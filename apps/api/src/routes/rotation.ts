@@ -7,7 +7,8 @@ import {
   ProposalStateError,
   UnauthorizedError,
   OperatorNotEnrolledError,
-  OperatorRevokedError
+  OperatorRevokedError,
+  RotationApprovalDataSchema
 } from '@quoteseal/shared';
 import type { IDbStore } from '../services/db-store.js';
 import type { IRotationControllerClient } from '../services/rotation-controller-client.js';
@@ -45,21 +46,8 @@ const CreateProposalSchema = z
   }));
 
 const SubmitApprovalSchema = z.object({
-  signature: z.string().regex(/^0x[a-fA-F0-9]{130}$/),
-  approvalData: z.object({
-    merchantId: z.string().regex(/^0x[a-fA-F0-9]{64}$/),
-    proposalId: z.string().regex(/^0x[a-fA-F0-9]{64}$/),
-    operator: z.string().regex(/^0x[a-fA-F0-9]{40}$/),
-    resolver: z.string().regex(/^0x[a-fA-F0-9]{40}$/),
-    namehash: z.string().regex(/^0x[a-fA-F0-9]{64}$/),
-    oldPayToHash: z.string().regex(/^0x[a-fA-F0-9]{64}$/),
-    newPayToHash: z.string().regex(/^0x[a-fA-F0-9]{64}$/),
-    effectiveAt: z.coerce.bigint(),
-    proposalExpiry: z.coerce.bigint(),
-    proposalNonce: z.coerce.bigint(),
-    authTime: z.coerce.bigint(),
-    attestationExpiry: z.coerce.bigint()
-  })
+  signature: z.string().regex(/^0x[a-fA-F0-9]{130}$/) as z.ZodType<Hex>,
+  approvalData: RotationApprovalDataSchema
 });
 
 const ActivateProposalSchema = z.object({
@@ -265,8 +253,8 @@ export const rotationRoutes: FastifyPluginAsync<RotationRouteOptions> = async (a
     // Submit EIP-712 approval to on-chain RotationController
     const txHash = await opts.rotationControllerClient.approveWithAttestation(
       controllerAddress,
-      approvalData as any,
-      signature as Hex,
+      approvalData,
+      signature,
       { account: { address: approvalData.operator as Address } }
     );
 

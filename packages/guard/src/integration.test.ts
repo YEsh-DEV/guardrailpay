@@ -18,7 +18,22 @@ import {
   type IRpcProvider
 } from '@quoteseal/ens-profile';
 import { verifyTrustAnchors, type TrustAnchors, type Verdict } from '@quoteseal/ens-profile';
-import { VerdictSchema } from '@quoteseal/shared';
+import {
+  VerdictSchema,
+  OnChainVerdictSchema,
+  toOnChainVerdict,
+  toSolidityVerdictIndex,
+  toRotationState,
+  toSolidityStateIndex,
+  normalizeRotationState
+} from '@quoteseal/shared';
+import {
+  GuardEngine,
+  createPaymentAttempt,
+  type BoundaryInput,
+  type TrustSnapshot
+} from './index.js';
+import type { ClientHederaSigner } from '@x402/hedera';
 
 const ENS_NAME = 'merchant.eth';
 const REGISTRY = '0x1111111111111111111111111111111111111111';
@@ -152,13 +167,164 @@ describe('Cross-Branch Integration: ENS Profile -> Guard -> Rotation Data', () =
     expect(tamperedContract).toBe('BLOCK');
   });
 
-  it('ENS profile version key mismatch: contract writes profileVersion, resolver reads version', async () => {
-    const contractWriteKey = 'quoteseal.profileVersion'; // Solidity VERSION_KEY
-    const resolverReadKey = 'quoteseal.version';          // resolver.ts line 128
-    expect(contractWriteKey).toBe('quoteseal.profileVersion');
-    expect(resolverReadKey).toBe('quoteseal.version');
-    // ABI/API MISMATCH: resolver reads 'quoteseal.version' but contract writes 'quoteseal.profileVersion'
-    expect(contractWriteKey).not.toBe(resolverReadKey);
+  it('ENS profile version key resolution: resolver supports quoteseal.profileVersion written by contract with legacy fallback', async () => {
+    // 1. Contract writes 'quoteseal.profileVersion'
+    const profileContract = baseProfile();
+    profileContract.profileVersion = 2;
+    const mockReadContract = buildMockReadContract(profileContract);
+    const primary1 = createMockRpcProvider({ readContract: mockReadContract });
+    const secondary1 = createMockRpcProvider({ readContract: mockReadContract });
+    const resolverContract = new EnsProfileResolver({
+      dualRpcClient: new DualRpcClient({ primary: primary1, secondary: secondary1 }),
+      registryAddress: REGISTRY
+    });
+
+    const resolvedContract = await resolverContract.resolveProfile(ENS_NAME);
+    expect(resolvedContract.profileVersion).toBe(2);
+
+    // 2. Legacy resolver without quoteseal.profileVersion falls back to quoteseal.version
+    const mockReadLegacy = vi.fn().mockImplementation((params: any) => {
+      const { address, functionName, args } = params;
+      if (address.toLowerCase() === REGISTRY.toLowerCase()) {
+        if (functionName === 'owner') return OWNER;
+        if (functionName === 'resolver') return RESOLVER;
+        if (functionName === 'expiry') return 1800000000;
+      }
+      if (address.toLowerCase() === RESOLVER.toLowerCase()) {
+        const key = args?.[1];
+        if (key === 'quoteseal.activePayTo') return '0.0.123456';
+        if (key === 'quoteseal.profileVersion') return '';   // Absent in legacy resolver
+        if (key === 'quoteseal.version') return '4';        // Legacy version record
+      }
+      return '';
+    });
+    const resolverLegacy = new EnsProfileResolver({
+      dualRpcClient: new DualRpcClient({
+        primary: createMockRpcProvider({ readContract: mockReadLegacy }),
+        secondary: createMockRpcProvider({ readContract: mockReadLegacy })
+      }),
+      registryAddress: REGISTRY
+    });
+
+    const resolvedLegacy = await resolverLegacy.resolveProfile(ENS_NAME);
+    expect(resolvedLegacy.profileVersion).toBe(4);
+  });
+
+  it('Regression: profile-version change triggers ANCHOR_VERSION_MISMATCH and blocks payment signing until re-anchored', async () => {
+    const guardEngine = new GuardEngine();
+    let currentProfileVersion = 1;
+    let rawSignerCalls = 0;
+
+    const rawSigner: ClientHederaSigner = {
+      accountId: '0.0.999',
+      async createPartiallySignedTransferTransaction() {
+        rawSignerCalls++;
+        return 'signed_tx_bytes' as any;
+      }
+    };
+
+    const getProfile = (): EnsProfileRecord => ({
+      ...baseProfile(),
+      profileVersion: currentProfileVersion
+    });
+
+    const pinnedAnchors: TrustAnchors = {
+      trustedOwner: OWNER,
+      trustedResolver: RESOLVER,
+      trustedExpiry: 1800000000,
+      trustedProfileVersion: 1
+    };
+
+    const paymentChallenge = {
+      x402Version: 2,
+      resource: { url: 'https://merchant.example/checkout' },
+      accepts: [
+        {
+          scheme: 'exact',
+          network: 'hedera:testnet',
+          asset: '0.0.0',
+          amount: '10',
+          payTo: '0.0.123456',
+          maxTimeoutSeconds: 60,
+          extra: { feePayer: '0.0.98' }
+        }
+      ]
+    };
+
+    const boundaryInput: BoundaryInput = {
+      originalUrl: 'https://merchant.example/checkout',
+      challenge: paymentChallenge as any,
+      selectedIndex: 0,
+      firstSeen: 1000,
+      now: () => 1001,
+      readTrust: (): TrustSnapshot => ({
+        profile: getProfile() as any,
+        anchors: {
+          owner: pinnedAnchors.trustedOwner,
+          resolver: pinnedAnchors.trustedResolver,
+          expiry: pinnedAnchors.trustedExpiry,
+          version: pinnedAnchors.trustedProfileVersion
+        }
+      })
+    };
+
+    // A. Initial state: profileVersion is 1, pinned anchor is 1 -> PASS
+    const initialEval = await guardEngine.evaluate({
+      buyerOriginalUrl: 'https://merchant.example/checkout',
+      challenge: paymentChallenge,
+      selectedRequirement: paymentChallenge.accepts[0],
+      ensProfile: getProfile(),
+      trustAnchors: pinnedAnchors,
+      buyerMaxAmount: '100'
+    });
+    expect(initialEval.verdict).toBe('PASS');
+    expect(initialEval.allowedSignerInvocation).toBe(true);
+
+    // Initial payment attempt signs successfully
+    const attempt1 = createPaymentAttempt(boundaryInput, rawSigner);
+    await attempt1.createPaymentPayload();
+    expect(rawSignerCalls).toBe(1);
+
+    // B. Merchant profile version is bumped to 2 (e.g. following on-chain rotation activation)
+    currentProfileVersion = 2;
+
+    // GuardEngine evaluation MUST return HOLD with ANCHOR_VERSION_MISMATCH
+    const updatedEval = await guardEngine.evaluate({
+      buyerOriginalUrl: 'https://merchant.example/checkout',
+      challenge: paymentChallenge,
+      selectedRequirement: paymentChallenge.accepts[0],
+      ensProfile: getProfile(),
+      trustAnchors: pinnedAnchors, // Still pinned to version 1
+      buyerMaxAmount: '100'
+    });
+    expect(updatedEval.verdict).toBe('HOLD');
+    expect(updatedEval.reasonCode).toBe('ANCHOR_VERSION_MISMATCH');
+    expect(updatedEval.allowedSignerInvocation).toBe(false);
+    expect(updatedEval.divergentFields).toContain('profileVersion');
+
+    // Pre-signing boundary MUST reject payment attempt and NEVER invoke raw signer
+    const attempt2 = createPaymentAttempt(boundaryInput, rawSigner);
+    await expect(attempt2.createPaymentPayload()).rejects.toThrow('QUOTESEAL_REJECTED');
+    expect(rawSignerCalls).toBe(1); // Still 1, raw signer was NOT called!
+
+    // C. Buyer explicitly trusts the new version (re-anchoring)
+    pinnedAnchors.trustedProfileVersion = 2;
+
+    const reAnchoredEval = await guardEngine.evaluate({
+      buyerOriginalUrl: 'https://merchant.example/checkout',
+      challenge: paymentChallenge,
+      selectedRequirement: paymentChallenge.accepts[0],
+      ensProfile: getProfile(),
+      trustAnchors: pinnedAnchors,
+      buyerMaxAmount: '100'
+    });
+    expect(reAnchoredEval.verdict).toBe('PASS');
+    expect(reAnchoredEval.allowedSignerInvocation).toBe(true);
+
+    // Payment attempt now succeeds
+    const attempt3 = createPaymentAttempt(boundaryInput, rawSigner);
+    await attempt3.createPaymentPayload();
+    expect(rawSignerCalls).toBe(2); // Successfully signed after re-anchoring
   });
 
   it('Rotation state machine: STABLE -> PROPOSED -> PENDING_APPROVED -> HOLD for new payTo', async () => {

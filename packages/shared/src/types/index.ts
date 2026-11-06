@@ -4,19 +4,100 @@ import { z } from 'zod';
 // VERDICTS & STATUSES
 // =============================================================================
 
-export const VerdictSchema = z.enum(['PASS', 'HOLD', 'BLOCK', 'UNVERIFIABLE']);
+// 1:1 Solidity Contract Verdicts (RotationController.sol: enum Verdict { PASS, BLOCK, HOLD })
+export const SolidityVerdict = {
+  PASS: 0,
+  BLOCK: 1,
+  HOLD: 2
+} as const;
+
+export const OnChainVerdictSchema = z.enum(['PASS', 'BLOCK', 'HOLD']);
+export type OnChainVerdict = z.infer<typeof OnChainVerdictSchema>;
+
+// Off-Chain Verdict Schema: includes 'UNVERIFIABLE' for RPC/transport divergence
+export const VerdictSchema = z.enum(['PASS', 'BLOCK', 'HOLD', 'UNVERIFIABLE']);
 export type Verdict = z.infer<typeof VerdictSchema>;
 
-export const RotationStateSchema = z.enum([
+export function toOnChainVerdict(solidityIndex: number): OnChainVerdict {
+  if (solidityIndex === 0) return 'PASS';
+  if (solidityIndex === 1) return 'BLOCK';
+  if (solidityIndex === 2) return 'HOLD';
+  throw new Error(`Invalid Solidity verdict index: ${solidityIndex}`);
+}
+
+export function toSolidityVerdictIndex(verdict: OnChainVerdict): number {
+  if (verdict === 'PASS') return SolidityVerdict.PASS;
+  if (verdict === 'BLOCK') return SolidityVerdict.BLOCK;
+  if (verdict === 'HOLD') return SolidityVerdict.HOLD;
+  throw new Error(`Cannot convert verdict '${verdict}' to on-chain Solidity index`);
+}
+
+// 1:1 Solidity Contract States (RotationController.sol: enum State { STABLE, PROPOSED, PENDING_APPROVED, ACTIVATED, CANCELLED })
+export const SolidityRotationState = {
+  STABLE: 0,
+  PROPOSED: 1,
+  PENDING_APPROVED: 2,
+  ACTIVATED: 3,
+  CANCELLED: 4
+} as const;
+
+export const OnChainRotationStateSchema = z.enum([
   'STABLE',
   'PROPOSED',
   'PENDING_APPROVED',
-  'APPROVED',
   'ACTIVATED',
-  'CANCELLED',
-  'PAUSED'
+  'CANCELLED'
 ]);
-export type RotationState = z.infer<typeof RotationStateSchema>;
+export type OnChainRotationState = z.infer<typeof OnChainRotationStateSchema>;
+
+export const RotationStateSchema = OnChainRotationStateSchema;
+export type RotationState = OnChainRotationState;
+
+export function toRotationState(solidityIndex: number): RotationState {
+  switch (solidityIndex) {
+    case 0:
+      return 'STABLE';
+    case 1:
+      return 'PROPOSED';
+    case 2:
+      return 'PENDING_APPROVED';
+    case 3:
+      return 'ACTIVATED';
+    case 4:
+      return 'CANCELLED';
+    default:
+      throw new Error(`Invalid Solidity State enum index: ${solidityIndex}`);
+  }
+}
+
+export function toSolidityStateIndex(state: RotationState | string): number {
+  const normalized = normalizeRotationState(state);
+  return SolidityRotationState[normalized];
+}
+
+/**
+ * Normalizes backend workflow states or text records to canonical on-chain RotationState.
+ * E.g., 'pending' or 'APPROVED' -> 'PENDING_APPROVED', 'stable' -> 'STABLE'
+ */
+export function normalizeRotationState(state: string): RotationState {
+  const upper = state.trim().toUpperCase();
+  switch (upper) {
+    case 'STABLE':
+      return 'STABLE';
+    case 'PROPOSED':
+      return 'PROPOSED';
+    case 'PENDING':
+    case 'PENDING_APPROVED':
+    case 'APPROVED':
+      return 'PENDING_APPROVED';
+    case 'ACTIVATED':
+      return 'ACTIVATED';
+    case 'CANCELLED':
+      return 'CANCELLED';
+    default:
+      return 'STABLE';
+  }
+}
 
 export const ReasonCodeSchema = z.enum([
   'OK',
@@ -143,26 +224,36 @@ export type Operator = z.infer<typeof OperatorSchema>;
 export const EIP712_DOMAIN_NAME = 'QuoteSeal';
 export const EIP712_DOMAIN_VERSION = '1';
 
-export interface RotationApprovalData {
-  merchantId: `0x${string}`;
-  proposalId: `0x${string}`;
-  operator: `0x${string}`;
-  resolver: `0x${string}`;
-  namehash: `0x${string}`;
-  oldPayToHash: `0x${string}`;
-  newPayToHash: `0x${string}`;
-  effectiveAt: bigint;
-  proposalExpiry: bigint;
-  proposalNonce: bigint;
-  authTime: bigint;
-  attestationExpiry: bigint;
-}
+export const Hex32Schema = z
+  .string()
+  .regex(/^0x[a-fA-F0-9]{64}$/, 'Must be 32-byte hex string (0x...)') as z.ZodType<`0x${string}`>;
 
-export interface OperatorEnrollmentData {
-  merchantId: `0x${string}`;
-  operator: `0x${string}`;
-  role: bigint;
-  expiry: bigint;
-  nonce: bigint;
-  controller: `0x${string}`;
-}
+export const AddressSchema = z
+  .string()
+  .regex(/^0x[a-fA-F0-9]{40}$/, 'Must be 20-byte address (0x...)') as z.ZodType<`0x${string}`>;
+
+export const RotationApprovalDataSchema = z.object({
+  merchantId: Hex32Schema,
+  proposalId: Hex32Schema,
+  operator: AddressSchema,
+  resolver: AddressSchema,
+  namehash: Hex32Schema,
+  oldPayToHash: Hex32Schema,
+  newPayToHash: Hex32Schema,
+  effectiveAt: z.coerce.bigint(),
+  proposalExpiry: z.coerce.bigint(),
+  proposalNonce: z.coerce.bigint(),
+  authTime: z.coerce.bigint(),
+  attestationExpiry: z.coerce.bigint()
+});
+export type RotationApprovalData = z.infer<typeof RotationApprovalDataSchema>;
+
+export const OperatorEnrollmentDataSchema = z.object({
+  merchantId: Hex32Schema,
+  operator: AddressSchema,
+  role: z.coerce.bigint(),
+  expiry: z.coerce.bigint(),
+  nonce: z.coerce.bigint(),
+  controller: AddressSchema
+});
+export type OperatorEnrollmentData = z.infer<typeof OperatorEnrollmentDataSchema>;

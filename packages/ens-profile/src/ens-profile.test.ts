@@ -147,6 +147,68 @@ describe('EnsProfileResolver (MOCKED TEST VECTORS)', () => {
     expect(profile.network).toBe('hedera:testnet');
   });
 
+  it('[MOCKED] prioritizes quoteseal.profileVersion written by Solidity contract over legacy quoteseal.version', async () => {
+    const registryAddress = '0x1111111111111111111111111111111111111111';
+    const resolverAddress = '0x2222222222222222222222222222222222222222';
+    const ownerAddress = '0x3333333333333333333333333333333333333333';
+
+    const mockRead = vi.fn().mockImplementation((params) => {
+      if (params.address === registryAddress) {
+        if (params.functionName === 'owner') return ownerAddress;
+        if (params.functionName === 'resolver') return resolverAddress;
+        if (params.functionName === 'expiry') return 1800000000n;
+      }
+      if (params.address === resolverAddress) {
+        const key = params.args[1];
+        if (key === 'quoteseal.activePayTo') return '0.0.123456';
+        if (key === 'quoteseal.profileVersion') return '5'; // On-chain contract key
+        if (key === 'quoteseal.version') return '1';        // Stale legacy key
+        if (key === 'quoteseal.rotationStatus') return 'stable';
+      }
+      return '';
+    });
+
+    const primary = createMockRpcProvider({ readContract: mockRead });
+    const secondary = createMockRpcProvider({ readContract: mockRead });
+    const dualRpc = new DualRpcClient({ primary, secondary });
+    const resolver = new EnsProfileResolver({ dualRpcClient: dualRpc, registryAddress });
+
+    const profile = await resolver.resolveProfile('merchant.eth');
+    expect(profile.profileVersion).toBe(5);
+    expect(profile.rotationStatus).toBe('STABLE');
+  });
+
+  it('[MOCKED] falls back to legacy quoteseal.version if quoteseal.profileVersion is absent', async () => {
+    const registryAddress = '0x1111111111111111111111111111111111111111';
+    const resolverAddress = '0x2222222222222222222222222222222222222222';
+    const ownerAddress = '0x3333333333333333333333333333333333333333';
+
+    const mockRead = vi.fn().mockImplementation((params) => {
+      if (params.address === registryAddress) {
+        if (params.functionName === 'owner') return ownerAddress;
+        if (params.functionName === 'resolver') return resolverAddress;
+        if (params.functionName === 'expiry') return 1800000000n;
+      }
+      if (params.address === resolverAddress) {
+        const key = params.args[1];
+        if (key === 'quoteseal.activePayTo') return '0.0.123456';
+        if (key === 'quoteseal.profileVersion') return '';   // Absent
+        if (key === 'quoteseal.version') return '3';        // Legacy fallback
+        if (key === 'quoteseal.rotationStatus') return 'pending';
+      }
+      return '';
+    });
+
+    const primary = createMockRpcProvider({ readContract: mockRead });
+    const secondary = createMockRpcProvider({ readContract: mockRead });
+    const dualRpc = new DualRpcClient({ primary, secondary });
+    const resolver = new EnsProfileResolver({ dualRpcClient: dualRpc, registryAddress });
+
+    const profile = await resolver.resolveProfile('merchant.eth');
+    expect(profile.profileVersion).toBe(3);
+    expect(profile.rotationStatus).toBe('PENDING_APPROVED');
+  });
+
   it('[MOCKED] throws UnverifiableError if quoteseal.activePayTo is missing', async () => {
     const registryAddress = '0x1111111111111111111111111111111111111111';
     const resolverAddress = '0x2222222222222222222222222222222222222222';

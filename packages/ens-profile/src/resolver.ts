@@ -1,7 +1,7 @@
 import { namehash } from 'viem/ens';
 import { type DualRpcClient } from './dual-rpc.js';
 import type { EnsProfileRecord } from './types.js';
-import { UnverifiableError } from '@quoteseal/shared';
+import { UnverifiableError, normalizeRotationState } from '@quoteseal/shared';
 
 export const ENS_REGISTRY_ABI = [
   {
@@ -129,10 +129,8 @@ export class EnsProfileResolver {
     const versionStr = records['quoteseal.profileVersion'] || records['quoteseal.version'] || '1';
     const profileVersion = parseInt(versionStr, 10);
 
-    const rotationStatusRaw = (records['quoteseal.rotationStatus'] || 'STABLE').toUpperCase();
-    const rotationStatus = ['STABLE', 'PROPOSED', 'APPROVED', 'ACTIVATED', 'CANCELLED'].includes(rotationStatusRaw)
-      ? (rotationStatusRaw as 'STABLE' | 'PROPOSED' | 'APPROVED' | 'ACTIVATED' | 'CANCELLED')
-      : 'STABLE';
+    const rotationStatusRaw = records['quoteseal.rotationStatus'] || 'STABLE';
+    const rotationStatus = normalizeRotationState(rotationStatusRaw);
 
     return {
       ensName,

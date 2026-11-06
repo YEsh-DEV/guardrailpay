@@ -18,9 +18,9 @@ export class GuardEngine implements IGuardEngine {
       expectedPayTo: request.selectedRequirement.payTo
     });
 
-    if (anchorVerification.verdict === 'HOLD') {
+    if (anchorVerification.verdict === 'HOLD' || anchorVerification.verdict === 'BLOCK') {
       return {
-        verdict: 'HOLD',
+        verdict: anchorVerification.verdict,
         reasonCode: anchorVerification.reasonCode,
         message: anchorVerification.message,
         allowedSignerInvocation: false,
@@ -66,7 +66,7 @@ export class GuardEngine implements IGuardEngine {
     let message = 'Evaluation passed all security checks';
 
     if (verdict === 'BLOCK') {
-      reasonCode = anchorVerification.verdict === 'BLOCK' ? anchorVerification.reasonCode : 'PAYTO_MISMATCH';
+      reasonCode = 'PAYTO_MISMATCH';
       message = 'Payment requirement rejected by guard policy';
     } else if (verdict === 'HOLD') {
       reasonCode = 'ANCHOR_MISMATCH';

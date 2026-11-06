@@ -25,7 +25,7 @@ QuoteSeal enforces multi-party governance over merchant payout address rotations
 - **The Smart Contract (`RotationController.sol`) DOES NOT verify World ID OIDC tokens.** Smart contracts cannot parse Web PKI X.509 signatures or execute OpenID Connect authorization code token exchanges on-chain.
 - **The Backend Attestor Service** acts as an authorized EIP-712 oracle. It executes the full OIDC exchange with the official World ID issuer (`https://auth.world.org`), validates cryptographic ID token signatures, enforces biometric verification levels (`orb`), checks authentication freshness (`auth_time`), and pseudonymizes user subjects using HMAC-SHA256.
 - Once step-up verification succeeds, the attestor signs a typed EIP-712 `RotationApproval` struct using a dedicated private key recognized by `RotationController.sol`.
-- The operator then submits this attestation directly to `RotationController.approveRotation()`.
+- The operator then submits this attestation directly to `RotationController.approveWithAttestation()`.
 - On-chain state in `RotationController` is the **single source of truth** for all rotation proposals, delay enforcement, and activation. The backend database serves as an index and verification coordinator.
 
 ---
@@ -95,10 +95,18 @@ Signed by the **Backend Attestor Service** after biometric World ID step-up:
       { "name": "verifyingContract", "type": "address" }
     ],
     "RotationApproval": [
-      { "name": "proposalHash", "type": "bytes32" },
+      { "name": "merchantId", "type": "bytes32" },
+      { "name": "proposalId", "type": "bytes32" },
       { "name": "operator", "type": "address" },
-      { "name": "expiry", "type": "uint256" },
-      { "name": "controller", "type": "address" }
+      { "name": "resolver", "type": "address" },
+      { "name": "namehash", "type": "bytes32" },
+      { "name": "oldPayToHash", "type": "bytes32" },
+      { "name": "newPayToHash", "type": "bytes32" },
+      { "name": "effectiveAt", "type": "uint64" },
+      { "name": "proposalExpiry", "type": "uint64" },
+      { "name": "proposalNonce", "type": "uint256" },
+      { "name": "authTime", "type": "uint64" },
+      { "name": "attestationExpiry", "type": "uint64" }
     ]
   }
 }
