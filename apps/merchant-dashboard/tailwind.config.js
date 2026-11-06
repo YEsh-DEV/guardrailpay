@@ -1,4 +1,4 @@
-   /** @type {import('tailwindcss').Config} */
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
@@ -8,91 +8,58 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        gabrun: {
-          blue: '#1A6CFF',
-          blueDark: '#0052E0',
-          blueLight: '#E8F1FF',
-          blueMuted: '#D0E2FF',
-          ink: '#0F172A',
-          slate: '#64748B',
-          canvas: '#FFFFFF',
-          canvasSubtle: '#F8FAFC',
+        // Layer 1: Black Base (~60%)
+        finovate: {
+          950: '#050505',
+          900: '#0E0E0E',
+          850: '#141414',
+          800: '#1A1A1A',
+          700: '#262626',
+          grey: '#656663',
         },
-        bg: {
-          base: '#03045E',
-          darker: '#02033B',
-          surface: '#050875',
-          elevated: '#081096',
+        // Layer 2: Violet / Magenta Accent (~30%)
+        violet: {
+          glow: '#2B0A3D',
+          glowDark: '#1B0B1C',
+          400: '#DD60F7',
+          500: '#D152F5',
+          600: '#B035D4',
+          700: '#7F359B',
         },
-        tuyo: {
-          canvas: '#FAF9F6',
-          canvasMuted: '#F9F6EC',
-          canvasDark: '#081014',
-          canvasDarker: '#05090C',
-          ink: '#141414',
-          inkSecondary: '#242422',
-          inkMuted: '#586974',
-          mint: '#D6E3CB',
-          mintText: '#293B26',
-          peach: '#F2D9CD',
-          peachText: '#493128',
-          sky: '#CBDDEB',
-          skyText: '#263948',
-          butter: '#F2E890',
-          butterText: '#33321F',
-          butterLight: '#FFF8CB',
-          lilac: '#DCD5EF',
-          lilacText: '#352D48',
-          neon: '#00FF59',
-          neonHover: '#00E650',
-          neonLime: '#9AEA62',
+        lavender: {
+          100: '#F5D3FE',
+          200: '#F1BDFF',
+          300: '#EA9DFD',
         },
-        neon: {
-          green: '#00FF59',
-          lime: '#9AEA62',
-          cyan: '#00F5D4',
-          danger: '#FF3B30',
-          warning: '#FF9F0A',
+        // Layer 3: Cool Silver #E2E8F0 (~10%)
+        silver: {
+          100: '#F1F5F9',
+          200: '#E2E8F0',
+          400: '#94A3B8',
+          600: '#64748B',
         },
-        brand: {
-          textSecondary: '#9BA9B2',
-          textMuted: '#586974',
+        // Semantic Verdicts
+        verdict: {
+          pass: '#34D399',
+          hold: '#FBBF24',
+          block: '#F43F5E',
+          unverified: '#94A3B8',
         },
       },
       fontFamily: {
-        display: ['var(--font-manrope)', 'Manrope', 'system-ui', 'sans-serif'],
         sans: ['var(--font-manrope)', 'Manrope', 'system-ui', 'sans-serif'],
-        inter: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
         mono: ['var(--font-mono)', 'IBM Plex Mono', 'monospace'],
       },
       borderRadius: {
-        card: '24px',
-        container: '38px',
-        outer: '48px',
+        btn: '10px',
+        card: '20px',
+        phone: '44px',
+        platform: '28px',
       },
       boxShadow: {
-        'glow-cyan': '0 0 35px -5px rgba(0, 180, 216, 0.45)',
-        'glow-cerulean': '0 0 35px -5px rgba(0, 119, 182, 0.45)',
-        'glow-green': '0 0 35px -5px rgba(0, 180, 216, 0.45)',
-        'glow-danger': '0 0 35px -5px rgba(255, 59, 48, 0.4)',
-        'ambient-card': '0 42px 76px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08)',
-        'tuyo-light': '0 24px 48px -12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)',
-      },
-      animation: {
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'marquee': 'marquee 35s linear infinite',
-        'marquee-reverse': 'marquee-reverse 35s linear infinite',
-        'spin-slow': 'spin 20s linear infinite',
-      },
-      keyframes: {
-        marquee: {
-          '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-50%)' },
-        },
-        'marquee-reverse': {
-          '0%': { transform: 'translateX(-50%)' },
-          '100%': { transform: 'translateX(0%)' },
-        },
+        'violet-glow': '0 0 80px 20px rgba(209, 82, 245, 0.25)',
+        'violet-btn': '0 4px 20px rgba(209, 82, 245, 0.4)',
+        'silver-card': '0 20px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(226, 232, 240, 0.1)',
       },
     },
   },
