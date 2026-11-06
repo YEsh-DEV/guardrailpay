@@ -1,4 +1,4 @@
-# QuoteSeal
+# tryquoteme
 
 > **Merchant-Authorized Payment Identity for Autonomous x402 Agents**  
 > *ETHGlobal Mumbai 2026*
