@@ -10,6 +10,8 @@ export const EnvSchema = z.object({
   ENS_MERCHANT_NAME: z.string().default('researchpro.eth'),
   ROTATION_CONTROLLER_ADDRESS: z.string().default('0x0000000000000000000000000000000000000000'),
   DEPLOYER_PRIVATE_KEY: z.string().optional(),
+  ROTATION_ATTESTOR_PRIVATE_KEY: z.string().optional(),
+  ROTATION_APPROVER: z.string().optional(),
 
   // Hedera
   HEDERA_NETWORK: z.enum(['testnet', 'mainnet', 'previewnet']).default('testnet'),

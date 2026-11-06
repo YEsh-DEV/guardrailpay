@@ -19,6 +19,7 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean",
+    "setup:evm": "node scripts/setup-evm.mjs",
     "forge:build": "cd contracts && forge build",
     "forge:test": "cd contracts && forge test -vvv"
   },
