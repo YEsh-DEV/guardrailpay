@@ -92,17 +92,17 @@ Phase 9  Polish, docs, demo, submission
 **Goal:** Everyone can run the repo and has the accounts they need.
 
 ### Tasks
-- [ ] Create GitHub repo `quoteseal` (public, MIT license)
-- [ ] Initialize pnpm workspace + Turborepo
-- [ ] Add `packages/config` (shared tsconfig strict, eslint, prettier)
-- [ ] Add `packages/shared` (types, error classes, logger, Zod env loader)
-- [ ] Create folder skeleton exactly as below
-- [ ] Add GitHub Actions CI (install, lint, typecheck, test, `forge build`)
-- [ ] Create `.env.example` (see section 8) and add `.env` to `.gitignore`
+- [x] Create GitHub repo `quoteseal` (public, MIT license)
+- [x] Initialize pnpm workspace + Turborepo
+- [x] Add `packages/config` (shared tsconfig strict, eslint, prettier)
+- [x] Add `packages/shared` (types, error classes, logger, Zod env loader)
+- [x] Create folder skeleton exactly as below
+- [x] Add GitHub Actions CI (install, lint, typecheck, test, `forge build`)
+- [x] Create `.env.example` (see section 8) and add `.env` to `.gitignore`
 - [ ] Get a Sepolia RPC URL and fund a **testnet-only** wallet
 - [ ] Create Hedera testnet accounts: buyer, merchant (and fund buyer)
 - [ ] Register for World ID Agent Pass access (confirm current dev/test setup in the docs)
-- [ ] Read the reference docs listed in section 13
+- [x] Read the reference docs listed in section 13
 
 ### Repository skeleton
 ```
@@ -130,8 +130,8 @@ quoteseal/
 ```
 
 ### Gate 0
-- [ ] `pnpm install && pnpm test` runs green on a fresh clone (even if tests are empty)
-- [ ] CI passes on `main`
+- [x] `pnpm install && pnpm test` runs green on a fresh clone (even if tests are empty)
+- [x] CI passes on `main`
 - [ ] All team members have testnet keys in their own local `.env`
 
 ---
@@ -141,15 +141,15 @@ quoteseal/
 **Goal:** A fully tested verdict engine. This is the heart of the project and needs no external accounts, so it can start on day 1.
 
 ### Tasks
-- [ ] Define types in `packages/payee-guard/src/types.ts`:
+- [x] Define types in `packages/payee-guard/src/types.ts`:
   - `Verdict = "PASS" | "HOLD" | "BLOCK" | "UNVERIFIABLE"`
   - `PaymentRequest`, `MerchantProfile`, `BuyerPolicy`, `EvaluationResult { verdict, reason }`
-- [ ] Implement `normalize.ts` with canonical forms for:
+- [x] Implement `normalize.ts` with canonical forms for:
   - URLs / origins (scheme, host lowercase, default ports, no trailing-slash tricks)
   - Network IDs (e.g. `hedera:testnet`)
   - Asset/token identifiers
   - Hedera account IDs (`0.0.x` format)
-- [ ] Implement `evaluate(payment, profile, policy, now)` per the brief:
+- [x] Implement `evaluate(payment, profile, policy, now)` per the brief:
   1. profile missing or expired → BLOCK
   2. origin mismatch → BLOCK
   3. network mismatch → BLOCK
@@ -159,12 +159,12 @@ quoteseal/
   7. payTo == pendingPayTo and now < pendingEffectiveAt → HOLD
   8. anything else → BLOCK
   9. Stale 402 offer (expired) → BLOCK / require fresh request
-- [ ] Implement `guardedSigner(signer, deps)` wrapper:
+- [x] Implement `guardedSigner(signer, deps)` wrapper:
   - Resolve profile → on any error return `UNVERIFIABLE`
   - Call `evaluate`
   - Invoke the real signer **only** on PASS
   - Expose a call counter for tests
-- [ ] Write unit tests:
+- [x] Write unit tests:
   - Match and mismatch for payTo, amount, asset, network, origin, expiry
   - All rotation states (none, pending before effective time, pending after)
   - Normalization edge cases (case, trailing slash, port, whitespace)
@@ -177,9 +177,9 @@ quoteseal/
 - No loose string comparison anywhere.
 
 ### Gate 1
-- [ ] Tests for T1, T2, T3 (logic only), T4, T5, T6, T7, T10, T11 pass
-- [ ] Coverage on `evaluate` and `normalize` is effectively complete
-- [ ] A reviewer other than the author has read `evaluate.ts`
+- [x] Tests for T1, T2, T3 (logic only), T4, T5, T6, T7, T10, T11 pass
+- [x] Coverage on `evaluate` and `normalize` is effectively complete
+- [x] A reviewer other than the author has read `evaluate.ts`
 
 ---
 
