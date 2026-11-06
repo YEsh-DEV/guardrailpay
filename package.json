@@ -20,6 +20,7 @@
     "typecheck": "turbo run typecheck",
     "clean": "turbo run clean",
     "setup:evm": "node scripts/setup-evm.mjs",
+    "deploy:contracts": "node scripts/deploy-contracts.mjs",
     "forge:build": "cd contracts && forge build",
     "forge:test": "cd contracts && forge test -vvv"
   },
