@@ -149,11 +149,11 @@ async function startServer() {
             && profile.scheme === env.X402_SCHEME
             && profile.assetId === env.X402_ASSET
             && BigInt(profile.maxAmount) <= BigInt(env.MAX_PAYMENT_AMOUNT_DEFAULT)
-            && merchant.ensName.toLowerCase() === ensMerchantName.toLowerCase()
+            && merchant.ensName?.toLowerCase() === ensMerchantName.toLowerCase()
             && merchant.chainId === env.APPLICATION_CHAIN_ID
-            && merchant.namehash.toLowerCase() === env.ENS_NAMEHASH.toLowerCase()
-            && merchant.registryAddress.toLowerCase() === env.ENS_REGISTRY_ADDRESS.toLowerCase()
-            && merchant.resolverAddress.toLowerCase() === env.ENS_RESOLVER_ADDRESS.toLowerCase()
+            && merchant.namehash?.toLowerCase() === env.ENS_NAMEHASH.toLowerCase()
+            && merchant.registryAddress?.toLowerCase() === env.ENS_REGISTRY_ADDRESS.toLowerCase()
+            && merchant.resolverAddress?.toLowerCase() === env.ENS_RESOLVER_ADDRESS.toLowerCase()
             && merchant.ownerAddress.toLowerCase() === env.ENS_EXPECTED_OWNER.toLowerCase()
             && merchant.controllerAddress?.toLowerCase() === controllerAddress?.toLowerCase()
             && merchant.activePayTo === profile.activePayTo

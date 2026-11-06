@@ -31,6 +31,8 @@ import { rotationRoutes } from './routes/rotation.js';
 import { auditRoutes } from './routes/audit.js';
 import { worldRoutes } from './routes/world.js';
 import { buyerRoutes } from './routes/buyer.js';
+import { discoveryRoutes } from './routes/discovery.js';
+import { ArkivDiscoveryService, MemoryArkivStorageClient, type IArkivStorageClient } from '@quoteseal/arkiv';
 import type { Hex } from 'viem';
 
 export interface AppDependencies {
@@ -50,6 +52,9 @@ export interface AppDependencies {
   checkWorldId?: () => Promise<boolean>;
   checkHedera?: () => Promise<boolean>;
   checkFacilitator?: () => Promise<boolean>;
+  arkivDiscoveryService?: ArkivDiscoveryService;
+  arkivStorageClient?: IArkivStorageClient;
+  domainVerificationService?: any;
   requiredDependencies?: string[];
 }
 
@@ -204,7 +209,10 @@ export function createApp(deps: AppDependencies): FastifyInstance {
   app.register(merchantRoutes, {
     ensResolver: deps.ensResolver,
     dbStore,
-    operatorEnrollmentService
+    operatorEnrollmentService,
+    domainVerificationService: deps.domainVerificationService,
+    chainId: env.APPLICATION_CHAIN_ID,
+    controllerAddress: (env.ROTATION_CONTROLLER_ADDRESS || '0x0000000000000000000000000000000000000000') as Hex
   });
 
   app.register(rotationRoutes, {
@@ -225,6 +233,13 @@ export function createApp(deps: AppDependencies): FastifyInstance {
 
   app.register(buyerRoutes, {
     ensResolver: deps.ensResolver
+  });
+
+  const arkivStorageClient = deps.arkivStorageClient ?? new MemoryArkivStorageClient();
+  const arkivDiscoveryService = deps.arkivDiscoveryService ?? new ArkivDiscoveryService(arkivStorageClient);
+
+  app.register(discoveryRoutes, {
+    arkivDiscoveryService
   });
 
   return app;

@@ -257,3 +257,6 @@ export const OperatorEnrollmentDataSchema = z.object({
   controller: AddressSchema
 });
 export type OperatorEnrollmentData = z.infer<typeof OperatorEnrollmentDataSchema>;
+
+export * from './merchant-identity.js';
+

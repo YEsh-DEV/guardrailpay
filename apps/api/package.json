@@ -19,6 +19,7 @@
     "@quoteseal/ens-profile": "workspace:*",
     "@quoteseal/guard": "workspace:*",
     "@quoteseal/buyer": "workspace:*",
+    "@quoteseal/arkiv": "workspace:*",
     "@quoteseal/shared": "workspace:*",
     "drizzle-orm": "^0.39.3",
     "fastify": "^5.2.1",

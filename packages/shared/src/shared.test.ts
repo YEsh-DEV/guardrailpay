@@ -208,7 +208,7 @@ describe('Database initialization and readiness', () => {
   });
 
   it('requires every journal migration before reporting migration readiness', async () => {
-    const timestamps = ['1793965945372', '1793968201627'];
+    const timestamps = ['1793965945372', '1793968201627', '1793970000000'];
     const pool = { query: async (sql: string) => {
       if (sql === 'SELECT 1') return { rows: [{ '?column?': 1 }] };
       if (sql.includes('to_regclass')) return { rows: [{ name: 'drizzle.__drizzle_migrations' }] };

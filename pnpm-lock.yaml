@@ -187,6 +187,9 @@ importers:
       '@fastify/sensible':
         specifier: ^6.0.3
         version: 6.0.7
+      '@quoteseal/arkiv':
+        specifier: workspace:*
+        version: link:../../packages/arkiv
       '@quoteseal/buyer':
         specifier: workspace:*
         version: link:../../packages/buyer
@@ -242,6 +245,31 @@ importers:
       '@x402/hedera':
         specifier: 2.30.0
         version: 2.30.0(protobufjs@8.6.6)
+    devDependencies:
+      '@types/node':
+        specifier: ^24.10.0
+        version: 24.19.2
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.7
+        version: 3.2.7(@types/node@24.19.2)
+
+  packages/arkiv:
+    dependencies:
+      '@arkiv-network/sdk':
+        specifier: ^1.0.1
+        version: 1.0.1(typescript@5.9.3)(viem@2.57.16(typescript@5.9.3)(zod@3.25.76))
+      '@quoteseal/shared':
+        specifier: workspace:*
+        version: link:../shared
+      viem:
+        specifier: ^2.23.5
+        version: 2.57.16(typescript@5.9.3)(zod@3.25.76)
+      zod:
+        specifier: ^3.24.2
+        version: 3.25.76
     devDependencies:
       '@types/node':
         specifier: ^24.10.0
@@ -375,6 +403,16 @@ packages:
 
   '@adraffy/ens-normalize@1.11.1':
     resolution: {integrity: sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==}
+
+  '@arkiv-network/sdk@1.0.1':
+    resolution: {integrity: sha512-DCOFdGunn4I5nYrvIV/YIkMCkLZM7EQNSyNPtqpmQkP2JzTEfRLBJleBSB2rokWMa833/9P8DMiwsEXACr3CUQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      typescript: '>=5.0.0'
+      viem: ^2.0.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
@@ -2051,6 +2089,12 @@ snapshots:
   '@adraffy/ens-normalize@1.10.1': {}
 
   '@adraffy/ens-normalize@1.11.1': {}
+
+  '@arkiv-network/sdk@1.0.1(typescript@5.9.3)(viem@2.57.16(typescript@5.9.3)(zod@3.25.76))':
+    dependencies:
+      viem: 2.57.16(typescript@5.9.3)(zod@3.25.76)
+    optionalDependencies:
+      typescript: 5.9.3
 
   '@drizzle-team/brocli@0.10.2': {}
 

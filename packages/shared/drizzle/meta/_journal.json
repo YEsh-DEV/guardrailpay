@@ -15,6 +15,13 @@
       "when": 1793968201627,
       "tag": "0001_gigantic_rachel_grey",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793970000000,
+      "tag": "0002_native_merchant_identity_and_arkiv",
+      "breakpoints": true
     }
   ]
 }

@@ -86,6 +86,10 @@ export interface MockDatabaseStore {
   authAttempts: Map<string, typeof schema.authAttempts.$inferSelect>;
   approvals: Map<string, typeof schema.approvals.$inferSelect>;
   auditEvents: Array<typeof schema.auditEvents.$inferSelect>;
+  merchantDomainChallenges: Map<string, typeof schema.merchantDomainChallenges.$inferSelect>;
+  onboardingNonces: Map<string, typeof schema.onboardingNonces.$inferSelect>;
+  merchantPayoutWallets: Map<string, typeof schema.merchantPayoutWallets.$inferSelect>;
+  arkivSyncRecords: Map<string, typeof schema.arkivSyncRecords.$inferSelect>;
 }
 
 export function createMockDatabase(): MockDatabaseStore {
@@ -96,6 +100,10 @@ export function createMockDatabase(): MockDatabaseStore {
     rotationProposals: new Map(),
     authAttempts: new Map(),
     approvals: new Map(),
-    auditEvents: []
+    auditEvents: [],
+    merchantDomainChallenges: new Map(),
+    onboardingNonces: new Map(),
+    merchantPayoutWallets: new Map(),
+    arkivSyncRecords: new Map()
   };
 }

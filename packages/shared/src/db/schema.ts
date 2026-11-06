@@ -4,6 +4,7 @@ import {
   varchar,
   bigint,
   integer,
+  boolean,
   timestamp,
   text,
   jsonb,
@@ -16,15 +17,17 @@ import { sql } from 'drizzle-orm';
 // =============================================================================
 export const merchants = pgTable('merchants', {
   id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
-  ensName: varchar('ens_name', { length: 255 }).notNull().unique(),
-  namehash: varchar('namehash', { length: 66 }).notNull().unique(),
+  identityType: varchar('identity_type', { length: 32 }).notNull().default('ENSV2'),
+  identityRef: varchar('identity_ref', { length: 255 }).notNull().default(''),
+  ensName: varchar('ens_name', { length: 255 }),
+  namehash: varchar('namehash', { length: 66 }),
   endpointOrigin: varchar('endpoint_origin', { length: 255 }).notNull(),
   chainId: bigint('chain_id', { mode: 'number' }).notNull().default(11155111),
-  registryAddress: varchar('registry_address', { length: 42 }).notNull(),
-  resolverAddress: varchar('resolver_address', { length: 42 }).notNull(),
+  registryAddress: varchar('registry_address', { length: 42 }).default('0x0000000000000000000000000000000000000000'),
+  resolverAddress: varchar('resolver_address', { length: 42 }).default('0x0000000000000000000000000000000000000000'),
   controllerAddress: varchar('controller_address', { length: 42 }),
   ownerAddress: varchar('owner_address', { length: 42 }).notNull(),
-  nameExpiry: bigint('name_expiry', { mode: 'number' }).notNull(),
+  nameExpiry: bigint('name_expiry', { mode: 'number' }).notNull().default(0),
   profileVersion: integer('profile_version').notNull().default(1),
   network: varchar('network', { length: 64 }).notNull().default('hedera:testnet'),
   scheme: varchar('scheme', { length: 32 }).notNull().default('exact'),
@@ -32,6 +35,9 @@ export const merchants = pgTable('merchants', {
   activePayTo: varchar('active_pay_to', { length: 64 }).notNull(),
   maxAmount: varchar('max_amount', { length: 78 }).notNull(),
   status: varchar('status', { length: 32 }).notNull().default('active'),
+  domain: varchar('domain', { length: 255 }),
+  domainVerifiedAt: timestamp('domain_verified_at', { withTimezone: true }),
+  domainChallenge: jsonb('domain_challenge'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull()
 });
 
@@ -183,6 +189,69 @@ export const auditEvents = pgTable('audit_events', {
 });
 
 // =============================================================================
+// 8. MERCHANT DOMAIN CHALLENGES
+// =============================================================================
+export const merchantDomainChallenges = pgTable('merchant_domain_challenges', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  merchantId: uuid('merchant_id')
+    .notNull()
+    .references(() => merchants.id, { onDelete: 'cascade' }),
+  domain: varchar('domain', { length: 255 }).notNull(),
+  challengeType: varchar('challenge_type', { length: 32 }).notNull(), // 'DNS_TXT' | 'HTTPS_WELL_KNOWN'
+  token: varchar('token', { length: 128 }).notNull(),
+  status: varchar('status', { length: 32 }).notNull().default('PENDING'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  verifiedAt: timestamp('verified_at', { withTimezone: true })
+});
+
+// =============================================================================
+// 9. ONBOARDING NONCES
+// =============================================================================
+export const onboardingNonces = pgTable('onboarding_nonces', {
+  nonce: varchar('nonce', { length: 128 }).primaryKey(),
+  merchantId: varchar('merchant_id', { length: 128 }),
+  walletAddress: varchar('wallet_address', { length: 42 }).notNull(),
+  endpointOrigin: varchar('endpoint_origin', { length: 255 }).notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  consumedAt: timestamp('consumed_at', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull()
+});
+
+// =============================================================================
+// 10. MERCHANT PAYOUT WALLETS (OPERATIONAL MULTI-PAYOUT STORE)
+// =============================================================================
+export const merchantPayoutWallets = pgTable('merchant_payout_wallets', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  merchantId: uuid('merchant_id')
+    .notNull()
+    .references(() => merchants.id, { onDelete: 'cascade' }),
+  payTo: varchar('pay_to', { length: 64 }).notNull(),
+  isActive: boolean('is_active').notNull().default(false),
+  status: varchar('status', { length: 32 }).notNull().default('PENDING'),
+  label: varchar('label', { length: 128 }),
+  enrolledAt: timestamp('enrolled_at', { withTimezone: true }).defaultNow().notNull(),
+  revokedAt: timestamp('revoked_at', { withTimezone: true })
+});
+
+// =============================================================================
+// 11. ARKIV SYNC RECORDS
+// =============================================================================
+export const arkivSyncRecords = pgTable('arkiv_sync_records', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  merchantId: uuid('merchant_id')
+    .notNull()
+    .references(() => merchants.id, { onDelete: 'cascade' }),
+  entityKey: varchar('entity_key', { length: 66 }).notNull(),
+  entityType: varchar('entity_type', { length: 64 }).notNull(),
+  version: integer('version').notNull().default(1),
+  txHash: varchar('tx_hash', { length: 66 }),
+  payloadJson: jsonb('payload_json'),
+  syncedAt: timestamp('synced_at', { withTimezone: true }).defaultNow().notNull(),
+  status: varchar('status', { length: 32 }).notNull().default('CONFIRMED')
+});
+
+// =============================================================================
 // INFERRED TYPES FOR SCHEMA RECORDS
 // =============================================================================
 export type MerchantRecord = typeof merchants.$inferSelect;
@@ -202,4 +271,17 @@ export type InsertApprovalRecord = typeof approvals.$inferInsert;
 
 export type AuditEventRecord = typeof auditEvents.$inferSelect;
 export type InsertAuditEventRecord = typeof auditEvents.$inferInsert;
+
+export type MerchantDomainChallengeRecord = typeof merchantDomainChallenges.$inferSelect;
+export type InsertMerchantDomainChallengeRecord = typeof merchantDomainChallenges.$inferInsert;
+
+export type OnboardingNonceRecord = typeof onboardingNonces.$inferSelect;
+export type InsertOnboardingNonceRecord = typeof onboardingNonces.$inferInsert;
+
+export type MerchantPayoutWalletRecord = typeof merchantPayoutWallets.$inferSelect;
+export type InsertMerchantPayoutWalletRecord = typeof merchantPayoutWallets.$inferInsert;
+
+export type ArkivSyncRecordDb = typeof arkivSyncRecords.$inferSelect;
+export type InsertArkivSyncRecordDb = typeof arkivSyncRecords.$inferInsert;
+
 
