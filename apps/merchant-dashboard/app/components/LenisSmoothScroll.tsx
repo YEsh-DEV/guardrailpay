@@ -18,27 +18,31 @@ export default function LenisSmoothScroll({ children }: LenisSmoothScrollProps) 
     let lenis: any;
 
     const initLenis = async () => {
-      const { default: Lenis } = await import('lenis');
-      lenis = new Lenis({
-        duration: 1.2,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-        wheelMultiplier: 1.0,
-        touchMultiplier: 1.5,
-        infinite: false,
-      });
+      try {
+        const { default: Lenis } = await import('lenis');
+        lenis = new Lenis({
+          duration: 1.2,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+          wheelMultiplier: 1.0,
+          touchMultiplier: 1.5,
+          infinite: false,
+        });
 
-      let rafId: number;
-      function raf(time: number) {
-        lenis.raf(time);
+        let rafId: number;
+        function raf(time: number) {
+          if (lenis) lenis.raf(time);
+          rafId = requestAnimationFrame(raf);
+        }
         rafId = requestAnimationFrame(raf);
-      }
-      rafId = requestAnimationFrame(raf);
 
-      return () => {
-        cancelAnimationFrame(rafId);
-        lenis.destroy();
-      };
+        return () => {
+          cancelAnimationFrame(rafId);
+          if (lenis) lenis.destroy();
+        };
+      } catch (err) {
+        console.warn('Lenis smooth scroll initialization skipped:', err);
+      }
     };
 
     const cleanup = initLenis();
