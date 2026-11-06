@@ -1,0 +1,25 @@
+{
+  "name": "@quoteseal/tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo 'No lint specified for tests'"
+  },
+  "dependencies": {
+    "@quoteseal/ens-profile": "workspace:*",
+    "@quoteseal/hedera-x402": "workspace:*",
+    "@quoteseal/payee-guard": "workspace:*",
+    "@quoteseal/rotation-controller": "workspace:*",
+    "@quoteseal/shared": "workspace:*",
+    "@quoteseal/world-auth": "workspace:*",
+    "vitest": "^3.0.5"
+  },
+  "devDependencies": {
+    "@quoteseal/config": "workspace:*",
+    "@types/node": "^22.13.0",
+    "typescript": "^5.7.3"
+  }
+}

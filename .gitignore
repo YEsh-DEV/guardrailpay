@@ -1,0 +1,40 @@
+# Node / Dependencies
+node_modules/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+*.tsbuildinfo
+
+# Turbo
+.turbo/
+
+# Environment files
+.env
+.env*.local
+!.env.example
+
+# Foundry
+contracts/cache/
+contracts/out/
+contracts/broadcast/
+
+# Database & SQLite
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Logs & temp
+*.log
+.DS_Store
+*.swp
+coverage/
+.nyc_output/

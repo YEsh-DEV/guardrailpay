@@ -1,0 +1,67 @@
+export const ROTATION_CONTROLLER_ABI = [
+  {
+    type: 'function',
+    name: 'activePayTo',
+    inputs: [],
+    outputs: [{ type: 'string', name: '' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'rotationDelay',
+    inputs: [],
+    outputs: [{ type: 'uint256', name: '' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'proposeRotation',
+    inputs: [{ type: 'string', name: 'newPayTo' }],
+    outputs: [{ type: 'uint256', name: '' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'approveRotation',
+    inputs: [{ type: 'uint256', name: 'id' }],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'activate',
+    inputs: [{ type: 'uint256', name: 'id' }],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'revoke',
+    inputs: [{ type: 'uint256', name: 'id' }],
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'getRotation',
+    inputs: [{ type: 'uint256', name: 'id' }],
+    outputs: [
+      {
+        type: 'tuple',
+        name: '',
+        components: [
+          { type: 'uint256', name: 'id' },
+          { type: 'string', name: 'currentPayTo' },
+          { type: 'string', name: 'pendingPayTo' },
+          { type: 'uint256', name: 'proposedAt' },
+          { type: 'uint256', name: 'approvedAt' },
+          { type: 'uint256', name: 'effectiveAt' },
+          { type: 'uint8', name: 'status' },
+          { type: 'address', name: 'proposer' },
+          { type: 'address', name: 'approver' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+] as const;

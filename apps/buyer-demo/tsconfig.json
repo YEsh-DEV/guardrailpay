@@ -1,0 +1,8 @@
+{
+  "extends": "@quoteseal/config/tsconfig.node.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist"
+  },
+  "include": ["agent/**/*", "ui/**/*", "src/**/*"]
+}

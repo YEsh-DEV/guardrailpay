@@ -1,0 +1,29 @@
+{
+  "name": "@quoteseal/buyer-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo 'No lint specified for buyer-demo'",
+    "agent": "tsx agent/index.ts",
+    "dev": "tsx agent/index.ts",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@quoteseal/ens-profile": "workspace:*",
+    "@quoteseal/hedera-x402": "workspace:*",
+    "@quoteseal/payee-guard": "workspace:*",
+    "@quoteseal/shared": "workspace:*",
+    "fastify": "^5.2.1"
+  },
+  "devDependencies": {
+    "@quoteseal/config": "workspace:*",
+    "@types/node": "^22.13.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}
