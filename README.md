@@ -159,5 +159,40 @@ pnpm test
 
 ---
 
+## Marketing Site & Product UI
+
+QuoteSeal features a full marketing site and interactive product console inspired by the spatial elegance and physics of [Tuyo](https://tuyo.com) (Awwwards Honorable Mention), with 100% original branding, copywriting, procedural 3D card physics, and motion language.
+
+### Tech Stack
+- **Framework**: Next.js 15 (App Router) + TypeScript + Tailwind CSS
+- **Motion & Physics**: Framer Motion (spring choreography, masked reveals)
+- **Smooth Scroll**: Lenis with custom cubic-bezier deceleration
+- **3D Spatial Web**: Interactive 3D CSS perspective & procedural canvas tilt with holographic sheen
+- **Shared UI**: Monorepo package `@quoteseal/ui`
+
+### Routes
+- `/`: Full 10-section marketing landing page (Hero text reveals, 3D card tilt, sticky phone ENS verification, horizontal payment rail, attack proxy simulation, safe rotation countdown, infinite attack marquee, live rolling odometer).
+- `/merchant`: Live Merchant Dashboard with ENS profile inspector, 48-hour timelock countdown ring, World ID rotation proposal wizard, and EAC contract role matrix.
+- `/buyer`: Buyer Agent Console with interactive Attack Simulator, live terminal telemetry stream, and real-time verdict audit trail with HashScan links.
+
+### Running Locally
+```bash
+# Install dependencies
+pnpm install
+
+# Run the UI (marketing site + dashboards)
+pnpm --filter @quoteseal/merchant-dashboard dev
+
+# Open in your browser
+http://localhost:3000
+http://localhost:3000/merchant
+http://localhost:3000/buyer
+```
+
+### Original Assets Notice
+All SVGs, vector icons, gradients, 3D card textures, color tokens, and typography selections (`Instrument Serif`, `Manrope`, `IBM Plex Mono`) are 100% original and generated specifically for the QuoteSeal protocol. No assets, images, or copy were copied from Tuyo.
+
+---
+
 ## License
 MIT

@@ -27,6 +27,7 @@ app.get('/api/run', async (request) => {
 });
 
 app.get('/api/history', async () => {
+
   return recentLogs;
 });
 

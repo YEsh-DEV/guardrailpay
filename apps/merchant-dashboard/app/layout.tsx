@@ -1,33 +1,38 @@
 import React from 'react';
+import type { Metadata, Viewport } from 'next';
+import './globals.css';
 
-export const metadata = {
-  title: 'QuoteSeal - Merchant Payment Identity',
-  description: 'Merchant dashboard for ENSv2 payment identity, payouts, and rotations',
+export const metadata: Metadata = {
+  title: 'QuoteSeal — Payment Guard for Autonomous AI Agents',
+  description:
+    "QuoteSeal verifies every AI agent payment against the merchant's ENS identity before it signs. Autonomous, but never blind.",
+  keywords: ['AI agents', 'x402', 'ENS', 'Hedera', 'payment security', 'Web3', 'autonomous payments'],
+  openGraph: {
+    title: 'QuoteSeal — Payment Guard for Autonomous AI Agents',
+    description: 'Your agent\'s payment guard. Verified before it signs. Autonomous, but never blind.',
+    type: 'website',
+  },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#081014',
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="bg-slate-950 text-slate-100 min-h-screen">
-        <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="bg-blue-600 text-white px-2.5 py-1 rounded font-bold text-sm tracking-wide">
-              QuoteSeal
-            </span>
-            <span className="font-semibold text-slate-200">Merchant Dashboard</span>
-          </div>
-          <nav className="flex items-center gap-6 text-sm text-slate-300">
-            <a href="/" className="hover:text-blue-400">Overview</a>
-            <a href="/onboard" className="hover:text-blue-400">Onboarding</a>
-            <a href="/profile" className="hover:text-blue-400">ENS Profile</a>
-            <a href="/rotation" className="hover:text-blue-400">Payout Rotation</a>
-          </nav>
-        </header>
-        <main className="p-8 max-w-6xl mx-auto">{children}</main>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="bg-[#081014] text-white overflow-x-hidden antialiased">
+        {children}
       </body>
     </html>
   );
