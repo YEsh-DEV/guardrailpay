@@ -62,7 +62,7 @@ export default function FeatureSectionA() {
           </span>
           <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.08] text-[#0F172A] mb-3">
             Get The Most Powerful and{' '}
-            <em className="font-serif-accent not-italic text-[#1A6CFF]">Secure Payment Rail.</em>
+            <span className="font-medium text-[#1A6CFF]">Secure Payment Rail.</span>
           </h2>
           <p className="text-[#64748B] text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
             Autonomous agents shouldn't blind-sign. QuoteSeal sits directly between the HTTP 402 response and the wallet signer.

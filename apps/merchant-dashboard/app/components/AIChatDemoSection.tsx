@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { Avatar, AvatarFallback } from '@quoteseal/ui';
 
 type Mode = 'pass' | 'attack';
 
@@ -123,7 +124,7 @@ export default function AIChatDemoSection() {
           </span>
           <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-3">
             Rewards That are Endlessly{' '}
-            <em className="font-serif-accent not-italic text-[#1A6CFF]">Rewarding.</em>
+            <span className="font-medium text-[#1A6CFF]">Rewarding.</span>
           </h2>
           <p className="text-[#64748B] text-sm sm:text-base max-w-xl mx-auto">
             Test the interceptor in real time. Watch how QuoteSeal protects an autonomous AI agent when encountering hostile 402 responses.
@@ -226,9 +227,11 @@ export default function AIChatDemoSection() {
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-3"
                       >
-                        <div className="w-8 h-8 rounded-full bg-[#1A6CFF] text-white font-title-sans font-bold flex items-center justify-center shrink-0 mt-0.5 shadow-md text-xs">
-                          AI
-                        </div>
+                        <Avatar className="h-8 w-8 shrink-0 mt-0.5 shadow-sm border border-[#1A6CFF]/20">
+                          <AvatarFallback className="bg-[#1A6CFF] text-white text-xs font-semibold">
+                            AI
+                          </AvatarFallback>
+                        </Avatar>
                         <div className="bg-white text-[#0F172A] border border-slate-200 rounded-3xl rounded-tl-sm px-5 py-3.5 text-sm font-medium shadow-sm max-w-[85%] leading-relaxed">
                           {typingIndex === i ? (
                             <TypingText text={msg.text} startAt={true} />
@@ -297,13 +300,11 @@ export default function AIChatDemoSection() {
                             )}
                           </div>
                         </div>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 font-bold font-mono text-xs ${
-                          isBlock
-                            ? 'bg-rose-500 text-white shadow-md'
-                            : 'bg-[#1A6CFF] text-white shadow-[0_4px_12px_rgba(26,108,255,0.4)]'
-                        }`}>
-                          QS
-                        </div>
+                        <Avatar className="h-8 w-8 shrink-0 mt-0.5 shadow-sm border border-slate-200">
+                          <AvatarFallback className={isBlock ? 'bg-rose-500 text-white text-xs font-semibold' : 'bg-[#1A6CFF] text-white text-xs font-semibold'}>
+                            QS
+                          </AvatarFallback>
+                        </Avatar>
                       </motion.div>
                     );
                   }

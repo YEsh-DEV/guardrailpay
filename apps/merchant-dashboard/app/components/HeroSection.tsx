@@ -28,7 +28,7 @@ function RotatingHeadline() {
     return (
       <h1 className="font-title-sans text-[clamp(40px,6.2vw,76px)] font-bold tracking-tight leading-[1.08] text-white mb-6">
         {headlines[0].text}{' '}
-        <em className="font-serif-accent not-italic text-white underline decoration-[#CAF0F8]/40">{headlines[0].italic}</em>
+        <span className="font-medium text-white/95">{headlines[0].italic}</span>
       </h1>
     );
   }
@@ -48,9 +48,9 @@ function RotatingHeadline() {
           className="absolute inset-0 font-title-sans text-[clamp(40px,6.2vw,76px)] font-bold tracking-tight leading-[1.08] text-white flex flex-col items-center justify-center text-center"
         >
           <span className="block drop-shadow-[0_2px_18px_rgba(0,30,100,0.4)]">{headline.text}</span>
-          <em className="font-serif-accent not-italic block text-white drop-shadow-[0_2px_24px_rgba(0,30,100,0.5)]">
+          <span className="block font-medium text-white/95 drop-shadow-[0_2px_24px_rgba(0,30,100,0.5)]">
             {headline.italic}
-          </em>
+          </span>
         </motion.h1>
       </AnimatePresence>
     </div>

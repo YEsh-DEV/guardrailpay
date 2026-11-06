@@ -60,8 +60,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['var(--font-instrument)', 'Instrument Serif', 'Georgia', 'serif'],
+        display: ['var(--font-manrope)', 'Manrope', 'system-ui', 'sans-serif'],
         sans: ['var(--font-manrope)', 'Manrope', 'system-ui', 'sans-serif'],
+        inter: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
         mono: ['var(--font-mono)', 'IBM Plex Mono', 'monospace'],
       },
       borderRadius: {

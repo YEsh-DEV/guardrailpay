@@ -204,7 +204,7 @@ export default function SafeRotationSection() {
           </span>
           <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-3">
             From Propose to Live{' '}
-            <em className="font-serif-accent not-italic text-[#1A6CFF]">in 48 Hours.</em>
+            <span className="font-medium text-[#1A6CFF]">in 48 Hours.</span>
           </h2>
           <p className="text-[#64748B] text-sm sm:text-base max-w-xl mx-auto">
             Legitimate payout changes go through an announced, delayed, human-approved rotation guarded by World ID Agent Pass.

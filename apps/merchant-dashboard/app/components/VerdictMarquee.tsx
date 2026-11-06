@@ -152,7 +152,7 @@ export default function VerdictMarquee() {
           </span>
           <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] leading-[1.1] font-bold text-[#0F172A] mb-3">
             Every known vector.{' '}
-            <em className="font-serif-accent not-italic text-[#1A6CFF]">Every one blocked.</em>
+            <span className="font-medium text-[#1A6CFF]">Every one blocked.</span>
           </h2>
           <p className="text-[#64748B] text-sm sm:text-base max-w-lg mx-auto">
             Alternating threat scenario cards documented from real autonomous agent payment traffic.

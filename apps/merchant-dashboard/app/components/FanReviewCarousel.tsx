@@ -73,7 +73,7 @@ export default function FanReviewCarousel() {
         </span>
         <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] leading-[1.05] tracking-[-0.03em] font-bold text-[#0F172A] mb-3">
           Real attacks.{' '}
-          <em className="font-serif-accent not-italic text-[#1A6CFF]">Zero loss.</em>
+          <span className="font-medium text-[#1A6CFF]">Zero loss.</span>
         </h2>
         <p className="text-sm sm:text-base lg:text-lg text-[#64748B] max-w-xl mx-auto">
           How QuoteSeal defends autonomous agents against hostile 402 endpoints and payment manipulation in the wild.

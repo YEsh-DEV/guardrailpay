@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Manrope:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-instrument: 'Instrument Serif', Georgia, serif;
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-manrope: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
   --color-bg-base: #FFFFFF;
@@ -70,25 +70,26 @@ body {
   padding: 0;
 }
 
-/* Typography Utility Classes matching Tuyo */
+/* Typography Utility Classes matching Formal Minimal Spec */
 .font-display-hero {
-  font-family: var(--font-instrument);
+  font-family: var(--font-manrope);
+  font-weight: 700;
   letter-spacing: -0.035em;
   line-height: 0.98;
 }
 
 .font-title-sans {
   font-family: var(--font-manrope);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
 }
 
 .font-serif-accent {
-  font-family: var(--font-instrument);
-  font-style: italic;
+  font-family: var(--font-inter);
+  font-style: normal;
   font-weight: 400;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.015em;
 }
 
 .font-mono-tag {

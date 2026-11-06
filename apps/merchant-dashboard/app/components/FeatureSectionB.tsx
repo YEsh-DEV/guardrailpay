@@ -227,7 +227,7 @@ export default function FeatureSectionB() {
             </span>
             <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-4">
               Keep Your Money Secure{' '}
-              <em className="font-serif-accent not-italic text-[#1A6CFF]">Always.</em>
+              <span className="font-medium text-[#1A6CFF]">Always.</span>
             </h2>
             <p className="text-[#64748B] text-base sm:text-lg leading-relaxed mb-6">
               Every merchant's ENSv2 name contains a cryptographically signed payment profile. QuoteSeal
