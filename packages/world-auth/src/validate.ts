@@ -23,7 +23,7 @@ export async function validateCallback(
     return {
       valid: false,
       subject: '',
-      error: `World ID Auth Denied: ${params.error_description || params.error}`,
+      error: `World ID Auth Denied (${params.error}): ${params.error_description || params.error}`,
     };
   }
 

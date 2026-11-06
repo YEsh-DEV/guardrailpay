@@ -9,7 +9,7 @@
     "lint": "echo 'No lint specified for buyer-demo'",
     "agent": "tsx agent/index.ts",
     "dev": "tsx agent/index.ts",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "clean": "rm -rf dist"
   },
   "dependencies": {

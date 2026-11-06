@@ -19,7 +19,7 @@ export async function resolveProfile(
   const normalizedName = ensName.trim().toLowerCase();
 
   // 1. Check mock registry if configured (e.g. for deterministic unit / simulation tests)
-  if (options.mockRegistry && options.mockRegistry.has(normalizedName)) {
+  if (options.mockRegistry) {
     const mock = options.mockRegistry.get(normalizedName);
     if (!mock) throw new ProfileResolutionError(`No mock profile for ${ensName}`);
     return EnsMerchantProfileSchema.parse(mock);
