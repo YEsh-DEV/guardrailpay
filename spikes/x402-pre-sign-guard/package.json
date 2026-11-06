@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "tsx --test proof.test.ts",
-    "typecheck": "tsc --noEmit"
+    "test": "tsx --test proof.test.ts final-boundary.test.ts",
+    "typecheck": "tsc --noEmit",
+    "test:boundary": "tsx --test final-boundary.test.ts"
   },
   "keywords": [],
   "author": "",

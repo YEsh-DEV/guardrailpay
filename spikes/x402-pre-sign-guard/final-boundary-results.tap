@@ -1,0 +1,112 @@
+
+> x402-pre-sign-guard@1.0.0 test
+> tsx --test proof.test.ts final-boundary.test.ts --test-reporter=tap
+
+{"case":"payTo","signerCalls":0}
+{"case":"amount","signerCalls":0}
+{"case":"asset","signerCalls":0}
+{"case":"network","signerCalls":0}
+{"case":"scheme","signerCalls":0}
+{"case":"feePayer","signerCalls":0}
+{"case":"timeout","signerCalls":0}
+{"case":"replace selection","signerCalls":0}
+{"case":"equal cloned reference","signerCalls":0}
+{"case":"replace offered reference","signerCalls":0}
+{"case":"original offers modified","signerCalls":0}
+{"case":"getter TOCTOU","signerCalls":0}
+{"case":"proxy selection","signerCalls":0}
+{"case":"throw exception","signerCalls":0}
+(node:107658) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ final boundary rejects payTo (3.062147ms)
+✔ final boundary rejects amount (0.463871ms)
+✔ final boundary rejects asset (0.416666ms)
+✔ final boundary rejects network (0.50975ms)
+✔ final boundary rejects scheme (0.357561ms)
+✔ final boundary rejects feePayer (0.404851ms)
+✔ final boundary rejects timeout (0.323143ms)
+✔ final boundary rejects replace selection (0.363531ms)
+✔ final boundary rejects equal cloned reference (0.429605ms)
+✔ final boundary rejects replace offered reference (0.416142ms)
+✔ final boundary rejects original offers modified (0.297077ms)
+✔ final boundary rejects getter TOCTOU (0.285981ms)
+✔ final boundary rejects proxy selection (0.320422ms)
+✔ final boundary rejects throw exception (0.230085ms)
+✔ authorized payment signs exact private detached selection once (0.639386ms)
+✔ no direct signer call before or after BLOCK (0.249438ms)
+✔ no direct signer call before or after HOLD (0.177965ms)
+✔ no direct signer call before or after UNVERIFIABLE (0.193694ms)
+✔ final boundary rechecks current profile (0.362461ms)
+✔ final boundary rechecks current anchors (0.226177ms)
+✔ final boundary rechecks current identity (0.19637ms)
+✔ final boundary rechecks current freshness (0.230418ms)
+✔ real registered extension mutation cannot cross signer boundary (0.432487ms)
+✔ real scheme hook mutation cannot cross signer boundary (0.297391ms)
+✔ real SDK re-entry after rejected mutation cannot reuse approval (0.279571ms)
+✔ alternate SDK selection cannot replace buyer-selected offered option (0.17812ms)
+✔ selected second offer signs its exact destination and amount (0.281978ms)
+✔ direct scheme execution without guard cannot invoke raw signer (0.123273ms)
+✔ HTTP SDK recovery retry cannot reuse consumed authorization (4.083692ms)
+✔ later aborted hook revokes authorization through facade finally (0.314426ms)
+✔ delayed mutation during real signer await cannot change signer input (0.353479ms)
+✔ origin cannot be redefined by resource.url or altered buyer input object (0.256251ms)
+✔ concurrent calls to one attempt cannot sign twice (0.316363ms)
+✔ current trust adapter exception blocks final signer (0.280128ms)
+✔ scheme failure recovery cannot invoke signer after boundary rejection (0.294079ms)
+✔ later hook exception followed by SDK retry remains closed via attempt (0.207773ms)
+✔ current observation clock expiry during hooks rejects before signer (0.266666ms)
+✔ registration capabilities cannot be added through returned facade (0.194313ms)
+✔ changing startup hook array cannot install a late plugin (0.269171ms)
+{"name":"T1 valid","verdict":"PASS","signerCalls":1,"payloadCreationCalls":1}
+{"name":"T2 payTo","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T3 asset","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T3 network","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T4 amount","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T5 unknown","verdict":"HOLD","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T6 second valid","verdict":"PASS","signerCalls":1,"payloadCreationCalls":1}
+{"name":"T6 second malicious","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T6 nonmember","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T7 injection","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T9 stale","verdict":"UNVERIFIABLE","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T9 disagreement","verdict":"UNVERIFIABLE","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T9 outage","verdict":"UNVERIFIABLE","signerCalls":0,"payloadCreationCalls":0}
+{"name":"anchor changed","verdict":"HOLD","signerCalls":0,"payloadCreationCalls":0}
+{"name":"version changed","verdict":"HOLD","signerCalls":0,"payloadCreationCalls":0}
+{"name":"offer stale","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"malformed amount","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"timeout zero","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"unknown scheme","verdict":"UNVERIFIABLE","signerCalls":0,"payloadCreationCalls":0}
+{"name":"hook exception","verdict":"UNVERIFIABLE","signerCalls":0,"payloadCreationCalls":0}
+(node:107659) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ T1 valid (6.983506ms)
+✔ T2 payTo (0.910634ms)
+✔ T3 asset (0.460091ms)
+✔ T3 network (0.395466ms)
+✔ T4 amount (0.409718ms)
+✔ T5 unknown (0.362265ms)
+✔ T6 second valid (0.560954ms)
+✔ T6 second malicious (0.430839ms)
+✔ T6 nonmember (0.4144ms)
+✔ T7 injection (0.450142ms)
+✔ T9 stale (0.233831ms)
+✔ T9 disagreement (0.194263ms)
+✔ T9 outage (0.188851ms)
+✔ anchor changed (0.194879ms)
+✔ version changed (0.182399ms)
+✔ offer stale (0.200706ms)
+✔ malformed amount (0.20004ms)
+✔ timeout zero (0.222331ms)
+✔ unknown scheme (0.24018ms)
+✔ hook exception (0.218493ms)
+✔ T8 real HTTP redirect blocked before signer (18.245609ms)
+✔ recovery retry re-enters guard and cannot sign rejected retry (0.954503ms)
+✔ SDK limitation: later trusted hook can mutate selection after guard (0.180132ms)
+ℹ tests 62
+ℹ suites 0
+ℹ pass 62
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 752.677849
