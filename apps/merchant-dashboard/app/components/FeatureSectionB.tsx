@@ -78,6 +78,7 @@ function MerchantCard() {
 
   return (
     <div
+      data-cursor-card="true"
       className="relative w-[380px] h-[240px] cursor-pointer"
       style={{ perspective: '1200px' }}
       onClick={() => setFlipped((f) => !f)}

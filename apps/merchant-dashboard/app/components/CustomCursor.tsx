@@ -1,12 +1,11 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
-  const [isHovering, setIsHovering] = useState(false);
+  const [hoverMode, setHoverMode] = useState<'default' | 'pointer' | 'card'>('default');
   const [isHidden, setIsHidden] = useState(true);
   const rafRef = useRef<number>(0);
   const pos = useRef({ x: 0, y: 0 });
@@ -31,16 +30,30 @@ export default function CustomCursor() {
 
     const checkHover = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const isInteractive = target.closest('a, button, [role="button"], input, label');
-      setIsHovering(!!isInteractive);
+      if (!target) return;
+      const isCard = !!target.closest('[data-cursor-card]');
+      const isInteractive = !!target.closest('a, button, [role="button"], input, label, [data-cursor-hover]');
+
+      if (isCard) {
+        setHoverMode('card');
+      } else if (isInteractive) {
+        setHoverMode('pointer');
+      } else {
+        setHoverMode('default');
+      }
     };
 
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
     const animate = () => {
-      cursorPos.current.x = lerp(cursorPos.current.x, pos.current.x, 0.12);
-      cursorPos.current.y = lerp(cursorPos.current.y, pos.current.y, 0.12);
+      cursorPos.current.x = lerp(cursorPos.current.x, pos.current.x, 0.14);
+      cursorPos.current.y = lerp(cursorPos.current.y, pos.current.y, 0.14);
       if (cursorRef.current) {
-        const size = isHovering ? 48 : 24;
+        let size = 24;
+        if (hoverMode === 'card') {
+          size = 64;
+        } else if (hoverMode === 'pointer') {
+          size = 48;
+        }
         cursorRef.current.style.transform = `translate(${cursorPos.current.x - size / 2}px, ${cursorPos.current.y - size / 2}px)`;
         cursorRef.current.style.width = `${size}px`;
         cursorRef.current.style.height = `${size}px`;
@@ -61,7 +74,7 @@ export default function CustomCursor() {
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, [isHovering]);
+  }, [hoverMode]);
 
   if (isHidden && typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
     return null;
@@ -69,19 +82,33 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Large ring cursor */}
+      {/* Outer ring cursor */}
       <div
         ref={cursorRef}
-        className="fixed top-0 left-0 z-[9999] pointer-events-none rounded-full border border-[#00FF59]/60 mix-blend-difference transition-[width,height] duration-200"
-        style={{ willChange: 'transform', transition: 'width 0.25s ease, height 0.25s ease' }}
-      />
+        className={`fixed top-0 left-0 z-[9999] pointer-events-none rounded-full flex items-center justify-center transition-[width,height,border-color,background-color,box-shadow] duration-200 ${
+          hoverMode === 'card'
+            ? 'border-2 border-[#00FF59] bg-[#00FF59]/15 shadow-[0_0_28px_rgba(0,255,89,0.45)] backdrop-blur-[1px]'
+            : hoverMode === 'pointer'
+            ? 'border border-[#00FF59]/80 bg-white/5 shadow-[0_0_15px_rgba(0,255,89,0.25)]'
+            : 'border border-[#00FF59]/60 mix-blend-difference'
+        }`}
+        style={{ willChange: 'transform' }}
+      >
+        {hoverMode === 'card' && (
+          <span className="font-mono text-[10px] font-bold text-[#00FF59] tracking-wider uppercase select-none pointer-events-none animate-pulse">
+            TILT
+          </span>
+        )}
+      </div>
+
       {/* Small dot cursor */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 z-[9999] pointer-events-none w-2 h-2 rounded-full bg-[#00FF59]"
+        className={`fixed top-0 left-0 z-[9999] pointer-events-none rounded-full transition-opacity duration-200 ${
+          hoverMode === 'card' ? 'w-2 h-2 bg-[#00FF59] opacity-0' : 'w-2 h-2 bg-[#00FF59] opacity-100'
+        }`}
         style={{ willChange: 'transform' }}
       />
     </>
   );
 }
-

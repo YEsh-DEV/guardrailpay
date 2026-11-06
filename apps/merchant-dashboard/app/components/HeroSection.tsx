@@ -62,6 +62,7 @@ function RotatingHeadline() {
 }
 
 function FloatingCard3D() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
   const rotX = useRef(0);
@@ -69,35 +70,50 @@ function FloatingCard3D() {
   const targetX = useRef(0);
   const targetY = useRef(0);
   const time = useRef(0);
+  const isInsideCircle = useRef(false);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!cardRef.current || prefersReduced) return;
-      const rect = cardRef.current.getBoundingClientRect();
+      if (!containerRef.current || prefersReduced) return;
+      const rect = containerRef.current.getBoundingClientRect();
       const cx = rect.left + rect.width / 2;
       const cy = rect.top + rect.height / 2;
-      const dx = (e.clientX - cx) / (rect.width / 2);
-      const dy = (e.clientY - cy) / (rect.height / 2);
-      targetX.current = dy * -18;
-      targetY.current = dx * 18;
+      const radius = rect.width / 2;
+      const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+
+      if (dist <= radius) {
+        isInsideCircle.current = true;
+        const dx = (e.clientX - cx) / radius;
+        const dy = (e.clientY - cy) / radius;
+        targetX.current = dy * -22;
+        targetY.current = dx * 22;
+      } else {
+        isInsideCircle.current = false;
+        targetX.current = 0;
+        targetY.current = 0;
+      }
     };
 
-    const card = cardRef.current;
-    if (card) {
-      card.addEventListener('mousemove', handleMouseMove);
-    }
-    document.addEventListener('mousemove', handleMouseMove);
+    const handleMouseLeave = () => {
+      isInsideCircle.current = false;
+      targetX.current = 0;
+      targetY.current = 0;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
 
     const animate = (t: number) => {
       time.current = t * 0.001;
-      const ambientX = Math.sin(time.current * 0.9) * 4;
-      const ambientY = Math.cos(time.current * 0.7) * 4;
+      const ambientX = Math.sin(time.current * 0.9) * 3;
+      const ambientY = Math.cos(time.current * 0.7) * 3;
 
       if (!prefersReduced) {
-        rotX.current += (targetX.current + ambientX - rotX.current) * 0.06;
-        rotY.current += (targetY.current + ambientY - rotY.current) * 0.06;
+        const easing = isInsideCircle.current ? 0.08 : 0.04;
+        rotX.current += (targetX.current + ambientX - rotX.current) * easing;
+        rotY.current += (targetY.current + ambientY - rotY.current) * easing;
       }
 
       if (cardRef.current) {
@@ -116,28 +132,35 @@ function FloatingCard3D() {
 
     return () => {
       cancelAnimationFrame(rafRef.current);
-      if (card) {
-        card.removeEventListener('mousemove', handleMouseMove);
-      }
-      document.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, []);
 
   return (
-    <div className="relative flex items-center justify-center w-full h-full min-h-[420px]">
-      {/* Ambient background glow rings */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[340px] h-[340px] rounded-full border border-[#00FF59]/10 animate-pulse-slow" />
-        <div className="absolute w-[490px] h-[490px] rounded-full border border-[#00FF59]/5 animate-pulse-slow" style={{ animationDelay: '1s' }} />
-        <div className="absolute w-[620px] h-[620px] rounded-full border border-white/[0.04]" />
-      </div>
-
-      {/* The 3D Card with pure white & holographic sheen */}
+    <div className="relative flex items-center justify-center w-full h-full min-h-[460px]">
+      {/* Interactive circular zone surrounding the card */}
       <div
-        ref={cardRef}
-        className="relative w-[340px] h-[215px] cursor-pointer select-none"
-        style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
+        ref={containerRef}
+        data-cursor-card="true"
+        className="relative flex items-center justify-center w-[480px] h-[480px] rounded-full cursor-pointer select-none group"
       >
+        {/* Ambient background glow rings surrounding the card */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          {/* Small inner circle directly surrounding the card */}
+          <div className="w-[340px] h-[340px] rounded-full border border-[#00FF59]/20 group-hover:border-[#00FF59]/50 group-hover:shadow-[0_0_35px_rgba(0,255,89,0.22)] transition-all duration-500 animate-pulse-slow" />
+          {/* Middle ring */}
+          <div className="absolute w-[480px] h-[480px] rounded-full border border-[#00FF59]/10 group-hover:border-[#00FF59]/30 transition-all duration-500 animate-pulse-slow" style={{ animationDelay: '1s' }} />
+          {/* Outer ring */}
+          <div className="absolute w-[620px] h-[620px] rounded-full border border-white/[0.04] group-hover:border-white/[0.08] transition-all duration-500" />
+        </div>
+
+        {/* The 3D Card with pure white & holographic sheen */}
+        <div
+          ref={cardRef}
+          className="relative z-10 w-[340px] h-[215px] select-none"
+          style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
+        >
         <div className="absolute inset-0 rounded-[28px] overflow-hidden shadow-[0_45px_90px_-15px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.15)] bg-gradient-to-br from-[#0E2A1A] via-[#091F14] to-[#081014]">
           {/* Holographic sheen overlay */}
           <div className="holo-sheen absolute inset-0 opacity-70" />
@@ -182,6 +205,7 @@ function FloatingCard3D() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
