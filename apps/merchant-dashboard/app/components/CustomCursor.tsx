@@ -87,15 +87,15 @@ export default function CustomCursor() {
         ref={cursorRef}
         className={`fixed top-0 left-0 z-[9999] pointer-events-none rounded-full flex items-center justify-center transition-[width,height,border-color,background-color,box-shadow] duration-200 ${
           hoverMode === 'card'
-            ? 'border-2 border-[#00FF59] bg-[#00FF59]/15 shadow-[0_0_28px_rgba(0,255,89,0.45)] backdrop-blur-[1px]'
+            ? 'border-2 border-[#00B4D8] bg-[#00B4D8]/20 shadow-[0_0_28px_rgba(0,180,216,0.6)] backdrop-blur-[1px]'
             : hoverMode === 'pointer'
-            ? 'border border-[#00FF59]/80 bg-white/5 shadow-[0_0_15px_rgba(0,255,89,0.25)]'
-            : 'border border-[#00FF59]/60 mix-blend-difference'
+            ? 'border border-[#00B4D8]/80 bg-[#0077B6]/15 shadow-[0_0_15px_rgba(0,180,216,0.35)]'
+            : 'border border-[#00B4D8]/60 mix-blend-difference'
         }`}
         style={{ willChange: 'transform' }}
       >
         {hoverMode === 'card' && (
-          <span className="font-mono text-[10px] font-bold text-[#00FF59] tracking-wider uppercase select-none pointer-events-none animate-pulse">
+          <span className="font-mono text-[10px] font-bold text-[#00B4D8] tracking-wider uppercase select-none pointer-events-none animate-pulse">
             TILT
           </span>
         )}
@@ -105,7 +105,7 @@ export default function CustomCursor() {
       <div
         ref={dotRef}
         className={`fixed top-0 left-0 z-[9999] pointer-events-none rounded-full transition-opacity duration-200 ${
-          hoverMode === 'card' ? 'w-2 h-2 bg-[#00FF59] opacity-0' : 'w-2 h-2 bg-[#00FF59] opacity-100'
+          hoverMode === 'card' ? 'w-2 h-2 bg-[#00B4D8] opacity-0' : 'w-2 h-2 bg-[#00B4D8] opacity-100'
         }`}
         style={{ willChange: 'transform' }}
       />

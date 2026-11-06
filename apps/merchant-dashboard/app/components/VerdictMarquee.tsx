@@ -91,8 +91,8 @@ function AttackCard({ card }: { card: typeof attackCards[0] }) {
       className={`
         shrink-0 w-[295px] p-6 rounded-[24px] transition-transform duration-300 cursor-default select-none
         ${isLight
-          ? 'bg-[#FAF9F6] text-[#141414] shadow-[0_15px_35px_-10px_rgba(0,0,0,0.12)] border border-[#E5E4DA]'
-          : 'bg-[#0E171D] text-white shadow-[0_20px_40px_-15px_rgba(0,0,0,0.6)] border border-white/10'
+          ? 'bg-[#CAF0F8] text-[#03045E] shadow-[0_15px_35px_-10px_rgba(2,3,59,0.3)] border border-[#90E0EF]'
+          : 'bg-[#02033B]/90 text-[#CAF0F8] shadow-[0_20px_40px_-15px_rgba(2,3,59,0.8)] border border-[#0077B6]/40'
         }
         hover:scale-[1.02]
       `}
@@ -107,15 +107,15 @@ function AttackCard({ card }: { card: typeof attackCards[0] }) {
         >
           {badge.tag}
         </span>
-        <span className={`font-mono text-[11px] ${isLight ? 'text-[#77766F]' : 'text-white/35'}`}>
+        <span className={`font-mono text-[11px] ${isLight ? 'text-[#0077B6]' : 'text-[#90E0EF]/60'}`}>
           {card.detectedIn !== '—' ? `${card.detectedIn} lat.` : 'Fail-safe'}
         </span>
       </div>
 
-      <h3 className={`font-title-sans text-base mb-2 ${isLight ? 'text-[#141414]' : 'text-white'}`}>
+      <h3 className={`font-title-sans text-base mb-2 ${isLight ? 'text-[#03045E]' : 'text-[#CAF0F8]'}`}>
         {card.title}
       </h3>
-      <p className={`text-xs leading-relaxed ${isLight ? 'text-[#586974]' : 'text-white/50'}`}>
+      <p className={`text-xs leading-relaxed ${isLight ? 'text-[#0077B6]' : 'text-[#90E0EF]/80'}`}>
         {card.desc}
       </p>
     </div>
@@ -139,7 +139,7 @@ export default function VerdictMarquee() {
   const row2 = attackCards.slice(half - 1);
 
   return (
-    <section className="relative py-32 overflow-hidden bg-[#081014] text-white">
+    <section className="relative py-32 overflow-hidden bg-[#03045E] text-[#CAF0F8]">
       {/* Background ambient glow */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 mb-14 text-center">
         <motion.div
@@ -147,23 +147,23 @@ export default function VerdictMarquee() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
         >
-          <span className="font-mono text-xs font-semibold text-[#00FF59] uppercase tracking-widest mb-3 block">
+          <span className="font-mono text-xs font-semibold text-[#00B4D8] uppercase tracking-widest mb-3 block">
             Threat Landscape
           </span>
-          <h2 className="font-title-sans text-[clamp(32px,4.5vw,56px)] leading-[1.1] text-white mb-4">
+          <h2 className="font-title-sans text-[clamp(32px,4.5vw,56px)] leading-[1.1] text-[#CAF0F8] mb-4">
             Every known vector.{' '}
-            <em className="font-serif-accent not-italic text-[#00FF59]">Every one blocked.</em>
+            <em className="font-serif-accent not-italic text-[#00B4D8]">Every one blocked.</em>
           </h2>
-          <p className="text-[#9BA9B2] text-lg max-w-lg mx-auto">
-            Alternating light & dark scenario cards documented from real autonomous agent payment traffic.
+          <p className="text-[#90E0EF] text-lg max-w-lg mx-auto">
+            Alternating Deep Sea and Glacial Aqua scenario cards documented from real autonomous agent payment traffic.
           </p>
         </motion.div>
       </div>
 
       {/* Dual-tone Marquee Rows */}
       <div className="relative space-y-6">
-        <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none bg-gradient-to-r from-[#081014] to-transparent" />
-        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none bg-gradient-to-l from-[#081014] to-transparent" />
+        <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none bg-gradient-to-r from-[#03045E] to-transparent" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none bg-gradient-to-l from-[#03045E] to-transparent" />
 
         <div className="overflow-hidden">
           <MarqueeTrack cards={row1} />

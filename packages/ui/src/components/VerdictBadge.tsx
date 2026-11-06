@@ -19,11 +19,11 @@ export function VerdictBadge({
 }: VerdictBadgeProps) {
   const config = {
     PASS: {
-      bg: 'bg-emerald-950/80',
-      border: 'border-emerald-500/40',
-      text: 'text-emerald-400',
-      glow: 'shadow-[0_0_15px_-3px_rgba(0,255,89,0.3)]',
-      dot: 'bg-emerald-400',
+      bg: 'bg-[#03045E]/80',
+      border: 'border-[#00B4D8]/50',
+      text: 'text-[#00B4D8]',
+      glow: 'shadow-[0_0_15px_-3px_rgba(0,180,216,0.5)]',
+      dot: 'bg-[#00B4D8]',
       label: 'VERIFIED · PASS',
     },
     BLOCK: {

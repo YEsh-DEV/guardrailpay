@@ -8,11 +8,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        deepsea: {
+          abyss: '#02033B',
+          navy: '#03045E',
+          cerulean: '#0077B6',
+          cyan: '#00B4D8',
+          aqua: '#90E0EF',
+          foam: '#CAF0F8',
+        },
         bg: {
-          base: '#081014',
-          darker: '#05090C',
-          surface: '#0E171D',
-          elevated: '#14222B',
+          base: '#03045E',
+          darker: '#02033B',
+          surface: '#050875',
+          elevated: '#081096',
         },
         tuyo: {
           canvas: '#FAF9F6',
@@ -60,7 +68,9 @@ module.exports = {
         outer: '48px',
       },
       boxShadow: {
-        'glow-green': '0 0 35px -5px rgba(0, 255, 89, 0.35)',
+        'glow-cyan': '0 0 35px -5px rgba(0, 180, 216, 0.45)',
+        'glow-cerulean': '0 0 35px -5px rgba(0, 119, 182, 0.45)',
+        'glow-green': '0 0 35px -5px rgba(0, 180, 216, 0.45)',
         'glow-danger': '0 0 35px -5px rgba(255, 59, 48, 0.4)',
         'ambient-card': '0 42px 76px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08)',
         'tuyo-light': '0 24px 48px -12px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04)',

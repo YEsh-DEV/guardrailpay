@@ -10,10 +10,10 @@ const rotationSteps = [
     title: 'Propose',
     subtitle: 'New address submitted',
     desc: 'The merchant operator submits a new payTo address through the QuoteSeal dashboard. This triggers an on-chain rotation proposal in the ENS Authorized Controller contract.',
-    bg: '#E3F2FD', // Frost Icy
-    text: '#0A192F', // Navy Ink
-    accent: '#0D47A1',
-    border: 'rgba(13, 71, 161, 0.2)',
+    bg: '#CAF0F8', // Frosted Foam
+    text: '#03045E', // Navy Ink
+    accent: '#00B4D8',
+    border: 'rgba(0, 180, 216, 0.25)',
   },
   {
     id: 'worldid',
@@ -21,10 +21,10 @@ const rotationSteps = [
     title: 'World ID Check',
     subtitle: 'Human operator verified',
     desc: 'A World ID Agent Pass proof is generated for the operator. QuoteSeal verifies on-chain that the proposer is a unique human — no bots can authorize a payout address change.',
-    bg: '#D0E6FA', // Soft Sky
-    text: '#0A192F',
-    accent: '#2196F3',
-    border: 'rgba(33, 150, 243, 0.25)',
+    bg: '#90E0EF', // Glacial Aqua
+    text: '#03045E',
+    accent: '#0077B6',
+    border: 'rgba(0, 119, 182, 0.25)',
   },
   {
     id: 'delay',
@@ -32,10 +32,10 @@ const rotationSteps = [
     title: '48h Time-Lock',
     subtitle: 'Emergency window open',
     desc: 'The proposal enters a 48-hour delay period. During this window, any observer can raise an alarm. AI agents continue paying the existing address safely.',
-    bg: '#90CAF9', // Mist Azure
-    text: '#0A192F',
-    accent: '#0D47A1',
-    border: 'rgba(13, 71, 161, 0.3)',
+    bg: '#00B4D8', // Electric Cyan
+    text: '#03045E',
+    accent: '#03045E',
+    border: 'rgba(3, 4, 94, 0.3)',
   },
   {
     id: 'activate',
@@ -43,10 +43,10 @@ const rotationSteps = [
     title: 'Activate',
     subtitle: 'New address goes live',
     desc: 'After the delay passes with no objections and the World ID proof is confirmed valid, the new payTo address is written to the ENS resolver and immediately enforced.',
-    bg: '#C7E2FE', // Pale Azure
-    text: '#0A192F',
-    accent: '#2196F3',
-    border: 'rgba(33, 150, 243, 0.3)',
+    bg: '#0077B6', // Oceanic Cerulean
+    text: '#CAF0F8',
+    accent: '#CAF0F8',
+    border: 'rgba(202, 240, 248, 0.3)',
   },
 ];
 
@@ -181,12 +181,12 @@ export default function SafeRotationSection() {
   const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <section className="relative py-32 md:py-40 overflow-hidden bg-[#081014] text-white">
+    <section className="relative py-32 md:py-40 overflow-hidden bg-[#03045E] text-[#CAF0F8]">
       {/* Background ambient lighting */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] opacity-15 pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] opacity-20 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse, rgba(0,255,89,0.3) 0%, rgba(214,227,203,0.1) 50%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(0,180,216,0.35) 0%, rgba(0,119,182,0.15) 50%, transparent 70%)',
           filter: 'blur(90px)',
         }}
       />
@@ -199,14 +199,14 @@ export default function SafeRotationSection() {
           viewport={{ once: true, amount: 0.4 }}
           className="text-center mb-16"
         >
-          <span className="font-mono text-xs font-semibold text-[#00FF59] uppercase tracking-widest mb-3 block">
+          <span className="font-mono text-xs font-semibold text-[#00B4D8] uppercase tracking-widest mb-3 block">
             Safe Payout Rotation
           </span>
           <h2 className="font-title-sans text-[clamp(36px,5vw,60px)] leading-[1.1] text-white mb-4">
             From propose to live{' '}
-            <em className="font-serif-accent not-italic text-[#00FF59]">in 48 hours.</em>
+            <em className="font-serif-accent not-italic text-[#00B4D8]">in 48 hours.</em>
           </h2>
-          <p className="text-[#9BA9B2] text-lg max-w-xl mx-auto">
+          <p className="text-[#90E0EF] text-lg max-w-xl mx-auto">
             Legitimate payout changes go through an announced, delayed, human-approved rotation guarded by World ID Agent Pass.
           </p>
         </motion.div>

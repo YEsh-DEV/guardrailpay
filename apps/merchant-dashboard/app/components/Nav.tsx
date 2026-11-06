@@ -53,20 +53,20 @@ export default function Nav() {
           relative flex items-center justify-between gap-8 w-full max-w-6xl px-6 py-3 rounded-full
           transition-all duration-500
           ${scrolled
-            ? 'bg-[rgba(8,16,20,0.80)] backdrop-blur-[20px] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]'
+            ? 'bg-[#02033B]/85 backdrop-blur-[20px] border border-[#0077B6]/30 shadow-[0_8px_32px_rgba(2,3,59,0.7)]'
             : 'bg-transparent border border-white/0'
           }
         `}
       >
         {/* Logo */}
         <a href="/" className="flex items-center gap-2.5 group shrink-0">
-          <span className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-[#00FF59] to-[#00C94C] flex items-center justify-center shadow-[0_0_20px_rgba(0,255,89,0.5)]">
+          <span className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-[#00B4D8] to-[#0077B6] flex items-center justify-center shadow-[0_0_20px_rgba(0,180,216,0.5)]">
             <svg viewBox="0 0 24 24" fill="none" className="w-4.5 h-4.5">
-              <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#081014"/>
-              <path d="M9 12L11 14L15 10" stroke="#00FF59" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#03045E"/>
+              <path d="M9 12L11 14L15 10" stroke="#CAF0F8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </span>
-          <span className="font-display text-lg font-normal tracking-tight text-white group-hover:text-[#00FF59] transition-colors">
+          <span className="font-display text-lg font-normal tracking-tight text-[#CAF0F8] group-hover:text-[#00B4D8] transition-colors">
             QuoteSeal
           </span>
         </a>
@@ -77,7 +77,7 @@ export default function Nav() {
             <a
               key={link.label}
               href={link.href}
-              className="text-sm text-[#9BA9B2] hover:text-white transition-colors duration-200 font-medium"
+              className="text-sm text-[#90E0EF]/80 hover:text-[#CAF0F8] transition-colors duration-200 font-medium"
             >
               {link.label}
             </a>
@@ -88,17 +88,17 @@ export default function Nav() {
         <div className="flex items-center gap-3">
           <a
             href="/merchant"
-            className="hidden md:block text-sm text-[#9BA9B2] hover:text-white transition-colors font-medium"
+            className="hidden md:block text-sm text-[#90E0EF]/80 hover:text-[#CAF0F8] transition-colors font-medium"
           >
             Dashboard
           </a>
           <a
             href="#demo"
             className="
-              inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold
-              bg-[#00FF59] text-[#081014] hover:bg-[#9AEA62]
-              shadow-[0_0_20px_rgba(0,255,89,0.35)]
-              hover:shadow-[0_0_30px_rgba(0,255,89,0.6)]
+              inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold
+              bg-[#00B4D8] text-[#03045E] hover:bg-[#90E0EF]
+              shadow-[0_0_20px_rgba(0,180,216,0.45)]
+              hover:shadow-[0_0_30px_rgba(0,180,216,0.7)]
               transition-all duration-300 ease-out
               active:scale-[0.97]
             "
@@ -130,7 +130,7 @@ export default function Nav() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.97 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full left-4 right-4 mt-2 p-4 rounded-2xl bg-[rgba(14,23,29,0.95)] backdrop-blur-xl border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
+            className="absolute top-full left-4 right-4 mt-2 p-4 rounded-2xl bg-[#02033B]/95 backdrop-blur-xl border border-[#0077B6]/30 shadow-[0_20px_60px_rgba(2,3,59,0.9)]"
           >
             {navLinks.map((link, i) => (
               <motion.a
@@ -140,7 +140,7 @@ export default function Nav() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="flex items-center py-3 px-2 text-base text-white/80 hover:text-white border-b border-white/5 last:border-0 transition-colors"
+                className="flex items-center py-3 px-2 text-base text-[#90E0EF] hover:text-[#CAF0F8] border-b border-white/5 last:border-0 transition-colors"
               >
                 {link.label}
               </motion.a>

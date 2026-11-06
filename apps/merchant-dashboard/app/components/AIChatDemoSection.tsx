@@ -204,33 +204,33 @@ export default function AIChatDemoSection() {
           {/* Chat Window with Glassmorphism Contrast */}
           <div
             ref={sectionRef}
-            className="lg:col-span-3 rounded-[28px] glass-panel-dark overflow-hidden shadow-[0_35px_80px_rgba(0,0,0,0.8)]"
+            className="lg:col-span-3 rounded-[28px] glass-panel-dark overflow-hidden shadow-[0_35px_80px_rgba(2,3,59,0.9)] border border-[#0077B6]/30"
           >
             {/* Window Chrome Header */}
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/8 bg-[#091217]">
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#0077B6]/30 bg-[#02033B]">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-[#FF5F57]" />
                 <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-                <span className="w-3 h-3 rounded-full bg-[#28C840]" />
-                <span className="font-mono text-xs text-white/50 ml-3">QuoteSeal Agent Gateway</span>
+                <span className="w-3 h-3 rounded-full bg-[#00B4D8]" />
+                <span className="font-mono text-xs text-[#90E0EF]/60 ml-3">QuoteSeal Agent Gateway</span>
               </div>
               <span className={`font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                 mode === 'attack'
                   ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
-                  : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                  : 'bg-[#00B4D8]/20 text-[#00B4D8] border border-[#00B4D8]/45'
               }`}>
                 {mode === 'attack' ? '⚠ MITM TRAP ACTIVE' : '● LIVE EVALUATION'}
               </span>
             </div>
 
             {/* Conversation Flow */}
-            <div className="p-6 space-y-4 min-h-[390px] overflow-y-auto">
+            <div className="p-6 space-y-4 min-h-[390px] overflow-y-auto bg-[#03045E]/50">
               <AnimatePresence mode="popLayout">
                 {visibleMessages.map((i) => {
                   const msg = messages[i];
                   if (!msg) return null;
 
-                  // 1. Agent message: Pure White card with Deep Ink text (Tuyo Signature Contrast)
+                  // 1. Agent message
                   if (msg.type === 'agent') {
                     return (
                       <motion.div
@@ -239,10 +239,10 @@ export default function AIChatDemoSection() {
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-3"
                       >
-                        <div className="w-8 h-8 rounded-full bg-white text-[#141414] font-title-sans font-bold flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                        <div className="w-8 h-8 rounded-full bg-[#CAF0F8] text-[#03045E] font-title-sans font-bold flex items-center justify-center shrink-0 mt-0.5 shadow-md">
                           AI
                         </div>
-                        <div className="bg-white text-[#141414] rounded-3xl rounded-tl-sm px-5 py-3.5 text-sm font-medium shadow-[0_10px_25px_rgba(0,0,0,0.25)] max-w-[85%] leading-relaxed">
+                        <div className="bg-[#CAF0F8] text-[#03045E] rounded-3xl rounded-tl-sm px-5 py-3.5 text-sm font-semibold shadow-[0_10px_25px_rgba(2,3,59,0.3)] max-w-[85%] leading-relaxed">
                           {typingIndex === i ? (
                             <TypingText text={msg.text} startAt={true} />
                           ) : (
@@ -265,7 +265,7 @@ export default function AIChatDemoSection() {
                         <div className={`rounded-2xl px-4 py-3 border font-mono text-[11px] leading-relaxed whitespace-pre-wrap ${
                           (msg as any).tampered
                             ? 'bg-rose-950/40 border-rose-500/40 text-rose-300'
-                            : 'bg-white/[0.04] border-white/10 text-white/60'
+                            : 'bg-[#02033B]/80 border-[#0077B6]/35 text-[#90E0EF]'
                         }`}>
                           {(msg as any).tampered && (
                             <p className="text-rose-400 font-bold mb-1 text-[10px] uppercase tracking-wider">
@@ -296,16 +296,13 @@ export default function AIChatDemoSection() {
                         <div className={`rounded-3xl rounded-tr-sm px-5 py-4 max-w-[85%] border shadow-xl ${
                           isBlock
                             ? 'bg-gradient-to-br from-rose-950/70 to-rose-900/40 border-rose-500/50 shadow-[0_0_35px_rgba(255,59,48,0.25)]'
-                            : 'bg-gradient-to-br from-emerald-950/70 to-emerald-900/40 border-emerald-500/50 shadow-[0_0_35px_rgba(0,255,89,0.2)]'
+                            : 'bg-gradient-to-br from-[#02033B]/90 to-[#0077B6]/40 border-[#00B4D8]/50 shadow-[0_0_35px_rgba(0,180,216,0.25)]'
                         }`}>
-                          <div className={`font-mono text-xl font-bold mb-2 flex items-center gap-2 ${
-                            isBlock ? 'text-rose-400' : 'text-[#00FF59]'
-                          }`}>
-                            <span>{isBlock ? '✗ DEFENDED · BLOCK' : '✓ VERIFIED · PASS'}</span>
+                          <div className="flex items-center gap-2 mb-2 pb-2 border-b border-white/10">
+                            <span className={`w-2 h-2 rounded-full ${isBlock ? 'bg-rose-400' : 'bg-[#00B4D8]'}`} />
+                            <span className="font-title-sans text-xs font-semibold text-[#CAF0F8]">QuoteSeal Guard</span>
                           </div>
-                          <div className={`font-mono text-[11.5px] leading-relaxed whitespace-pre-wrap ${
-                            isBlock ? 'text-rose-200/80' : 'text-emerald-200/80'
-                          }`}>
+                          <div className="font-mono text-xs text-[#CAF0F8] leading-relaxed whitespace-pre-wrap">
                             {typingIndex === i ? (
                               <TypingText text={msg.text} startAt={true} />
                             ) : (
@@ -316,20 +313,19 @@ export default function AIChatDemoSection() {
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 font-bold font-mono text-xs ${
                           isBlock
                             ? 'bg-rose-500 text-white shadow-[0_0_15px_rgba(255,59,48,0.5)]'
-                            : 'bg-[#00FF59] text-[#081014] shadow-[0_0_15px_rgba(0,255,89,0.5)]'
+                            : 'bg-[#00B4D8] text-[#03045E] shadow-[0_0_15px_rgba(0,180,216,0.6)]'
                         }`}>
                           QS
                         </div>
                       </motion.div>
                     );
                   }
-
                   return null;
                 })}
               </AnimatePresence>
 
               {visibleMessages.length === 0 && (
-                <div className="flex items-center justify-center h-44 text-white/30 font-mono text-xs">
+                <div className="flex items-center justify-center h-44 text-[#90E0EF]/40 font-mono text-xs">
                   Scroll into view to run automated sequence...
                 </div>
               )}

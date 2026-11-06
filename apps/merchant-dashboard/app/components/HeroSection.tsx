@@ -26,9 +26,9 @@ function RotatingHeadline() {
 
   if (prefersReduced) {
     return (
-      <h1 className="font-title-sans text-[clamp(44px,7.5vw,96px)] font-bold tracking-tight leading-[1.04] text-white mb-6">
+      <h1 className="font-title-sans text-[clamp(44px,7.5vw,96px)] font-bold tracking-tight leading-[1.04] text-[#CAF0F8] mb-6">
         {headlines[0].text}{' '}
-        <em className="font-serif-accent not-italic text-[#2196F3]">{headlines[0].italic}</em>
+        <em className="font-serif-accent not-italic text-[#00B4D8]">{headlines[0].italic}</em>
       </h1>
     );
   }
@@ -45,12 +45,12 @@ function RotatingHeadline() {
             duration: 0.65,
             ease: [0.65, 0, 0.35, 1],
           }}
-          className="absolute inset-0 font-title-sans text-[clamp(44px,7.5vw,96px)] font-bold tracking-tight leading-[1.04] text-white flex flex-col items-center justify-center text-center"
+          className="absolute inset-0 font-title-sans text-[clamp(44px,7.5vw,96px)] font-bold tracking-tight leading-[1.04] text-[#CAF0F8] flex flex-col items-center justify-center text-center"
         >
-          <span className="block drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]">{headline.text}</span>
+          <span className="block drop-shadow-[0_4px_24px_rgba(2,3,59,0.8)]">{headline.text}</span>
           <em
-            className={`font-serif-accent not-italic block drop-shadow-[0_4px_30px_rgba(33,150,243,0.35)] ${
-              headline.accent ? 'text-[#2196F3]' : 'text-[#90CAF9]'
+            className={`font-serif-accent not-italic block drop-shadow-[0_4px_30px_rgba(0,180,216,0.45)] ${
+              headline.accent ? 'text-[#00B4D8]' : 'text-[#90E0EF]'
             }`}
           >
             {headline.italic}
@@ -75,8 +75,8 @@ export default function HeroSection() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.15]);
 
   return (
-    <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#060E1A] text-white">
-      {/* Background Lighting with Sapphire/Electric Azure Glass Blobs */}
+    <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#03045E] text-[#CAF0F8]">
+      {/* Background Lighting with Deep Sea Gradient Blobs */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           animate={{
@@ -86,7 +86,7 @@ export default function HeroSection() {
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute top-[-10%] left-[15%] w-[800px] h-[800px] rounded-full opacity-35"
           style={{
-            background: 'radial-gradient(circle, rgba(13,71,161,0.55) 0%, rgba(33,150,243,0.25) 45%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(0,119,182,0.6) 0%, rgba(0,180,216,0.3) 45%, transparent 70%)',
             filter: 'blur(120px)',
           }}
         />
@@ -98,7 +98,7 @@ export default function HeroSection() {
           transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute bottom-[-15%] right-[10%] w-[750px] h-[750px] rounded-full opacity-30"
           style={{
-            background: 'radial-gradient(circle, rgba(33,150,243,0.45) 0%, rgba(144,202,249,0.18) 55%, transparent 75%)',
+            background: 'radial-gradient(circle, rgba(0,180,216,0.5) 0%, rgba(144,224,239,0.2) 55%, transparent 75%)',
             filter: 'blur(130px)',
           }}
         />
@@ -123,7 +123,7 @@ export default function HeroSection() {
             initial={prefersReduced ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.35 }}
-            className="text-[#90CAF9] text-xl sm:text-2xl md:text-[26px] leading-relaxed max-w-3xl mx-auto mb-12 font-normal tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
+            className="text-[#90E0EF] text-xl sm:text-2xl md:text-[26px] leading-relaxed max-w-3xl mx-auto mb-12 font-normal tracking-wide drop-shadow-[0_2px_12px_rgba(2,3,59,0.8)]"
           >
             QuoteSeal intercepts every x402 micropayment your agent builds — verifying the payee against
             the merchant&apos;s ENSv2 identity on Sepolia before the wallet ever signs.
@@ -140,9 +140,9 @@ export default function HeroSection() {
               href="#demo"
               className="
                 inline-flex items-center gap-2.5 px-10 py-4.5 rounded-full text-base sm:text-lg font-bold
-                bg-[#2196F3] text-white
-                shadow-[0_0_35px_rgba(33,150,243,0.55)]
-                hover:bg-[#1E88E5] hover:shadow-[0_0_55px_rgba(33,150,243,0.85)]
+                bg-[#00B4D8] text-[#03045E]
+                shadow-[0_0_35px_rgba(0,180,216,0.6)]
+                hover:bg-[#90E0EF] hover:shadow-[0_0_55px_rgba(0,180,216,0.85)]
                 hover:scale-[1.02] active:scale-[0.98]
                 transition-all duration-300
               "
@@ -156,8 +156,8 @@ export default function HeroSection() {
               href="#features"
               className="
                 inline-flex items-center gap-2.5 px-10 py-4.5 rounded-full text-base sm:text-lg font-semibold
-                text-[#E3F2FD] glass-pill-dark
-                border border-[#2196F3]/30 hover:border-[#90CAF9]/60 hover:bg-[#2196F3]/15
+                text-[#CAF0F8] glass-pill-dark
+                border border-[#00B4D8]/35 hover:border-[#90E0EF]/70 hover:bg-[#0077B6]/25
                 hover:scale-[1.02] active:scale-[0.98]
                 transition-all duration-300
               "
@@ -173,14 +173,14 @@ export default function HeroSection() {
             transition={{ duration: 0.7, delay: 0.65 }}
             className="flex flex-col items-center"
           >
-            <p className="font-mono text-xs sm:text-[13px] text-[#90CAF9]/75 uppercase tracking-[0.2em] mb-4">
+            <p className="font-mono text-xs sm:text-[13px] text-[#90E0EF]/80 uppercase tracking-[0.2em] mb-4">
               Protocol Foundations
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3.5">
               {partners.map((p) => (
                 <span
                   key={p}
-                  className="inline-flex items-center px-5 py-2 rounded-full glass-pill-dark font-mono text-xs sm:text-sm text-[#E3F2FD] border border-[#2196F3]/25 hover:border-[#2196F3]/60 hover:text-white transition-all duration-200"
+                  className="inline-flex items-center px-5 py-2 rounded-full glass-pill-dark font-mono text-xs sm:text-sm text-[#CAF0F8] border border-[#0077B6]/35 hover:border-[#00B4D8]/70 hover:text-white transition-all duration-200"
                 >
                   {p}
                 </span>

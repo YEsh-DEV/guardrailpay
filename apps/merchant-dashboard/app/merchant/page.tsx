@@ -77,36 +77,36 @@ export default function MerchantDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#081014] text-white">
+    <div className="min-h-screen bg-[#03045E] text-[#CAF0F8]">
       {/* Top Bar */}
-      <header className="border-b border-white/8 bg-[#060D10]/80 backdrop-blur-xl sticky top-0 z-50 px-6 py-4">
+      <header className="border-b border-[#0077B6]/30 bg-[#02033B]/85 backdrop-blur-xl sticky top-0 z-50 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2 group">
-              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00FF59] to-[#00C94C] flex items-center justify-center shadow-[0_0_15px_rgba(0,255,89,0.4)]">
+              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00B4D8] to-[#0077B6] flex items-center justify-center shadow-[0_0_15px_rgba(0,180,216,0.4)]">
                 <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4">
-                  <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#081014"/>
-                  <path d="M9 12L11 14L15 10" stroke="#00FF59" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#03045E"/>
+                  <path d="M9 12L11 14L15 10" stroke="#CAF0F8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
-              <span className="font-display text-lg text-white group-hover:text-[#00FF59] transition-colors">
+              <span className="font-display text-lg text-white group-hover:text-[#00B4D8] transition-colors">
                 QuoteSeal
               </span>
             </Link>
             <span className="text-white/20">/</span>
-            <span className="font-mono text-xs text-[#9BA9B2] uppercase tracking-wider">Merchant Dashboard</span>
+            <span className="font-mono text-xs text-[#90E0EF] uppercase tracking-wider">Merchant Dashboard</span>
           </div>
 
           <div className="flex items-center gap-4">
             <Link
               href="/buyer"
-              className="text-xs font-mono text-white/60 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/20 transition-all"
+              className="text-xs font-mono text-[#90E0EF] hover:text-white px-3 py-1.5 rounded-lg border border-[#0077B6]/40 hover:border-[#00B4D8] transition-all bg-[#0077B6]/10"
             >
               Open Buyer Console →
             </Link>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00FF59]/10 border border-[#00FF59]/30">
-              <span className="w-2 h-2 rounded-full bg-[#00FF59] animate-pulse" />
-              <span className="font-mono text-xs text-[#00FF59] font-medium">{profile.ensName}</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00B4D8]/15 border border-[#00B4D8]/35">
+              <span className="w-2 h-2 rounded-full bg-[#00B4D8] animate-pulse" />
+              <span className="font-mono text-xs text-[#CAF0F8] font-semibold">{profile.ensName}</span>
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@ export default function MerchantDashboard() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-10 space-y-8">
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-2 border-b border-white/8 pb-4">
+        <div className="flex items-center gap-2 border-b border-[#0077B6]/30 pb-4">
           {[
             { id: 'profile', label: '1. ENS Profile & Records' },
             { id: 'rotation', label: '2. Payout Rotation Timelock' },
@@ -126,8 +126,8 @@ export default function MerchantDashboard() {
               onClick={() => setActiveTab(tab.id as any)}
               className={`px-5 py-2.5 rounded-full font-mono text-xs font-medium transition-all ${
                 activeTab === tab.id
-                  ? 'bg-[#00FF59] text-[#081014] font-semibold shadow-[0_0_20px_rgba(0,255,89,0.3)]'
-                  : 'text-white/60 hover:text-white hover:bg-white/5'
+                  ? 'bg-[#00B4D8] text-[#03045E] font-bold shadow-[0_0_20px_rgba(0,180,216,0.5)]'
+                  : 'text-[#90E0EF]/70 hover:text-white hover:bg-[#0077B6]/20'
               }`}
             >
               {tab.label}
@@ -139,46 +139,46 @@ export default function MerchantDashboard() {
         {activeTab === 'profile' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* 3D Profile Summary Card */}
-            <div className="lg:col-span-1 rounded-[28px] border border-white/10 bg-gradient-to-br from-[#0E1F16] via-[#091610] to-[#060D0A] p-7 shadow-[0_30px_70px_rgba(0,0,0,0.7)] flex flex-col justify-between">
+            <div className="lg:col-span-1 rounded-[28px] border border-[#0077B6]/40 bg-gradient-to-br from-[#02033B] via-[#03045E] to-[#01021F] p-7 shadow-[0_30px_70px_rgba(2,3,59,0.8)] flex flex-col justify-between">
               <div>
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <span className="font-mono text-[10px] text-[#00FF59]/70 uppercase tracking-widest block mb-1">
+                    <span className="font-mono text-[10px] text-[#00B4D8] uppercase tracking-widest block mb-1 font-semibold">
                       Verified Identity
                     </span>
                     <h2 className="font-display text-3xl text-white">{profile.ensName}</h2>
-                    <p className="font-mono text-xs text-white/40 mt-1">{profile.domain}</p>
+                    <p className="font-mono text-xs text-[#90E0EF]/60 mt-1">{profile.domain}</p>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-[#00FF59]/15 border border-[#00FF59]/30">
+                  <div className="p-2.5 rounded-xl bg-[#00B4D8]/15 border border-[#00B4D8]/35">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" stroke="#00FF59" strokeWidth="1.5"/>
-                      <path d="M9 12L11 14L15 10" stroke="#00FF59" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" stroke="#00B4D8" strokeWidth="1.5"/>
+                      <path d="M9 12L11 14L15 10" stroke="#CAF0F8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                 </div>
 
                 <div className="space-y-4 my-6">
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                    <p className="font-mono text-[10px] text-white/40 uppercase tracking-wider mb-1">Active Payout (payTo)</p>
-                    <p className="font-mono text-xs text-[#00F5D4] break-all">{profile.activePayTo}</p>
+                  <div className="p-3 rounded-xl bg-[#02033B]/70 border border-[#0077B6]/30">
+                    <p className="font-mono text-[10px] text-[#90E0EF]/60 uppercase tracking-wider mb-1">Active Payout (payTo)</p>
+                    <p className="font-mono text-xs text-[#00B4D8] break-all font-semibold">{profile.activePayTo}</p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                      <p className="font-mono text-[10px] text-white/40 uppercase mb-1">Network</p>
+                    <div className="p-3 rounded-xl bg-[#02033B]/70 border border-[#0077B6]/30">
+                      <p className="font-mono text-[10px] text-[#90E0EF]/60 uppercase mb-1">Network</p>
                       <p className="font-mono text-xs text-white">{profile.network}</p>
                     </div>
-                    <div className="p-3 rounded-xl bg-white/5 border border-white/5">
-                      <p className="font-mono text-[10px] text-white/40 uppercase mb-1">Max Cap</p>
-                      <p className="font-mono text-xs text-[#00FF59] font-semibold">${profile.maxAmountUsdc.toFixed(2)} USDC</p>
+                    <div className="p-3 rounded-xl bg-[#02033B]/70 border border-[#0077B6]/30">
+                      <p className="font-mono text-[10px] text-[#90E0EF]/60 uppercase mb-1">Max Cap</p>
+                      <p className="font-mono text-xs text-[#00B4D8] font-bold">${profile.maxAmountUsdc.toFixed(2)} USDC</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                <span className="font-mono text-[11px] text-white/40">ENS Version: {profile.version}</span>
-                <span className="px-2.5 py-1 rounded-full bg-[#00FF59]/20 text-[#00FF59] font-mono text-[10px] font-semibold">
+              <div className="pt-4 border-t border-[#0077B6]/30 flex items-center justify-between">
+                <span className="font-mono text-[11px] text-[#90E0EF]/60">ENS Version: {profile.version}</span>
+                <span className="px-2.5 py-1 rounded-full bg-[#00B4D8]/20 border border-[#00B4D8]/40 text-[#00B4D8] font-mono text-[10px] font-bold">
                   EAC v2.4 Live
                 </span>
               </div>
@@ -186,9 +186,9 @@ export default function MerchantDashboard() {
 
             {/* ENS On-Chain Records Details */}
             <div className="lg:col-span-2 space-y-6">
-              <div className="p-7 rounded-[28px] border border-white/10 bg-[#0E171D]/60 backdrop-blur-xl">
+              <div className="p-7 rounded-[28px] border border-[#0077B6]/30 bg-[#02033B]/70 backdrop-blur-xl">
                 <h3 className="font-display text-xl text-white mb-2">On-Chain ENS Resolver Records</h3>
-                <p className="text-sm text-[#9BA9B2] mb-6">
+                <p className="text-sm text-[#90E0EF]/70 mb-6">
                   These records are resolved dynamically by QuoteSeal Guard before every payment proposal is signed.
                 </p>
 
@@ -203,10 +203,10 @@ export default function MerchantDashboard() {
                   ].map((rec) => (
                     <div
                       key={rec.key}
-                      className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/15 transition-all gap-2"
+                      className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl bg-[#03045E]/40 border border-[#0077B6]/25 hover:border-[#00B4D8]/50 transition-all gap-2"
                     >
-                      <span className="text-[#00FF59] font-medium">{rec.key}</span>
-                      <span className={rec.highlight ? 'text-[#00F5D4] break-all' : 'text-white/70 break-all'}>
+                      <span className="text-[#00B4D8] font-semibold">{rec.key}</span>
+                      <span className={rec.highlight ? 'text-[#CAF0F8] break-all font-semibold' : 'text-[#90E0EF]/80 break-all'}>
                         {rec.value}
                       </span>
                     </div>
@@ -216,21 +216,21 @@ export default function MerchantDashboard() {
 
               {/* Status and Diagnostics */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-5 rounded-2xl border border-white/10 bg-[#0E171D]/60">
-                  <p className="font-mono text-xs text-white/40 uppercase mb-2">RFC /.well-known Binding</p>
-                  <p className="font-mono text-sm text-[#00FF59] flex items-center gap-2">
+                <div className="p-5 rounded-2xl border border-[#0077B6]/30 bg-[#02033B]/70">
+                  <p className="font-mono text-xs text-[#90E0EF]/60 uppercase mb-2">RFC /.well-known Binding</p>
+                  <p className="font-mono text-sm text-[#00B4D8] flex items-center gap-2 font-semibold">
                     <span>✓</span> Verified (https://{profile.domain})
                   </p>
-                  <p className="text-xs text-[#9BA9B2] mt-2">
+                  <p className="text-xs text-[#90E0EF]/70 mt-2">
                     Ensures DNS domain ownership cryptographically matches the ENS registrant.
                   </p>
                 </div>
-                <div className="p-5 rounded-2xl border border-white/10 bg-[#0E171D]/60">
-                  <p className="font-mono text-xs text-white/40 uppercase mb-2">Active Payee Guard Health</p>
-                  <p className="font-mono text-sm text-[#00FF59] flex items-center gap-2">
+                <div className="p-5 rounded-2xl border border-[#0077B6]/30 bg-[#02033B]/70">
+                  <p className="font-mono text-xs text-[#90E0EF]/60 uppercase mb-2">Active Payee Guard Health</p>
+                  <p className="font-mono text-sm text-[#00B4D8] flex items-center gap-2 font-semibold">
                     <span>✓</span> 100% Operational (P99 8.2ms)
                   </p>
-                  <p className="text-xs text-[#9BA9B2] mt-2">
+                  <p className="text-xs text-[#90E0EF]/70 mt-2">
                     All agent payments strictly gated. Unannounced payee drift will be immediately blocked.
                   </p>
                 </div>
@@ -244,44 +244,44 @@ export default function MerchantDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Active Rotation Timeline */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="p-7 rounded-[28px] border border-white/10 bg-[#0E171D]/60 backdrop-blur-xl">
+              <div className="p-7 rounded-[28px] border border-[#0077B6]/30 bg-[#02033B]/70 backdrop-blur-xl">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <span className="font-mono text-[10px] text-[#FF9F0A] uppercase tracking-widest block mb-1">
+                    <span className="font-mono text-[10px] text-[#00B4D8] uppercase tracking-widest block mb-1">
                       Status: In 48h Time-Lock
                     </span>
                     <h3 className="font-display text-2xl text-white">Active Rotation Proposal</h3>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-[#FF9F0A]/15 border border-[#FF9F0A]/30 text-[#FF9F0A] font-mono text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-full bg-[#0077B6]/25 border border-[#00B4D8]/35 text-[#CAF0F8] font-mono text-xs font-semibold">
                     Proposal {rotation.id}
                   </span>
                 </div>
 
-                <div className="my-6 p-6 rounded-2xl bg-white/[0.02] border border-white/8 flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div className="my-6 p-6 rounded-2xl bg-[#03045E]/40 border border-[#0077B6]/25 flex flex-col sm:flex-row items-center justify-between gap-6">
                   {/* Countdown display */}
                   <div className="text-center sm:text-left">
-                    <p className="font-mono text-[11px] text-white/40 uppercase mb-1">Time until activation unlock</p>
-                    <p className="font-mono text-3xl font-bold text-[#FF9F0A]">
+                    <p className="font-mono text-[11px] text-[#90E0EF]/60 uppercase mb-1">Time until activation unlock</p>
+                    <p className="font-mono text-3xl font-bold text-[#00B4D8]">
                       {String(timeLeft.hours).padStart(2, '0')}h {String(timeLeft.minutes).padStart(2, '0')}m {String(timeLeft.seconds).padStart(2, '0')}s
                     </p>
-                    <p className="font-mono text-xs text-white/30 mt-1">Autonomous agents still pay current payTo</p>
+                    <p className="font-mono text-xs text-[#90E0EF]/50 mt-1">Autonomous agents still pay current payTo</p>
                   </div>
 
                   {/* World ID verification stamp */}
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-[#00FF59]/10 border border-[#00FF59]/20">
-                    <div className="w-8 h-8 rounded-full bg-[#00FF59]/20 flex items-center justify-center text-[#00FF59]">
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-[#00B4D8]/15 border border-[#00B4D8]/35">
+                    <div className="w-8 h-8 rounded-full bg-[#00B4D8]/20 flex items-center justify-center text-[#00B4D8] font-bold">
                       ✓
                     </div>
                     <div>
-                      <p className="font-mono text-xs text-[#00FF59] font-semibold">World ID Verified</p>
-                      <p className="font-mono text-[10px] text-white/40">Nullifier: {rotation.nullifierHash.slice(0, 12)}...</p>
+                      <p className="font-mono text-xs text-[#00B4D8] font-bold">World ID Verified</p>
+                      <p className="font-mono text-[10px] text-[#90E0EF]/60">Nullifier: {rotation.nullifierHash.slice(0, 12)}...</p>
                     </div>
                   </div>
                 </div>
 
                 {/* 4-Stage Step Tracker */}
                 <div className="space-y-4 pt-2">
-                  <p className="font-mono text-xs text-white/40 uppercase tracking-wider">Lifecycle Progress</p>
+                  <p className="font-mono text-xs text-[#90E0EF]/60 uppercase tracking-wider">Lifecycle Progress</p>
                   <div className="grid grid-cols-4 gap-2">
                     {[
                       { num: '1', title: 'Proposed', done: true },
@@ -293,14 +293,14 @@ export default function MerchantDashboard() {
                         key={st.num}
                         className={`p-3 rounded-xl text-center border font-mono text-xs transition-all ${
                           st.current
-                            ? 'bg-[#FF9F0A]/10 border-[#FF9F0A]/40 text-[#FF9F0A]'
+                            ? 'bg-[#00B4D8]/20 border-[#00B4D8]/50 text-[#00B4D8] font-bold'
                             : st.done
-                            ? 'bg-[#00FF59]/10 border-[#00FF59]/30 text-[#00FF59]'
+                            ? 'bg-[#0077B6]/25 border-[#0077B6]/40 text-[#CAF0F8]'
                             : 'bg-white/5 border-white/5 text-white/30'
                         }`}
                       >
                         <p className="font-bold">{st.num}. {st.title}</p>
-                        <p className="text-[10px] mt-0.5 opacity-70">
+                        <p className="text-[10px] mt-0.5 opacity-75">
                           {st.current ? 'Pending...' : st.done ? 'Complete' : 'Locked'}
                         </p>
                       </div>
@@ -308,10 +308,10 @@ export default function MerchantDashboard() {
                   </div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-white/8 flex items-center justify-between">
+                <div className="mt-8 pt-6 border-t border-[#0077B6]/30 flex items-center justify-between">
                   <div>
-                    <p className="font-mono text-[10px] text-white/40 uppercase">Proposed Address</p>
-                    <p className="font-mono text-xs text-[#00F5D4] break-all">{rotation.proposedPayTo}</p>
+                    <p className="font-mono text-[10px] text-[#90E0EF]/60 uppercase">Proposed Address</p>
+                    <p className="font-mono text-xs text-[#00B4D8] break-all font-semibold">{rotation.proposedPayTo}</p>
                   </div>
                   <button
                     disabled
@@ -325,54 +325,54 @@ export default function MerchantDashboard() {
 
             {/* Propose New Rotation Form */}
             <div className="lg:col-span-5">
-              <div className="p-7 rounded-[28px] border border-white/10 bg-[#0E171D]/60 backdrop-blur-xl">
+              <div className="p-7 rounded-[28px] border border-[#0077B6]/30 bg-[#02033B]/70 backdrop-blur-xl">
                 <h3 className="font-display text-xl text-white mb-2">Propose New Payout Address</h3>
-                <p className="text-sm text-[#9BA9B2] mb-6">
+                <p className="text-sm text-[#90E0EF]/70 mb-6">
                   Initiate a controlled migration. Requires World ID human proof and starts the mandatory 48-hour challenge delay.
                 </p>
 
                 {formSuccess && (
-                  <div className="mb-6 p-4 rounded-xl bg-[#00FF59]/15 border border-[#00FF59]/40 text-[#00FF59] font-mono text-xs">
+                  <div className="mb-6 p-4 rounded-xl bg-[#00B4D8]/15 border border-[#00B4D8]/40 text-[#00B4D8] font-mono text-xs font-semibold">
                     {formSuccess}
                   </div>
                 )}
 
                 <form onSubmit={handlePropose} className="space-y-4 font-mono text-xs">
                   <div>
-                    <label className="block text-white/60 mb-2 uppercase">New payTo Address (EVM / Hedera)</label>
+                    <label className="block text-[#90E0EF]/70 mb-2 uppercase">New payTo Address (EVM / Hedera)</label>
                     <input
                       type="text"
                       placeholder="0x..."
                       value={newPayTo}
                       onChange={(e) => setNewPayTo(e.target.value)}
                       required
-                      className="w-full px-4 py-3 rounded-xl bg-[#081014] border border-white/10 text-white placeholder-white/20 focus:outline-none focus:border-[#00FF59] transition-colors"
+                      className="w-full px-4 py-3 rounded-xl bg-[#02033B] border border-[#0077B6]/40 text-white placeholder-white/20 focus:outline-none focus:border-[#00B4D8] transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-white/60 mb-2 uppercase">Rotation Reason</label>
+                    <label className="block text-[#90E0EF]/70 mb-2 uppercase">Rotation Reason</label>
                     <input
                       type="text"
                       placeholder="e.g. Cold storage multisig transition"
                       value={proposedReason}
                       onChange={(e) => setProposedReason(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-[#081014] border border-white/10 text-white placeholder-white/20 focus:outline-none focus:border-[#00FF59] transition-colors"
+                      className="w-full px-4 py-3 rounded-xl bg-[#02033B] border border-[#0077B6]/40 text-white placeholder-white/20 focus:outline-none focus:border-[#00B4D8] transition-colors"
                     />
                   </div>
 
-                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/8 space-y-3">
+                  <div className="p-4 rounded-xl bg-[#03045E]/40 border border-[#0077B6]/30 space-y-3">
                     <div className="flex items-start gap-3">
                       <input
                         type="checkbox"
                         id="worldId"
                         checked={worldIdChecked}
                         onChange={(e) => setWorldIdChecked(e.target.checked)}
-                        className="mt-1 h-4 w-4 rounded border-white/20 bg-[#081014] text-[#00FF59] focus:ring-[#00FF59]"
+                        className="mt-1 h-4 w-4 rounded border-[#0077B6] bg-[#02033B] text-[#00B4D8] focus:ring-[#00B4D8]"
                       />
                       <label htmlFor="worldId" className="text-white/80 cursor-pointer">
                         <span className="font-semibold text-white block">Simulate World ID Agent Pass</span>
-                        <span className="text-[11px] text-[#9BA9B2] block">
+                        <span className="text-[11px] text-[#90E0EF]/70 block">
                           Confirms proof of unique personhood for rotation operator role.
                         </span>
                       </label>
@@ -382,7 +382,7 @@ export default function MerchantDashboard() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 rounded-full font-sans font-semibold text-sm bg-[#00FF59] text-[#081014] hover:bg-[#9AEA62] shadow-[0_0_20px_rgba(0,255,89,0.3)] transition-all disabled:opacity-50"
+                    className="w-full py-3.5 rounded-full font-sans font-bold text-sm bg-[#00B4D8] text-[#03045E] hover:bg-[#90E0EF] shadow-[0_0_20px_rgba(0,180,216,0.4)] transition-all disabled:opacity-50"
                   >
                     {isSubmitting ? 'Broadcasting Proposal...' : 'Submit Proposal (World ID)'}
                   </button>
@@ -394,10 +394,10 @@ export default function MerchantDashboard() {
 
         {/* Tab 3: EAC Roles & Permissions */}
         {activeTab === 'roles' && (
-          <div className="p-7 rounded-[28px] border border-white/10 bg-[#0E171D]/60 backdrop-blur-xl space-y-6">
+          <div className="p-7 rounded-[28px] border border-[#0077B6]/30 bg-[#02033B]/70 backdrop-blur-xl space-y-6">
             <div>
               <h3 className="font-display text-2xl text-white mb-2">EAC Contract Roles & Access Controls</h3>
-              <p className="text-sm text-[#9BA9B2]">
+              <p className="text-sm text-[#90E0EF]/70">
                 Enhanced Access Control (EAC) rules ensure that only verified cryptographic keys and human operators can touch payment configurations.
               </p>
             </div>
@@ -406,19 +406,19 @@ export default function MerchantDashboard() {
               {roles.map((r) => (
                 <div
                   key={r.role}
-                  className="p-5 rounded-2xl border border-white/8 bg-white/[0.02] hover:border-[#00FF59]/30 transition-all space-y-3"
+                  className="p-5 rounded-2xl border border-[#0077B6]/30 bg-[#03045E]/40 hover:border-[#00B4D8]/50 transition-all space-y-3"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-full bg-[#00FF59]/10 border border-[#00FF59]/30 text-[#00FF59] font-mono text-[11px] font-semibold">
+                    <span className="px-2.5 py-1 rounded-full bg-[#00B4D8]/15 border border-[#00B4D8]/35 text-[#00B4D8] font-mono text-[11px] font-bold">
                       {r.role}
                     </span>
-                    <span className="font-mono text-[10px] text-white/30">Assigned {r.assignedAt}</span>
+                    <span className="font-mono text-[10px] text-[#90E0EF]/50">Assigned {r.assignedAt}</span>
                   </div>
                   <div>
-                    <p className="font-mono text-xs text-white/40 mb-1">Assigned Address</p>
-                    <p className="font-mono text-xs text-[#00F5D4] break-all">{r.address}</p>
+                    <p className="font-mono text-xs text-[#90E0EF]/60 mb-1">Assigned Address</p>
+                    <p className="font-mono text-xs text-[#00B4D8] break-all font-semibold">{r.address}</p>
                   </div>
-                  <p className="text-xs text-[#9BA9B2] leading-relaxed">{r.description}</p>
+                  <p className="text-xs text-[#90E0EF]/80 leading-relaxed">{r.description}</p>
                 </div>
               ))}
             </div>
