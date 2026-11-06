@@ -28,7 +28,7 @@ function RotatingHeadline() {
     return (
       <h1 className="font-title-sans text-[clamp(32px,5.5vw,68px)] leading-[1.08] text-white mb-4">
         {headlines[0].text}{' '}
-        <em className="font-serif-accent not-italic text-[#2196F3]">{headlines[0].italic}</em>
+        <em className="font-serif-accent not-italic text-[#00FF59]">{headlines[0].italic}</em>
       </h1>
     );
   }
@@ -50,7 +50,7 @@ function RotatingHeadline() {
           <span className="block">{headline.text}</span>
           <em
             className={`font-serif-accent not-italic block ${
-              headline.accent ? 'text-[#2196F3]' : 'text-[#90CAF9]'
+              headline.accent ? 'text-[#00FF59]' : 'text-white/95'
             }`}
           >
             {headline.italic}
@@ -161,23 +161,23 @@ function FloatingCard3D() {
           className="relative z-10 w-[300px] sm:w-[330px] h-[195px] sm:h-[210px] select-none"
           style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
         >
-        <div className="absolute inset-0 rounded-[24px] overflow-hidden shadow-[0_35px_70px_-15px_rgba(2,6,23,0.9),0_0_0_1px_rgba(144,202,249,0.2)] bg-gradient-to-br from-[#0D47A1] via-[#092B66] to-[#060E1A]">
+        <div className="absolute inset-0 rounded-[24px] overflow-hidden shadow-[0_35px_70px_-15px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.15)] bg-gradient-to-br from-[#0E2A1A] via-[#091F14] to-[#081014]">
           {/* Holographic sheen overlay */}
-          <div className="holo-sheen absolute inset-0 opacity-60" />
+          <div className="holo-sheen absolute inset-0 opacity-70" />
 
           {/* Card Content */}
           <div className="relative z-10 p-5 sm:p-6 h-full flex flex-col justify-between">
             {/* Top row */}
             <div className="flex items-start justify-between">
               <div>
-                <p className="font-mono text-[9.5px] text-[#90CAF9] uppercase tracking-widest mb-0.5 font-semibold">QuoteSeal Protected</p>
+                <p className="font-mono text-[9.5px] text-[#00FF59] uppercase tracking-widest mb-0.5 font-semibold">QuoteSeal Protected</p>
                 <p className="font-title-sans text-lg sm:text-xl text-white">researchpro.eth</p>
                 <p className="font-mono text-[10px] text-white/50">Sepolia ENSv2</p>
               </div>
-              <div className="w-10 h-10 rounded-xl bg-white/10 border border-[#90CAF9]/30 flex items-center justify-center shadow-inner">
+              <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center shadow-inner">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="none" stroke="#2196F3" strokeWidth="2"/>
-                  <path d="M9 12L11 14L15 10" stroke="#90CAF9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="none" stroke="#00FF59" strokeWidth="2"/>
+                  <path d="M9 12L11 14L15 10" stroke="#00FF59" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
             </div>
@@ -185,7 +185,7 @@ function FloatingCard3D() {
             {/* Middle row */}
             <div>
               <p className="font-mono text-[10px] text-white/40 uppercase tracking-wider mb-1">Active Payout payTo</p>
-              <p className="font-mono text-xs text-[#90CAF9] font-semibold truncate">0x71Cf3D14...8f4B</p>
+              <p className="font-mono text-xs text-[#00F5D4] font-semibold truncate">0x71Cf3D14...8f4B</p>
             </div>
 
             {/* Bottom row */}
@@ -196,10 +196,10 @@ function FloatingCard3D() {
               </div>
               <div>
                 <p className="font-mono text-[10px] text-white/40 uppercase">Max Cap</p>
-                <p className="font-mono text-xs text-[#90CAF9] font-bold">$50.00 USDC</p>
+                <p className="font-mono text-xs text-[#00FF59] font-bold">$50.00 USDC</p>
               </div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2196F3]/25 border border-[#2196F3]/45 text-white font-mono text-[10px] font-bold shadow-[0_0_12px_rgba(33,150,243,0.35)]">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#2196F3] animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#00FF59]/20 border border-[#00FF59]/40 text-[#00FF59] font-mono text-[10px] font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00FF59] animate-pulse" />
                 ACTIVE
               </span>
             </div>
@@ -227,7 +227,7 @@ export default function HeroSection() {
 
   return (
     <section ref={heroRef} className="relative min-h-screen flex flex-col overflow-hidden bg-[#000000] text-white">
-      {/* Background Lighting with Cerulean & Sapphire Glass Blobs */}
+      {/* Background Lighting with Glass Blobs */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           animate={{
@@ -235,9 +235,9 @@ export default function HeroSection() {
             rotate: [0, 45, 0],
           }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-[-10%] left-[15%] w-[750px] h-[750px] rounded-full opacity-35"
+          className="absolute top-[-10%] left-[15%] w-[750px] h-[750px] rounded-full opacity-30"
           style={{
-            background: 'radial-gradient(circle, rgba(33,150,243,0.38) 0%, rgba(13,71,161,0.2) 50%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(0,255,89,0.35) 0%, rgba(0,245,212,0.15) 50%, transparent 70%)',
             filter: 'blur(100px)',
           }}
         />
@@ -247,9 +247,9 @@ export default function HeroSection() {
             rotate: [0, -40, 0],
           }}
           transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-[-15%] right-[5%] w-[650px] h-[650px] rounded-full opacity-30"
+          className="absolute bottom-[-15%] right-[5%] w-[650px] h-[650px] rounded-full opacity-25"
           style={{
-            background: 'radial-gradient(circle, rgba(144,202,249,0.32) 0%, rgba(33,150,243,0.15) 60%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(0,245,212,0.3) 0%, rgba(0,255,89,0.1) 60%, transparent 70%)',
             filter: 'blur(110px)',
           }}
         />
@@ -289,9 +289,9 @@ export default function HeroSection() {
                 href="#demo"
                 className="
                   inline-flex items-center gap-2.5 px-8 py-4 rounded-full text-base font-bold
-                  bg-[#2196F3] text-white
-                  shadow-[0_0_35px_rgba(33,150,243,0.55)]
-                  hover:bg-[#1E88E5] hover:shadow-[0_0_55px_rgba(33,150,243,0.75)]
+                  bg-[#00FF59] text-[#081014]
+                  shadow-[0_0_35px_rgba(0,255,89,0.5)]
+                  hover:bg-[#00E650] hover:shadow-[0_0_55px_rgba(0,255,89,0.7)]
                   transition-all duration-300 active:scale-[0.98]
                 "
               >
@@ -305,7 +305,7 @@ export default function HeroSection() {
                 className="
                   inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-semibold
                   text-white glass-pill-dark
-                  hover:border-[#90CAF9]/50 hover:bg-[#90CAF9]/10
+                  hover:border-white/40 hover:bg-white/10
                   transition-all duration-300
                 "
               >

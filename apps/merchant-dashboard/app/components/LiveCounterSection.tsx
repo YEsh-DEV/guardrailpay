@@ -60,14 +60,14 @@ export default function LiveCounterSection() {
   const digits = formatted.split('');
 
   return (
-    <section className="relative py-32 md:py-44 overflow-hidden bg-[#060E1A]">
+    <section className="relative py-32 md:py-44 overflow-hidden">
       {/* Background radial glow */}
       <div className="absolute inset-0">
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] opacity-25"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] opacity-20"
           style={{
-            background: 'radial-gradient(ellipse, rgba(33,150,243,0.35) 0%, rgba(13,71,161,0.15) 50%, transparent 70%)',
-            filter: 'blur(70px)',
+            background: 'radial-gradient(ellipse, rgba(0,255,89,0.3) 0%, rgba(0,245,212,0.1) 50%, transparent 70%)',
+            filter: 'blur(60px)',
           }}
         />
       </div>
@@ -79,10 +79,10 @@ export default function LiveCounterSection() {
           viewport={{ once: true, amount: 0.4 }}
           className="mb-8"
         >
-          <span className="font-mono text-[11px] text-[#2196F3] uppercase tracking-widest mb-4 block">
+          <span className="font-mono text-[11px] text-[#00FF59] uppercase tracking-widest mb-4 block">
             Live — since you opened this page
           </span>
-          <p className="text-[#90CAF9] text-lg mb-12">Payments verified by QuoteSeal Guard</p>
+          <p className="text-[#9BA9B2] text-lg mb-12">Payments verified by QuoteSeal Guard</p>
         </motion.div>
 
         {/* Big counter */}
@@ -91,8 +91,8 @@ export default function LiveCounterSection() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
-          className="inline-flex flex-wrap items-center justify-center font-mono font-semibold text-[clamp(44px,8vw,96px)] text-white leading-none mb-4 tracking-tight"
-          style={{ textShadow: '0 0 50px rgba(33,150,243,0.6), 0 0 20px rgba(13,71,161,0.4)' }}
+          className="inline-flex flex-wrap items-center justify-center font-mono font-semibold text-[clamp(44px,8vw,96px)] text-[#00FF59] leading-none mb-4 tracking-tight"
+          style={{ textShadow: '0 0 60px rgba(0,255,89,0.5), 0 0 20px rgba(0,255,89,0.3)' }}
         >
           {digits.map((d, i) => (
             <OdometerDigit key={`${i}`} digit={d} />
@@ -104,7 +104,7 @@ export default function LiveCounterSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="font-mono text-[11px] text-[#90CAF9]/60 uppercase tracking-widest mt-6"
+          className="font-mono text-[11px] text-[#586974] uppercase tracking-widest mt-6"
         >
           USDC value · Hedera Testnet · Mock data
         </motion.p>
@@ -118,13 +118,13 @@ export default function LiveCounterSection() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16"
         >
           {[
-            { value: '0', label: 'Missed attacks', color: '#2196F3' },
-            { value: '100%', label: 'Guard coverage', color: '#90CAF9' },
-            { value: '<12ms', label: 'Avg verdict time', color: '#2196F3' },
+            { value: '0', label: 'Missed attacks', color: '#00FF59' },
+            { value: '100%', label: 'Guard coverage', color: '#00FF59' },
+            { value: '<12ms', label: 'Avg verdict time', color: '#00F5D4' },
           ].map((s) => (
-            <div key={s.label} className="p-5 rounded-2xl glass-panel-dark">
+            <div key={s.label} className="p-5 rounded-2xl border border-white/8 bg-white/[0.02]">
               <p className="font-mono text-3xl font-semibold mb-1" style={{ color: s.color }}>{s.value}</p>
-              <p className="font-mono text-[11px] text-[#90CAF9]/70 uppercase tracking-wider">{s.label}</p>
+              <p className="font-mono text-[11px] text-[#586974] uppercase tracking-wider">{s.label}</p>
             </div>
           ))}
         </motion.div>

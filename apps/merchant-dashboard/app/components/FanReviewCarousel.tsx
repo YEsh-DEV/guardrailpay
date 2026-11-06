@@ -11,10 +11,10 @@ const attackReviews = [
     verdict: 'BLOCKED',
     quote: 'RPC MITM tried swapping payment address to an attacker wallet. QuoteSeal compared against ENS records and rejected it with 0 gas spent.',
     highlight: 'rejected it with 0 gas spent',
-    bg: '#E3F2FD', // Icy Alabaster Frost
-    textColor: '#0A192F',
-    badgeBg: '#2196F3',
-    badgeText: '#FFFFFF',
+    bg: '#E2FFD5', // Mint Pastel
+    textColor: '#141414',
+    badgeBg: '#00FF59',
+    badgeText: '#000000',
   },
   {
     id: 2,
@@ -23,8 +23,8 @@ const attackReviews = [
     verdict: 'BLOCKED',
     quote: 'Attacker hosted researchpr0.eth with Unicode homoglyphs. Guard flagged origin mismatch before signature prompt.',
     highlight: 'flagged origin mismatch',
-    bg: '#D0E6FA', // Soft Sky
-    textColor: '#0A192F',
+    bg: '#F2D9CD', // Peach Pastel
+    textColor: '#141414',
     badgeBg: '#FF3B30',
     badgeText: '#FFFFFF',
   },
@@ -35,10 +35,10 @@ const attackReviews = [
     verdict: 'HELD 48H',
     quote: 'A compromised key attempted immediate payout reroute. Time-lock delay triggered emergency alert while agent payments stayed safe.',
     highlight: 'Time-lock delay triggered',
-    bg: '#C7E2FE', // Ice Cerulean
-    textColor: '#0A192F',
-    badgeBg: '#0D47A1',
-    badgeText: '#FFFFFF',
+    bg: '#CBDDEB', // Sky Pastel
+    textColor: '#141414',
+    badgeBg: '#FF9F0A',
+    badgeText: '#000000',
   },
   {
     id: 4,
@@ -47,8 +47,8 @@ const attackReviews = [
     verdict: 'BLOCKED',
     quote: 'Agent asked for 5 USDC, but 402 server billed 500 USDC. Guard caught the policy ceiling violation and halted execution.',
     highlight: 'halted execution',
-    bg: '#EBF5FE', // Pale Frost
-    textColor: '#0A192F',
+    bg: '#F2E890', // Butter Pastel
+    textColor: '#141414',
     badgeBg: '#FF3B30',
     badgeText: '#FFFFFF',
   },
@@ -65,16 +65,16 @@ export default function FanReviewCarousel() {
   }, []);
 
   return (
-    <section className="relative w-full bg-[#E3F2FD] py-32 px-6 lg:px-20 overflow-hidden text-[#0A192F]">
+    <section className="relative w-full bg-[#FAF9F6] py-32 px-6 lg:px-20 overflow-hidden text-[#141414]">
       {/* Header */}
       <div className="max-w-3xl mx-auto text-center mb-20">
-        <span className="inline-block px-4 py-1.5 rounded-full bg-[#2196F3]/15 text-[#0D47A1] text-[12px] font-mono uppercase tracking-[0.08em] font-semibold mb-4 border border-[#2196F3]/25">
+        <span className="inline-block px-4 py-1.5 rounded-full bg-black/5 text-[#141414] text-[12px] font-mono uppercase tracking-[0.08em] font-semibold mb-4">
           Battle Tested Security
         </span>
-        <h2 className="font-title-sans text-[clamp(36px,4.5vw,56px)] leading-[1.05] tracking-[-0.03em] font-bold text-[#0A192F] mb-4">
+        <h2 className="font-title-sans text-[clamp(36px,4.5vw,56px)] leading-[1.05] tracking-[-0.03em] font-bold text-[#141414] mb-4">
           Real attacks. Zero loss.
         </h2>
-        <p className="text-[18px] lg:text-[20px] text-[#3B5A80] max-w-xl mx-auto">
+        <p className="text-[18px] lg:text-[20px] text-[#586974] max-w-xl mx-auto">
           How QuoteSeal defends autonomous agents against hostile 402 endpoints and payment manipulation in the wild.
         </p>
       </div>
@@ -163,4 +163,3 @@ export default function FanReviewCarousel() {
     </section>
   );
 }
-

@@ -178,14 +178,14 @@ export default function FeatureSectionA() {
     <section
       id="features"
       ref={containerRef}
-      className="relative bg-[#E3F2FD] text-[#0A192F] transition-colors duration-500"
+      className="relative bg-[#FAF9F6] text-[#141414] transition-colors duration-500"
       style={{ height: `${steps.length * 100}vh` }}
     >
       {/* Sticky container */}
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        {/* Soft background glow circles & azure glass mesh */}
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-blue-200/50 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-[#90CAF9]/40 blur-3xl pointer-events-none" />
+        {/* Soft background glow circles & glass mesh */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-emerald-200/30 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-cyan-100/40 blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
 
@@ -197,14 +197,14 @@ export default function FeatureSectionA() {
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
             >
-              <span className="font-mono text-xs font-semibold text-[#0D47A1] uppercase tracking-widest mb-2 block">
+              <span className="font-mono text-xs font-semibold text-[#00C94C] uppercase tracking-widest mb-2 block">
                 Verification Protocol
               </span>
-              <h2 className="font-title-sans text-[clamp(28px,3.8vw,46px)] leading-[1.1] text-[#0A192F] mb-2.5">
+              <h2 className="font-title-sans text-[clamp(28px,3.8vw,46px)] leading-[1.1] text-[#141414] mb-2.5">
                 Every payment checked against the merchant's{' '}
-                <em className="font-serif-accent not-italic text-[#0D47A1]">ENS identity.</em>
+                <em className="font-serif-accent not-italic text-[#00A33B]">ENS identity.</em>
               </h2>
-              <p className="text-[#3B5A80] text-base leading-relaxed max-w-lg">
+              <p className="text-[#586974] text-base leading-relaxed max-w-lg">
                 Autonomous agents shouldn't blind-sign. QuoteSeal sits directly between the HTTP 402 response and the wallet signer.
               </p>
             </motion.div>
@@ -222,7 +222,7 @@ export default function FeatureSectionA() {
                   transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
                   className={`p-4 rounded-xl transition-all duration-300 cursor-pointer ${
                     activeStep === i
-                      ? 'glass-panel-light border-[#2196F3]/50 shadow-[0_15px_35px_-10px_rgba(33,150,243,0.2)]'
+                      ? 'glass-panel-light border-[#00FF59]/60 shadow-[0_15px_35px_-10px_rgba(0,255,89,0.15)]'
                       : 'bg-white/40 backdrop-blur-md border-white/60 hover:bg-white/70'
                   }`}
                   onClick={() => setActiveStep(i)}
@@ -230,19 +230,19 @@ export default function FeatureSectionA() {
                   <div className="flex gap-3.5 items-start">
                     <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all ${
                       activeStep === i
-                        ? 'bg-[#2196F3] text-white shadow-[0_0_15px_rgba(33,150,243,0.5)]'
-                        : 'bg-[#D0E6FA] text-[#0D47A1]'
+                        ? 'bg-[#00FF59] text-[#081014] shadow-[0_0_15px_rgba(0,255,89,0.5)]'
+                        : 'bg-[#E5E4DA] text-[#586974]'
                     }`}>
                       {step.num}
                     </div>
                     <div>
                       <h3 className={`font-title-sans text-sm font-semibold mb-0.5 transition-colors ${
-                        activeStep === i ? 'text-[#0A192F]' : 'text-[#3B5A80]'
+                        activeStep === i ? 'text-[#141414]' : 'text-[#586974]'
                       }`}>
                         {step.title}
                       </h3>
                       <p className={`text-xs leading-relaxed transition-colors ${
-                        activeStep === i ? 'text-[#0D2B52]' : 'text-[#5C7A99]'
+                        activeStep === i ? 'text-[#33321F]' : 'text-[#77766F]'
                       }`}>
                         {step.body}
                       </p>

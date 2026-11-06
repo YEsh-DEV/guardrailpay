@@ -102,7 +102,7 @@ export default function AIChatDemoSection() {
   }, [mode, inView]);
 
   return (
-    <section id="demo" className="relative py-32 md:py-40 overflow-hidden bg-[#060E1A] text-white">
+    <section id="demo" className="relative py-32 md:py-40 overflow-hidden bg-[#05090C] text-white">
       {/* Background Glass Glows */}
       <div className="absolute inset-0 pointer-events-none opacity-40">
         <motion.div
@@ -111,7 +111,7 @@ export default function AIChatDemoSection() {
             rotate: [0, 90, 0],
           }}
           transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#0D47A1] via-[#2196F3] to-[#90CAF9] blur-[130px]"
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-cyan-400 via-[#00FF59] to-indigo-500 blur-[130px]"
         />
         <motion.div
           animate={{
@@ -119,7 +119,7 @@ export default function AIChatDemoSection() {
             rotate: [0, -90, 0],
           }}
           transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] rounded-full bg-gradient-to-br from-[#1E3A5F] via-[#0D47A1] to-[#2196F3] blur-[140px]"
+          className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] rounded-full bg-gradient-to-br from-pink-500 via-purple-600 to-amber-400 blur-[140px]"
         />
       </div>
 
@@ -131,14 +131,14 @@ export default function AIChatDemoSection() {
           viewport={{ once: true, amount: 0.4 }}
           className="text-center mb-16"
         >
-          <span className="font-mono text-xs font-semibold text-[#2196F3] uppercase tracking-widest mb-3 block">
+          <span className="font-mono text-xs font-semibold text-[#00FF59] uppercase tracking-widest mb-3 block">
             Interactive Agent Terminal
           </span>
           <h2 className="font-title-sans text-[clamp(36px,5vw,60px)] leading-[1.1] text-white mb-4">
             Let AI drive money.{' '}
-            <em className="font-serif-accent not-italic text-[#90CAF9]">Not criminals.</em>
+            <em className="font-serif-accent not-italic text-[#00FF59]">Not criminals.</em>
           </h2>
-          <p className="text-[#90CAF9]/80 text-lg max-w-xl mx-auto">
+          <p className="text-[#9BA9B2] text-lg max-w-xl mx-auto">
             Toggle the attack simulator to see QuoteSeal defend against a live payee substitution in real time.
           </p>
         </motion.div>
@@ -156,7 +156,7 @@ export default function AIChatDemoSection() {
                   onClick={() => setMode('pass')}
                   className={`flex-1 py-3 rounded-full font-sans font-bold text-xs tracking-wider transition-all ${
                     mode === 'pass'
-                      ? 'bg-[#2196F3] text-white shadow-[0_0_20px_rgba(33,150,243,0.5)]'
+                      ? 'bg-[#00FF59] text-[#081014] shadow-[0_0_20px_rgba(0,255,89,0.35)]'
                       : 'bg-white/5 border border-white/10 text-white/40 hover:text-white'
                   }`}
                 >
@@ -166,14 +166,14 @@ export default function AIChatDemoSection() {
                   onClick={() => setMode('attack')}
                   className={`flex-1 py-3 rounded-full font-sans font-bold text-xs tracking-wider transition-all ${
                     mode === 'attack'
-                      ? 'bg-[#FF3B30] text-white shadow-[0_0_20px_rgba(255,59,48,0.5)]'
+                      ? 'bg-[#FF3B30] text-white shadow-[0_0_20px_rgba(255,59,48,0.4)]'
                       : 'bg-white/5 border border-white/10 text-white/40 hover:text-white'
                   }`}
                 >
                   ON (Simulate Attack)
                 </button>
               </div>
-              <p className="font-mono text-[11px] text-[#90CAF9]/70">
+              <p className="font-mono text-[11px] text-[#9BA9B2]">
                 {mode === 'attack'
                   ? '⚠ Intercepts 402 challenge and replaces payTo with malicious actor address'
                   : '✓ Direct connection to researchpro.eth merchant endpoint'}
@@ -187,8 +187,8 @@ export default function AIChatDemoSection() {
               </span>
               {[
                 { color: '#FFFFFF', label: 'AI Buyer Agent', desc: 'claude-agent/2.0 initiating query' },
-                { color: '#90CAF9', label: 'HTTP 402 Response', desc: mode === 'attack' ? 'Compromised proxy' : 'Merchant API' },
-                { color: mode === 'pass' ? '#2196F3' : '#FF3B30', label: 'QuoteSeal Guard', desc: mode === 'pass' ? 'Verdict: PASS' : 'Verdict: BLOCK' },
+                { color: '#9BA9B2', label: 'HTTP 402 Response', desc: mode === 'attack' ? 'Compromised proxy' : 'Merchant API' },
+                { color: mode === 'pass' ? '#00FF59' : '#FF3B30', label: 'QuoteSeal Guard', desc: mode === 'pass' ? 'Verdict: PASS' : 'Verdict: BLOCK' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
