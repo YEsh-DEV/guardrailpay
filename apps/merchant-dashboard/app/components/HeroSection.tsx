@@ -131,23 +131,6 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </div>
-
-      {/* Trusted Logos Band Under Hero (Matching Gabrun) */}
-      <div className="max-w-5xl mx-auto mt-6 sm:mt-8 px-4 text-center">
-        <p className="font-title-sans text-xs sm:text-sm font-semibold text-[#64748B] mb-3 tracking-wide">
-          Trusted By More Than <span className="text-[#1A6CFF] font-bold">+10,000 AI Agent Transactions</span>
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
-          {partners.map((partner) => (
-            <div
-              key={partner}
-              className="px-4 py-1.5 rounded-full bg-slate-50 border border-slate-200/80 font-mono text-[11px] sm:text-xs font-bold text-[#0F172A] shadow-sm hover:border-[#1A6CFF]/50 transition-colors"
-            >
-              {partner}
-            </div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }
