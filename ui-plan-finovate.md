@@ -129,3 +129,4 @@ The palette has no natural "good/bad" colors, so use these sparingly, always wit
 | Reduced motion | `prefers-reduced-motion`: disable float, parallax, shimmer, glow pulse |
 
 Animate only `transform`, `opacity` and `filter`. Target 60 fps.
+
