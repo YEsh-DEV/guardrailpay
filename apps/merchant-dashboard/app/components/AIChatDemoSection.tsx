@@ -102,7 +102,7 @@ export default function AIChatDemoSection() {
   }, [mode, inView]);
 
   return (
-    <section id="demo" className="relative py-32 md:py-40 overflow-hidden bg-[#FFFFFF] text-[#0F172A]">
+    <section id="demo" className="relative pt-10 pb-20 md:pt-14 md:pb-28 overflow-hidden bg-[#FFFFFF] text-[#0F172A]">
       {/* Background Lighting */}
       <div className="absolute inset-0 pointer-events-none opacity-20">
         <div

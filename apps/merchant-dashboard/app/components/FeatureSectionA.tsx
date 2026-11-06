@@ -43,7 +43,7 @@ export default function FeatureSectionA() {
     <section
       id="features"
       ref={containerRef}
-      className="relative py-28 md:py-36 bg-[#FFFFFF] text-[#0F172A] overflow-hidden"
+      className="relative pt-12 pb-14 md:pt-16 md:pb-20 bg-[#FFFFFF] text-[#0F172A] overflow-hidden"
     >
       {/* Soft background blue ambient mesh */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-[#1A6CFF]/5 blur-3xl pointer-events-none" />

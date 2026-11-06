@@ -192,7 +192,7 @@ function MerchantCard() {
 
 export default function FeatureSectionB() {
   return (
-    <section id="card" className="relative py-32 md:py-40 overflow-hidden bg-[#FFFFFF]">
+    <section id="card" className="relative py-14 md:py-20 overflow-hidden bg-[#FFFFFF]">
       {/* Background glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10 pointer-events-none"
