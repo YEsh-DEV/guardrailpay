@@ -16,9 +16,12 @@ import {
   OperatorRevokedError,
   EIP712_DOMAIN_NAME,
   EIP712_DOMAIN_VERSION,
+  createLogger,
   type RotationApprovalData
 } from '@quoteseal/shared';
 import type { FastifyBaseLogger } from 'fastify';
+
+import type { IDbStore } from './db-store.js';
 
 export interface AttestorConfig {
   attestorPrivateKey: Hex;
@@ -68,8 +71,8 @@ export class AttestorService {
 
   constructor(
     config: Partial<AttestorConfig> & { attestorPrivateKey: Hex; chainId: number },
-    private readonly dbStore: any,
-    private readonly logger: FastifyBaseLogger = console as any
+    private readonly dbStore: IDbStore,
+    private readonly logger: FastifyBaseLogger = createLogger({ name: 'attestor' }) as unknown as FastifyBaseLogger
   ) {
     this.config = {
       maxAuthAgeSeconds: 300,
@@ -131,7 +134,12 @@ export class AttestorService {
     }
 
     const rotationDelaySeconds = BigInt(merchant.rotationDelaySeconds ?? 86400);
-    const effectiveAt = nowEpoch + rotationDelaySeconds;
+    // Bind the proposal's canonical effectiveAt established at proposal time, per RotationController.sol
+    const effectiveAt = proposal.effectiveAt
+      ? BigInt(Math.floor(new Date(proposal.effectiveAt).getTime() / 1000))
+      : (proposal.proposedAt
+          ? BigInt(Math.floor(new Date(proposal.proposedAt).getTime() / 1000))
+          : nowEpoch) + rotationDelaySeconds;
     const proposalExpiryBigInt = BigInt(Math.floor(new Date(proposal.expiresAt).getTime() / 1000));
 
     if (effectiveAt >= proposalExpiryBigInt) {

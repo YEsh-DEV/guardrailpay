@@ -1,16 +1,18 @@
 import {
   type Address,
   type Hex,
-  type PublicClient,
-  type WalletClient
+  type PublicClient
 } from 'viem';
 import {
   ContractExecutionError,
   ProposalStateError,
   UnauthorizedError,
+  ROTATION_CONTROLLER_ABI,
   type RotationApprovalData,
   type RotationState
 } from '@quoteseal/shared';
+
+export { ROTATION_CONTROLLER_ABI };
 
 export interface ContractProposal {
   id: Hex;
@@ -24,162 +26,28 @@ export interface ContractProposal {
   state: RotationState;
 }
 
-export const ROTATION_CONTROLLER_ABI = [
-  {
-    type: 'function',
-    name: 'activateRotation',
-    inputs: [{ name: 'proposalId', type: 'bytes32', internalType: 'bytes32' }],
-    outputs: [],
-    stateMutability: 'nonpayable'
-  },
-  {
-    type: 'function',
-    name: 'approveWithAttestation',
-    inputs: [
-      {
-        name: 'a',
-        type: 'tuple',
-        internalType: 'struct RotationController.RotationApproval',
-        components: [
-          { name: 'merchantId', type: 'bytes32', internalType: 'bytes32' },
-          { name: 'proposalId', type: 'bytes32', internalType: 'bytes32' },
-          { name: 'operator', type: 'address', internalType: 'address' },
-          { name: 'resolver', type: 'address', internalType: 'address' },
-          { name: 'namehash', type: 'bytes32', internalType: 'bytes32' },
-          { name: 'oldPayToHash', type: 'bytes32', internalType: 'bytes32' },
-          { name: 'newPayToHash', type: 'bytes32', internalType: 'bytes32' },
-          { name: 'effectiveAt', type: 'uint64', internalType: 'uint64' },
-          { name: 'proposalExpiry', type: 'uint64', internalType: 'uint64' },
-          { name: 'proposalNonce', type: 'uint256', internalType: 'uint256' },
-          { name: 'authTime', type: 'uint64', internalType: 'uint64' },
-          { name: 'attestationExpiry', type: 'uint64', internalType: 'uint64' }
-        ]
-      },
-      { name: 'signature', type: 'bytes', internalType: 'bytes' }
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable'
-  },
-  {
-    type: 'function',
-    name: 'cancelPendingRotation',
-    inputs: [
-      { name: 'proposalId', type: 'bytes32', internalType: 'bytes32' },
-      { name: 'reasonCode', type: 'bytes32', internalType: 'bytes32' }
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable'
-  },
-  {
-    type: 'function',
-    name: 'enrollOperator',
-    inputs: [
-      {
-        name: 'e',
-        type: 'tuple',
-        internalType: 'struct RotationController.Enrollment',
-        components: [
-          { name: 'merchantId', type: 'bytes32', internalType: 'bytes32' },
-          { name: 'operator', type: 'address', internalType: 'address' },
-          { name: 'role', type: 'uint256', internalType: 'uint256' },
-          { name: 'expiry', type: 'uint64', internalType: 'uint64' },
-          { name: 'nonce', type: 'uint256', internalType: 'uint256' },
-          { name: 'controller', type: 'address', internalType: 'address' }
-        ]
-      },
-      { name: 'ownerSignature', type: 'bytes', internalType: 'bytes' }
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable'
-  },
-  {
-    type: 'function',
-    name: 'getRotationState',
-    inputs: [],
-    outputs: [
-      {
-        name: '',
-        type: 'tuple',
-        internalType: 'struct RotationController.Proposal',
-        components: [
-          { name: 'id', type: 'bytes32', internalType: 'bytes32' },
-          { name: 'operator', type: 'address', internalType: 'address' },
-          { name: 'oldPayTo', type: 'string', internalType: 'string' },
-          { name: 'newPayTo', type: 'string', internalType: 'string' },
-          { name: 'proposedAt', type: 'uint64', internalType: 'uint64' },
-          { name: 'effectiveAt', type: 'uint64', internalType: 'uint64' },
-          { name: 'expiry', type: 'uint64', internalType: 'uint64' },
-          { name: 'nonce', type: 'uint256', internalType: 'uint256' },
-          { name: 'state', type: 'uint8', internalType: 'enum RotationController.State' }
-        ]
-      }
-    ],
-    stateMutability: 'view'
-  },
-  {
-    type: 'function',
-    name: 'payoutVerdict',
-    inputs: [{ name: 'payTo', type: 'string', internalType: 'string' }],
-    outputs: [{ name: '', type: 'uint8', internalType: 'enum RotationController.Verdict' }],
-    stateMutability: 'view'
-  },
-  {
-    type: 'function',
-    name: 'proposeRotation',
-    inputs: [
-      { name: 'newPayTo', type: 'string', internalType: 'string' },
-      { name: 'proposalExpiry', type: 'uint64', internalType: 'uint64' }
-    ],
-    outputs: [{ name: 'id', type: 'bytes32', internalType: 'bytes32' }],
-    stateMutability: 'nonpayable'
-  },
-  {
-    type: 'function',
-    name: 'revokeOperator',
-    inputs: [{ name: 'operator', type: 'address', internalType: 'address' }],
-    outputs: [],
-    stateMutability: 'nonpayable'
-  },
-  {
-    type: 'function',
-    name: 'activePayTo',
-    inputs: [],
-    outputs: [{ name: '', type: 'string', internalType: 'string' }],
-    stateMutability: 'view'
-  },
-  {
-    type: 'function',
-    name: 'pendingPayTo',
-    inputs: [],
-    outputs: [{ name: '', type: 'string', internalType: 'string' }],
-    stateMutability: 'view'
-  },
-  {
-    type: 'function',
-    name: 'profileVersion',
-    inputs: [],
-    outputs: [{ name: '', type: 'uint256', internalType: 'uint256' }],
-    stateMutability: 'view'
-  },
-  {
-    type: 'function',
-    name: 'paused',
-    inputs: [],
-    outputs: [{ name: '', type: 'bool', internalType: 'bool' }],
-    stateMutability: 'view'
-  },
-  {
-    type: 'function',
-    name: 'operatorExpiry',
-    inputs: [{ name: 'operator', type: 'address', internalType: 'address' }],
-    outputs: [{ name: '', type: 'uint64', internalType: 'uint64' }],
-    stateMutability: 'view'
-  }
-] as const;
-
 export interface IRotationControllerClient {
   getProposalState(controllerAddress: Address): Promise<ContractProposal>;
   payoutVerdict(controllerAddress: Address, payTo: string): Promise<'PASS' | 'BLOCK' | 'HOLD'>;
+  previewProposalId?(
+    controllerAddress: Address,
+    operator: Address,
+    newPayTo: string,
+    proposalExpiry: bigint
+  ): Promise<Hex>;
+  enrollOperator?(
+    controllerAddress: Address,
+    enrollment: {
+      merchantId: Hex;
+      operator: Address;
+      role: bigint;
+      expiry: bigint;
+      nonce: bigint;
+      controller: Address;
+    },
+    ownerSignature: Hex,
+    walletClient: any
+  ): Promise<Hex>;
   proposeRotation(
     controllerAddress: Address,
     newPayTo: string,
@@ -221,7 +89,7 @@ const VERDICT_MAP: Record<number, 'PASS' | 'BLOCK' | 'HOLD'> = {
 };
 
 export class LiveRotationControllerClient implements IRotationControllerClient {
-  constructor(private readonly publicClient: PublicClient) {}
+  constructor(private readonly publicClient: PublicClient<any, any>) {}
 
   async getProposalState(controllerAddress: Address): Promise<ContractProposal> {
     const raw: any = await this.publicClient.readContract({
@@ -254,6 +122,51 @@ export class LiveRotationControllerClient implements IRotationControllerClient {
     return VERDICT_MAP[raw] ?? 'BLOCK';
   }
 
+  async previewProposalId(
+    controllerAddress: Address,
+    operator: Address,
+    newPayTo: string,
+    proposalExpiry: bigint
+  ): Promise<Hex> {
+    return (await this.publicClient.readContract({
+      address: controllerAddress,
+      abi: ROTATION_CONTROLLER_ABI,
+      functionName: 'previewProposalId',
+      args: [operator, newPayTo, proposalExpiry]
+    })) as Hex;
+  }
+
+  async enrollOperator(
+    controllerAddress: Address,
+    enrollment: {
+      merchantId: Hex;
+      operator: Address;
+      role: bigint;
+      expiry: bigint;
+      nonce: bigint;
+      controller: Address;
+    },
+    ownerSignature: Hex,
+    walletClient: any
+  ): Promise<Hex> {
+    try {
+      const txHash = await walletClient.writeContract({
+        address: controllerAddress,
+        abi: ROTATION_CONTROLLER_ABI,
+        functionName: 'enrollOperator',
+        args: [enrollment, ownerSignature]
+      });
+
+      const receipt = await this.publicClient.waitForTransactionReceipt({ hash: txHash });
+      if (receipt.status === 'reverted') {
+        throw new ContractExecutionError(`enrollOperator transaction reverted: ${txHash}`);
+      }
+      return txHash;
+    } catch (err: any) {
+      throw new ContractExecutionError(`enrollOperator transaction failed: ${err.message}`);
+    }
+  }
+
   async proposeRotation(
     controllerAddress: Address,
     newPayTo: string,
@@ -268,7 +181,13 @@ export class LiveRotationControllerClient implements IRotationControllerClient {
         args: [newPayTo, proposalExpiry]
       });
 
-      // Fetch new proposal state to get assigned proposalId
+      // Wait for confirmation to ensure proposal is mined into a block
+      const receipt = await this.publicClient.waitForTransactionReceipt({ hash: txHash });
+      if (receipt.status === 'reverted') {
+        throw new ContractExecutionError(`proposeRotation transaction reverted: ${txHash}`);
+      }
+
+      // Fetch confirmed on-chain proposal state
       const proposal = await this.getProposalState(controllerAddress);
       return { txHash, proposalId: proposal.id };
     } catch (err: any) {
@@ -283,12 +202,18 @@ export class LiveRotationControllerClient implements IRotationControllerClient {
     walletClient: any
   ): Promise<Hex> {
     try {
-      return await walletClient.writeContract({
+      const txHash = await walletClient.writeContract({
         address: controllerAddress,
         abi: ROTATION_CONTROLLER_ABI,
         functionName: 'approveWithAttestation',
         args: [approval, signature]
       });
+
+      const receipt = await this.publicClient.waitForTransactionReceipt({ hash: txHash });
+      if (receipt.status === 'reverted') {
+        throw new ContractExecutionError(`approveWithAttestation transaction reverted: ${txHash}`);
+      }
+      return txHash;
     } catch (err: any) {
       throw new ContractExecutionError(`approveWithAttestation transaction failed: ${err.message}`);
     }
@@ -300,12 +225,18 @@ export class LiveRotationControllerClient implements IRotationControllerClient {
     walletClient: any
   ): Promise<Hex> {
     try {
-      return await walletClient.writeContract({
+      const txHash = await walletClient.writeContract({
         address: controllerAddress,
         abi: ROTATION_CONTROLLER_ABI,
         functionName: 'activateRotation',
         args: [proposalId]
       });
+
+      const receipt = await this.publicClient.waitForTransactionReceipt({ hash: txHash });
+      if (receipt.status === 'reverted') {
+        throw new ContractExecutionError(`activateRotation transaction reverted: ${txHash}`);
+      }
+      return txHash;
     } catch (err: any) {
       throw new ContractExecutionError(`activateRotation transaction failed: ${err.message}`);
     }
@@ -318,12 +249,18 @@ export class LiveRotationControllerClient implements IRotationControllerClient {
     walletClient: any
   ): Promise<Hex> {
     try {
-      return await walletClient.writeContract({
+      const txHash = await walletClient.writeContract({
         address: controllerAddress,
         abi: ROTATION_CONTROLLER_ABI,
         functionName: 'cancelPendingRotation',
         args: [proposalId, reasonCode]
       });
+
+      const receipt = await this.publicClient.waitForTransactionReceipt({ hash: txHash });
+      if (receipt.status === 'reverted') {
+        throw new ContractExecutionError(`cancelPendingRotation transaction reverted: ${txHash}`);
+      }
+      return txHash;
     } catch (err: any) {
       throw new ContractExecutionError(`cancelPendingRotation transaction failed: ${err.message}`);
     }
@@ -402,19 +339,31 @@ export class MockRotationControllerClient implements IRotationControllerClient {
     const proposalId = `0x${'aa'.repeat(32)}` as Hex;
     const nonce = (this.proposal ? this.proposal.nonce + 1n : 1n);
 
+    const proposedAt = BigInt(Math.floor(Date.now() / 1000));
+    const effectiveAt = proposedAt + 86400n;
+
     this.proposal = {
       id: proposalId,
       operator: caller,
       oldPayTo: this.activePayToValue,
       newPayTo,
-      proposedAt: BigInt(Math.floor(Date.now() / 1000)),
-      effectiveAt: 0n,
+      proposedAt,
+      effectiveAt,
       expiry: proposalExpiry,
       nonce,
       state: 'PROPOSED'
     };
 
     return { txHash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef', proposalId };
+  }
+
+  async previewProposalId(
+    _controllerAddress: Address,
+    _operator: Address,
+    _newPayTo: string,
+    _proposalExpiry: bigint
+  ): Promise<Hex> {
+    return `0x${'aa'.repeat(32)}` as Hex;
   }
 
   async approveWithAttestation(

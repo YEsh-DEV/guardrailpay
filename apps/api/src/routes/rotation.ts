@@ -175,18 +175,21 @@ export const rotationRoutes: FastifyPluginAsync<RotationRouteOptions> = async (a
       { account: { address: operatorAddress as Address } }
     );
 
+    // Fetch authoritative on-chain proposal state to record exact contract nonce, proposedAt, and effectiveAt
+    const onChainProposal = await opts.rotationControllerClient.getProposalState(controllerAddress);
+
     const proposalUuid = crypto.randomUUID();
     const proposalRecord = {
       id: proposalUuid,
       merchantId: merchant.id,
       oldPayTo: merchant.activePayTo,
       newPayTo,
-      proposalHash: onChainProposalId,
-      proposalNonce: 1, // Will increment or align with contract nonce
+      proposalHash: onChainProposal.id || onChainProposalId,
+      proposalNonce: onChainProposal.nonce > 0n ? Number(onChainProposal.nonce) : 1,
       proposedBy: operatorAddress.toLowerCase(),
-      proposedAt: new Date(),
-      effectiveAt: null,
-      expiresAt: new Date(Number(expiryBigInt) * 1000),
+      proposedAt: onChainProposal.proposedAt > 0n ? new Date(Number(onChainProposal.proposedAt) * 1000) : new Date(),
+      effectiveAt: onChainProposal.effectiveAt > 0n ? new Date(Number(onChainProposal.effectiveAt) * 1000) : null,
+      expiresAt: onChainProposal.expiry > 0n ? new Date(Number(onChainProposal.expiry) * 1000) : new Date(Number(expiryBigInt) * 1000),
       state: 'PROPOSED',
       activatedTx: null,
       cancelledAt: null,
@@ -315,14 +318,70 @@ export const rotationRoutes: FastifyPluginAsync<RotationRouteOptions> = async (a
 
     const controllerAddress = (merchant.controllerAddress ?? '0x0000000000000000000000000000000000000000') as Address;
 
-    // Submit on-chain activation
+    // Idempotency: Check if proposal is already activated in database
+    if (proposal.state === 'ACTIVATED') {
+      return reply.status(200).send({
+        data: {
+          proposalId,
+          state: 'ACTIVATED',
+          activePayTo: proposal.newPayTo,
+          profileVersion: merchant.profileVersion,
+          txHash: proposal.activatedTx ?? null,
+          alreadyActivated: true,
+          message: 'Proposal is already activated; no state transition required'
+        }
+      });
+    }
+
+    // Check authoritative on-chain state
+    const onChainProposal = await opts.rotationControllerClient.getProposalState(controllerAddress);
+
+    // If on-chain state is already ACTIVATED for this proposal, reconcile DB safely without double-tx
+    if (onChainProposal.id.toLowerCase() === proposal.proposalHash.toLowerCase() && onChainProposal.state === 'ACTIVATED') {
+      await opts.dbStore.updateProposalState(proposal.id, 'ACTIVATED', {
+        activatedTx: proposal.activatedTx ?? null
+      });
+      const updatedMerchant = {
+        ...merchant,
+        activePayTo: proposal.newPayTo,
+        profileVersion: (merchant.profileVersion ?? 1) + 1
+      };
+      await opts.dbStore.saveMerchant(updatedMerchant);
+
+      return reply.status(200).send({
+        data: {
+          proposalId,
+          state: 'ACTIVATED',
+          activePayTo: proposal.newPayTo,
+          profileVersion: updatedMerchant.profileVersion,
+          txHash: proposal.activatedTx ?? null,
+          alreadyActivated: true,
+          message: 'Proposal is already activated on-chain; reconciled local database state'
+        }
+      });
+    }
+
+    // Validate that proposal is in PENDING_APPROVED state both in DB and on-chain
+    if (proposal.state !== 'PENDING_APPROVED') {
+      throw new ProposalStateError(
+        `Cannot activate proposal in state '${proposal.state}'; only 'PENDING_APPROVED' proposals can be activated`
+      );
+    }
+
+    if (onChainProposal.state !== 'PENDING_APPROVED') {
+      throw new ProposalStateError(
+        `Cannot activate proposal: on-chain state is '${onChainProposal.state}', expected 'PENDING_APPROVED'`
+      );
+    }
+
+    // Submit on-chain activation (will revert if timelock has not elapsed or caller is unauthorized)
     const txHash = await opts.rotationControllerClient.activateRotation(
       controllerAddress,
       proposal.proposalHash as Hex,
       { account: { address: operatorAddress as Address } }
     );
 
-    // Update database records
+    // Update database records ONLY after successful on-chain transaction
     await opts.dbStore.updateProposalState(proposal.id, 'ACTIVATED', {
       activatedTx: txHash
     });
@@ -357,6 +416,7 @@ export const rotationRoutes: FastifyPluginAsync<RotationRouteOptions> = async (a
         activePayTo: proposal.newPayTo,
         profileVersion: updatedMerchant.profileVersion,
         txHash,
+        alreadyActivated: false,
         message: 'Rotation activated successfully on-chain and in database index'
       }
     });

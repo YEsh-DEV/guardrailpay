@@ -51,17 +51,31 @@ export const EnvSchema = z.object({
 }).refine(
   (data) => {
     if (data.NODE_ENV === 'production') {
-      if (data.ATTESTOR_PRIVATE_KEY === '0x1111111111111111111111111111111111111111111111111111111111111111') {
+      const knownTestKeys = [
+        '0x1111111111111111111111111111111111111111111111111111111111111111',
+        '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'
+      ];
+      if (knownTestKeys.includes(data.ATTESTOR_PRIVATE_KEY.toLowerCase())) {
         return false;
       }
       if (data.OPERATOR_SUBJECT_HMAC_SECRET === 'sample_32_byte_hmac_secret_for_subject_hashing_min32') {
+        return false;
+      }
+      if (data.ENCRYPTION_KEY_HEX === '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f') {
+        return false;
+      }
+      if (data.ROTATION_CONTROLLER_ADDRESS === '0x0000000000000000000000000000000000000000') {
+        return false;
+      }
+      if (data.WORLD_ID_CLIENT_ID === 'app_sample_quoteseal_world_id') {
         return false;
       }
     }
     return true;
   },
   {
-    message: 'Production deployment requires real, non-default ATTESTOR_PRIVATE_KEY and OPERATOR_SUBJECT_HMAC_SECRET'
+    message:
+      'Production deployment requires real non-default ATTESTOR_PRIVATE_KEY, OPERATOR_SUBJECT_HMAC_SECRET, ENCRYPTION_KEY_HEX, ROTATION_CONTROLLER_ADDRESS, and WORLD_ID_CLIENT_ID'
   }
 );
 

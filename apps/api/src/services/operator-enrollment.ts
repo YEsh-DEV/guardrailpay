@@ -9,10 +9,12 @@ import {
   NotFoundError,
   ConflictError,
   EIP712_DOMAIN_NAME,
-  EIP712_DOMAIN_VERSION
+  EIP712_DOMAIN_VERSION,
+  createLogger
 } from '@quoteseal/shared';
 import { computeSubjectHmac } from './crypto.js';
 import type { FastifyBaseLogger } from 'fastify';
+import type { IDbStore } from './db-store.js';
 
 export interface OperatorEnrollmentInput {
   merchantId: string;
@@ -58,13 +60,13 @@ export const OPERATOR_ENROLLMENT_TYPES = {
 
 export class OperatorEnrollmentService {
   constructor(
-    private readonly dbStore: any,
+    private readonly dbStore: IDbStore,
     private readonly config: {
       issuer: string;
       hmacSecret: string;
       chainId: number;
     },
-    private readonly logger: FastifyBaseLogger = console as any
+    private readonly logger: FastifyBaseLogger = createLogger({ name: 'operator-enrollment' }) as unknown as FastifyBaseLogger
   ) {}
 
   /**

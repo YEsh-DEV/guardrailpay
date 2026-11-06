@@ -1,0 +1,69 @@
+No files changed, compilation skipped
+
+Ran 48 tests for test/RotationController.t.sol:RotationControllerTest
+[PASS] testActivationRejectsChangedOldPayout() (gas: 721294)
+[PASS] testActivationWriteRollback() (gas: 853108)
+[PASS] testAliasRejected() (gas: 114995)
+[PASS] testApprovalWriteRollback() (gas: 682634)
+[PASS] testAttestationTTLAndAuthFreshness() (gas: 533199)
+[PASS] testAttestorCannotActAsOperator() (gas: 345823)
+[PASS] testCancellationSurvivesResolverFailureAndPause() (gas: 776781)
+[PASS] testCancelledNeverActivates() (gas: 713512)
+[PASS] testCrossChainReplay() (gas: 424853)
+[PASS] testCrossContractReplay() (gas: 4306502)
+[PASS] testDelayCannotBeShortened() (gas: 415905)
+[PASS] testDuplicateProposal() (gas: 378834)
+[PASS] testEIP712DigestMatchesExplicitEncoding() (gas: 307444)
+[PASS] testEnrollmentReplayAndRevocationInvalidatesPendingSignature() (gas: 148015)
+[PASS] testEnrollmentRequiresOwnerSignature() (gas: 118385)
+[PASS] testExpiredActivation() (gas: 662313)
+[PASS] testExpiredProposal() (gas: 400306)
+[PASS] testExpiredSignature() (gas: 397605)
+[PASS] testFuzzInvalidPayTo(bytes) (runs: 1000, μ: 92404, ~: 92097)
+[PASS] testFuzzUnauthorizedActivation(address) (runs: 1000, μ: 646135, ~: 646135)
+[PASS] testFuzzWrongBoundField(uint8) (runs: 1000, μ: 407158, ~: 404823)
+[PASS] testMalformedResolverConfiguration() (gas: 495398)
+[PASS] testOwnerAndExpiryAnchorChanges() (gas: 176573)
+[PASS] testPausedApprovalAndActivation() (gas: 865620)
+[PASS] testPausedOperationAndResume() (gas: 483887)
+[PASS] testReentrancyRejected() (gas: 914882)
+[PASS] testReplay() (gas: 713803)
+[PASS] testResolverAnchorChange() (gas: 90225)
+[PASS] testRevokedOperatorActivation() (gas: 679855)
+[PASS] testRevokedOperatorApproval() (gas: 384510)
+[PASS] testSignatureBindsEffectiveAt() (gas: 424276)
+[PASS] testSilentNoopResolverRejected() (gas: 551165)
+[PASS] testStateSemanticsAndExplicitActivation() (gas: 978811)
+[PASS] testUnauthorizedCancelPauseAndRevoke() (gas: 385077)
+[PASS] testUnauthorizedDirectWrite() (gas: 38662)
+[PASS] testUnauthorizedOperator() (gas: 40128)
+[PASS] testValidProposalAndApproval() (gas: 695416)
+[PASS] testWrongMerchant() (gas: 401324)
+[PASS] testWrongNameConfiguration() (gas: 506263)
+[PASS] testWrongNamehash() (gas: 404026)
+[PASS] testWrongNewPayout() (gas: 410864)
+[PASS] testWrongNonce() (gas: 413447)
+[PASS] testWrongOldPayout() (gas: 407196)
+[PASS] testWrongOperatorField() (gas: 403967)
+[PASS] testWrongProposalIdentity() (gas: 403452)
+[PASS] testWrongResolver() (gas: 404192)
+[PASS] testWrongSigner() (gas: 424207)
+[PASS] testZeroAddressAndInvalidDNS() (gas: 487588)
+Suite result: ok. 48 passed; 0 failed; 0 skipped; finished in 182.52ms (574.42ms CPU time)
+
+Ran 1 test for test/RotationController.t.sol:RotationInvariantTest
+[PASS]
+RotationInvariantTest invariants:
+[PASS] invariantActiveChangesOnlyOnAuthorizedActivation
+[PASS] invariantPendingIsNeverPass
+ RotationInvariantTest invariants (runs: 128, calls: 4096, reverts: 0)
+
+╭-----------------+----------+-------+---------+----------╮
+| Contract        | Selector | Calls | Reverts | Discards |
++=========================================================+
+| RotationHandler | step     | 4096  | 0       | 0        |
+╰-----------------+----------+-------+---------+----------╯
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 655.76ms (653.20ms CPU time)
+
+Ran 2 test suites in 657.70ms (838.28ms CPU time): 49 tests passed, 0 failed, 0 skipped (49 total tests)

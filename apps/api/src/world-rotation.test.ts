@@ -613,6 +613,40 @@ describe('World OIDC & Payout Rotation Backend (Comprehensive Suite)', () => {
       expect(res2.statusCode).toBe(409);
       expect(res2.json().error.code).toBe('REPLAY_DETECTED');
     });
+
+    it('concurrent callbacks with identical state execute as atomic single-winner (race defense)', async () => {
+      const startRes = await app.inject({
+        method: 'POST',
+        url: '/v1/world/start',
+        payload: { proposalId, operatorAddress: operatorAccount.address }
+      });
+      const { state, nonce } = startRes.json().data;
+
+      mockOidcService.setMockClaims({
+        sub: validWorldSubject,
+        acr: 'orb',
+        auth_time: Math.floor(Date.now() / 1000),
+        nonce
+      });
+
+      // Fire 2 concurrent callback requests with identical state
+      const [resA, resB] = await Promise.all([
+        app.inject({
+          method: 'POST',
+          url: '/v1/world/callback',
+          payload: { code: 'code_a', state, proposalHash, mockNonce: nonce }
+        }),
+        app.inject({
+          method: 'POST',
+          url: '/v1/world/callback',
+          payload: { code: 'code_b', state, proposalHash, mockNonce: nonce }
+        })
+      ]);
+
+      const statusCodes = [resA.statusCode, resB.statusCode].sort();
+      // Exactly ONE must succeed (200) and the other must be rejected (409 REPLAY_DETECTED)
+      expect(statusCodes).toEqual([200, 409]);
+    });
   });
 
   // ===========================================================================
@@ -759,6 +793,17 @@ describe('World OIDC & Payout Rotation Backend (Comprehensive Suite)', () => {
 
       const postOldVerdict = await mockContractClient.payoutVerdict(controllerAddress, '0.0.100001');
       expect(postOldVerdict).toBe('BLOCK');
+
+      // 9. Repeat activation test: safe idempotent repeat call returns 200 without double-execution
+      const repeatActivateRes = await app.inject({
+        method: 'POST',
+        url: `/v1/merchants/${ensName}/proposals/${proposalId}/activate`,
+        payload: { operatorAddress: operatorAccount.address }
+      });
+      expect(repeatActivateRes.statusCode).toBe(200);
+      expect(repeatActivateRes.json().data.state).toBe('ACTIVATED');
+      expect(repeatActivateRes.json().data.alreadyActivated).toBe(true);
+      expect(repeatActivateRes.json().data.activePayTo).toBe('0.0.200002');
     });
 
     it('emergency cancellation by guardian or operator cancels proposal and blocks activation', async () => {

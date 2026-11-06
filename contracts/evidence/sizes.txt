@@ -1,0 +1,195 @@
+No files changed, compilation skipped
+
+╭--------------------+------------------+-------------------+--------------------+---------------------╮
+| Contract           | Runtime Size (B) | Initcode Size (B) | Runtime Margin (B) | Initcode Margin (B) |
++======================================================================================================+
+| RegistryMock       | 705              | 949               | 23,871             | 48,203              |
+|--------------------+------------------+-------------------+--------------------+---------------------|
+| ResolverMock       | 4,146            | 4,175             | 20,430             | 44,977              |
+|--------------------+------------------+-------------------+--------------------+---------------------|
+| RotationController | 16,264           | 22,957            | 8,312              | 26,195              |
+╰--------------------+------------------+-------------------+--------------------+---------------------╯
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:156:45
+    │
+156 │                 || c.attestationTTL == 0 || c.nameExpiry <= block.timestamp || c.initialProfileVersion == 0
+    │                                             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:191:20
+    │
+191 │                 || e.expiry <= block.timestamp || e.nonce != enrollmentNonce
+    │                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/RotationController.sol:197:9
+    │
+197 │         emit OperatorEnrolled(e.operator, e.role, e.expiry, e.nonce);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:220:54
+    │
+220 │             _hash(newPayTo) == _hash(activePayTo) || proposalExpiry <= block.timestamp + rotationDelay
+    │                                                      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ src/RotationController.sol:237:52
+    │
+237 │             id, msg.sender, activePayTo, newPayTo, uint64(block.timestamp), 0, proposalExpiry, nonce, State.PROPOSED
+    │                                                    ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:252:13
+    │
+252 │         if (block.timestamp >= p.expiry || block.timestamp >= a.attestationExpiry) revert Expired();
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:252:44
+    │
+252 │         if (block.timestamp >= p.expiry || block.timestamp >= a.attestationExpiry) revert Expired();
+    │                                            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:258:20
+    │
+258 │                 || a.effectiveAt < block.timestamp + rotationDelay || a.effectiveAt >= p.expiry
+    │                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:259:49
+    │
+259 │                 || a.authTime < p.proposedAt || a.authTime > block.timestamp
+    │                                                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:260:20
+    │
+260 │                 || block.timestamp - a.authTime > maxAuthAge || a.attestationExpiry <= a.authTime
+    │                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/RotationController.sol:269:9
+    │
+269 │         emit RotationApproved(p.id, p.operator, p.effectiveAt, p.nonce, digest);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-no-eth]: external call can be reentered before `_status` is updated
+    ╭▸ src/RotationController.sol:373:9
+    │
+373 │         resolver.setText(namehash, key, value);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-no-eth
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:281:72
+    │
+281 │         if (p.id != proposalId || p.state != State.PENDING_APPROVED || block.timestamp < p.effectiveAt) {
+    │                                                                        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:284:13
+    │
+284 │         if (block.timestamp >= p.expiry) revert Expired();
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ src/RotationController.sol:296:9
+    │
+296 │         emit RotationActivated(p.id, activePayTo, profileVersion);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:348:58
+    │
+348 │             _proposal.state == State.PENDING_APPROVED && block.timestamp < _proposal.expiry
+    │                                                          ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:355:13
+    │
+355 │         if (operatorExpiry[account] <= block.timestamp) revert Unauthorized();
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/RotationController.sol:362:20
+    │
+362 │                 || block.timestamp >= nameExpiry || resolver.getAlias(dnsName).length != 0
+    │                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/RotationController.sol:389:43
+    │
+389 │             if (b[i] < "0" || b[i] > "9") revert InvalidInput();
+    │                                           ━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/RotationController.sol:403:66
+    │
+403 │             if (len == 0 || len > 63 || pos + len >= dns.length) revert InvalidInput();
+    │                                                                  ━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ src/RotationController.sol:408:21
+    │
+408 │                     revert InvalidInput();
+    │                     ━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[environment-read-across-mutation]: `block.timestamp` may be reused across `vm.warp`
+    ╭▸ test/RotationController.t.sol:641:17
+    │
+641 │         vm.warp(block.timestamp + bound(secondsForward, 0, 30));
+    │         ────────━━━━━━━━━━━━━━━──────────────────────────────── `vm.warp` changes this environment here
+    │
+    ├ help: capture it with `vm.getBlockTimestamp()` instead
+    ╰ help: https://getfoundry.sh/forge/linting/environment-read-across-mutation
+

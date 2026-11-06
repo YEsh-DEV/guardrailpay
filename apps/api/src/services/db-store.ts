@@ -8,7 +8,7 @@ import {
   approvals,
   auditEvents
 } from '@quoteseal/shared';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, isNull } from 'drizzle-orm';
 
 export interface IDbStore {
   findMerchantById(id: string): Promise<any | null>;
@@ -29,7 +29,7 @@ export interface IDbStore {
 
   saveAuthAttempt(attempt: any): Promise<void>;
   findAuthAttemptByStateHash(stateHash: string): Promise<any | null>;
-  consumeAuthAttempt(id: string): Promise<void>;
+  consumeAuthAttempt(id: string): Promise<boolean>;
 
   saveApproval(approval: any): Promise<void>;
   findApprovalByProposalId(proposalId: string): Promise<any | null>;
@@ -133,13 +133,15 @@ export class MemoryDbStore implements IDbStore {
     return null;
   }
 
-  async consumeAuthAttempt(id: string): Promise<void> {
+  async consumeAuthAttempt(id: string): Promise<boolean> {
     const a = this.mockDb.authAttempts.get(id);
-    if (a) {
-      a.consumedAt = new Date();
-      a.status = 'consumed';
-      this.mockDb.authAttempts.set(id, a);
+    if (!a || a.consumedAt || a.status === 'consumed') {
+      return false;
     }
+    a.consumedAt = new Date();
+    a.status = 'consumed';
+    this.mockDb.authAttempts.set(id, a);
+    return true;
   }
 
   async saveApproval(approval: any): Promise<void> {
@@ -245,11 +247,13 @@ export class PostgresDbStore implements IDbStore {
     return rows[0] ?? null;
   }
 
-  async consumeAuthAttempt(id: string): Promise<void> {
-    await this.db
+  async consumeAuthAttempt(id: string): Promise<boolean> {
+    const updated = await this.db
       .update(authAttempts)
       .set({ consumedAt: new Date(), status: 'consumed' })
-      .where(eq(authAttempts.id, id));
+      .where(and(eq(authAttempts.id, id), isNull(authAttempts.consumedAt)))
+      .returning({ id: authAttempts.id });
+    return updated.length > 0;
   }
 
   async saveApproval(approval: any): Promise<void> {

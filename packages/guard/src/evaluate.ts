@@ -1,8 +1,10 @@
 import { isDeepStrictEqual } from 'node:util';
 import type { PaymentRequirements } from '@x402/core/types';
+import type { PaymentRequirement } from './interfaces.js';
 import type { Verdict } from '@quoteseal/shared';
 
 export type { Verdict };
+export type EvaluatableRequirement = PaymentRequirements | PaymentRequirement;
 
 export interface EvaluatableProfile {
   owner: string;
@@ -55,8 +57,8 @@ export const defaultProfile: EvaluatableProfile = {
 };
 
 export function evaluate(
-  selected: PaymentRequirements,
-  offered: PaymentRequirements[],
+  selected: EvaluatableRequirement,
+  offered: readonly EvaluatableRequirement[],
   p: EvaluatableProfile | undefined,
   expected: EvaluatableAnchors,
   url: string,

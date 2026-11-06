@@ -1,4 +1,4 @@
-import Fastify, { type FastifyInstance } from 'fastify';
+import Fastify, { type FastifyInstance, type FastifyBaseLogger } from 'fastify';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import sensible from '@fastify/sensible';
@@ -46,10 +46,10 @@ export interface AppDependencies {
 }
 
 export function createApp(deps: AppDependencies): FastifyInstance {
-  const log = createLogger({ name: 'quoteseal-api' });
+  const log = createLogger({ name: 'quoteseal-api' }) as unknown as FastifyBaseLogger;
 
   const app = Fastify({
-    loggerInstance: log as any,
+    loggerInstance: log,
     disableRequestLogging: false
   });
 
@@ -71,7 +71,7 @@ export function createApp(deps: AppDependencies): FastifyInstance {
             encryptionKeyHex: env.ENCRYPTION_KEY_HEX
           },
           dbStore,
-          log as any
+          log
         )
       : new LiveWorldOidcService(
           {
@@ -85,7 +85,7 @@ export function createApp(deps: AppDependencies): FastifyInstance {
             encryptionKeyHex: env.ENCRYPTION_KEY_HEX
           },
           dbStore,
-          log as any
+          log
         ));
 
   const operatorEnrollmentService =
@@ -97,7 +97,7 @@ export function createApp(deps: AppDependencies): FastifyInstance {
         hmacSecret: env.OPERATOR_SUBJECT_HMAC_SECRET,
         chainId: env.APPLICATION_CHAIN_ID
       },
-      log as any
+      log
     );
 
   const attestorService =
@@ -110,7 +110,7 @@ export function createApp(deps: AppDependencies): FastifyInstance {
         chainId: env.APPLICATION_CHAIN_ID
       },
       dbStore,
-      log as any
+      log
     );
 
   const rotationControllerClient =
@@ -194,5 +194,5 @@ export function createApp(deps: AppDependencies): FastifyInstance {
     dbStore
   });
 
-  return app as any as FastifyInstance;
+  return app;
 }

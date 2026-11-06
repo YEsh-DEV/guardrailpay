@@ -8,7 +8,8 @@ export const PaymentRequirementSchema = z.object({
   asset: z.string(),
   amount: z.string(),
   payTo: z.string(),
-  maxTimeoutSeconds: z.number().int().positive().optional()
+  maxTimeoutSeconds: z.number().int().positive().optional(),
+  extra: z.record(z.unknown()).optional()
 });
 export type PaymentRequirement = z.infer<typeof PaymentRequirementSchema>;
 

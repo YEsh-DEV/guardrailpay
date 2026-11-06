@@ -16,7 +16,9 @@ import {
   normalizeRotationState,
   toOnChainVerdict,
   toSolidityVerdictIndex,
-  RotationApprovalDataSchema
+  RotationApprovalDataSchema,
+  computeProposalId,
+  ROTATION_CONTROLLER_ABI
 } from './index.js';
 import { validateEnv, EnvSchema } from './config/index.js';
 import { createLogger, SENSITIVE_PATHS } from './logging/index.js';
@@ -76,6 +78,40 @@ describe('Configuration & Environment Validation', () => {
         PORT: 'not-a-number'
       })
     ).toThrow(/Environment validation failed/);
+  });
+
+  it('rejects test fallback keys when NODE_ENV=production (fail-closed)', () => {
+    // Attempt starting with default test keys in production
+    expect(() =>
+      validateEnv({
+        NODE_ENV: 'production'
+      })
+    ).toThrow(/Production deployment requires real non-default/);
+
+    // Attempt starting with Foundry Key 0 in production
+    expect(() =>
+      validateEnv({
+        NODE_ENV: 'production',
+        ATTESTOR_PRIVATE_KEY: '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
+        OPERATOR_SUBJECT_HMAC_SECRET: 'production_hmac_secret_longer_than_32_bytes_safe',
+        ENCRYPTION_KEY_HEX: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+        ROTATION_CONTROLLER_ADDRESS: '0x1234567890123456789012345678901234567890',
+        WORLD_ID_CLIENT_ID: 'app_production_world_id'
+      })
+    ).toThrow(/Production deployment requires real non-default/);
+  });
+
+  it('accepts valid production configuration with real non-default secrets', () => {
+    const prodEnv = validateEnv({
+      NODE_ENV: 'production',
+      ATTESTOR_PRIVATE_KEY: '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d',
+      OPERATOR_SUBJECT_HMAC_SECRET: 'production_hmac_secret_longer_than_32_bytes_safe',
+      ENCRYPTION_KEY_HEX: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      ROTATION_CONTROLLER_ADDRESS: '0x1234567890123456789012345678901234567890',
+      WORLD_ID_CLIENT_ID: 'app_production_world_id'
+    });
+    expect(prodEnv.NODE_ENV).toBe('production');
+    expect(prodEnv.ROTATION_CONTROLLER_ADDRESS).toBe('0x1234567890123456789012345678901234567890');
   });
 });
 
@@ -162,5 +198,38 @@ describe('Solidity Contract Enums & Mappings', () => {
     expect(parsed.proposalNonce).toBe(1n);
     expect(parsed.authTime).toBe(1699999900n);
     expect(parsed.attestationExpiry).toBe(1700000300n);
+  });
+
+  it('computes canonical proposal ID matching RotationController.sol abi.encode formula', () => {
+    const proposalId = computeProposalId({
+      controllerAddress: '0x1111111111111111111111111111111111111111',
+      chainId: 31337,
+      merchantId: '0x2222222222222222222222222222222222222222222222222222222222222222',
+      proposalNonce: 1,
+      operatorAddress: '0x3333333333333333333333333333333333333333',
+      activePayTo: '0.0.123',
+      newPayTo: '0.0.456',
+      proposalExpiry: 2000
+    });
+
+    expect(proposalId).toBe('0xb1970ad01da4f26fc45b2fd55829b94db1e593a6129f25fcb9e93a7a7b605716');
+    expect(proposalId).toMatch(/^0x[a-f0-9]{64}$/);
+  });
+
+  it('exports generated ROTATION_CONTROLLER_ABI with 65 contract entries', () => {
+    expect(Array.isArray(ROTATION_CONTROLLER_ABI)).toBe(true);
+    expect(ROTATION_CONTROLLER_ABI.length).toBe(65);
+
+    // Verify key functions are present
+    const fnNames = ROTATION_CONTROLLER_ABI.filter((x) => x.type === 'function').map((x: any) => x.name);
+    expect(fnNames).toContain('proposeRotation');
+    expect(fnNames).toContain('approveWithAttestation');
+    expect(fnNames).toContain('activateRotation');
+    expect(fnNames).toContain('cancelPendingRotation');
+    expect(fnNames).toContain('enrollOperator');
+    expect(fnNames).toContain('revokeOperator');
+    expect(fnNames).toContain('previewProposalId');
+    expect(fnNames).toContain('getRotationState');
+    expect(fnNames).toContain('payoutVerdict');
   });
 });

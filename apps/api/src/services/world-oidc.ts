@@ -5,7 +5,8 @@ import {
   ReplayError,
   NotFoundError,
   OperatorRevokedError,
-  ValidationError
+  ValidationError,
+  createLogger
 } from '@quoteseal/shared';
 import {
   computeSubjectHmac,
@@ -14,6 +15,7 @@ import {
   sha256Hex
 } from './crypto.js';
 import type { FastifyBaseLogger } from 'fastify';
+import type { IDbStore } from './db-store.js';
 
 export interface WorldOidcConfig {
   issuer: string;
@@ -22,6 +24,7 @@ export interface WorldOidcConfig {
   redirectUri: string;
   requiredAcr: string;
   maxAuthAgeSeconds: number;
+  clockToleranceSeconds?: number;
   hmacSecret: string;
   encryptionKeyHex: string;
 }
@@ -49,6 +52,7 @@ export interface OidcCallbackInput {
   state: string;
   proposalHash: string;
   currentUrl?: string;
+  mockNonce?: string;
 }
 
 export interface VerifiedOidcSession {
@@ -89,8 +93,8 @@ export class LiveWorldOidcService implements IWorldOidcService {
 
   constructor(
     private readonly config: WorldOidcConfig,
-    private readonly dbStore: any,
-    private readonly logger: FastifyBaseLogger = console as any
+    private readonly dbStore: IDbStore,
+    private readonly logger: FastifyBaseLogger = createLogger({ name: 'world-oidc' }) as unknown as FastifyBaseLogger
   ) {}
 
   private async getOidcConfiguration(): Promise<oidc.Configuration> {
@@ -208,7 +212,11 @@ export class LiveWorldOidcService implements IWorldOidcService {
       throw new AuthenticationError(`World OIDC token exchange failed: ${err.message}`);
     }
 
-    const claims = (typeof (tokens as any).claims === 'function' ? (tokens as any).claims() : {}) as IdTokenClaims;
+    const claims = (
+      typeof tokens.claims === 'function'
+        ? (tokens.claims as () => unknown)()
+        : {}
+    ) as unknown as IdTokenClaims;
 
     // Validate claims fail-closed
     return this.validateAndFinalizeSession(attempt, claims);
@@ -240,7 +248,8 @@ export class LiveWorldOidcService implements IWorldOidcService {
       );
     }
 
-    if (claims.auth_time > nowEpoch + 5) {
+    const clockTolerance = this.config.clockToleranceSeconds ?? 60;
+    if (claims.auth_time > nowEpoch + clockTolerance) {
       throw new AuthenticationError('ID token auth_time is in the future');
     }
 
@@ -273,8 +282,11 @@ export class LiveWorldOidcService implements IWorldOidcService {
       throw new AuthenticationError('No World ID assurance policy configured (fail closed)');
     }
 
-    // 4. Mark attempt as consumed (one-time use, prevents replay)
-    await this.dbStore.consumeAuthAttempt(attempt.id);
+    // 4. Mark attempt as consumed atomically (single-winner operation, prevents race condition replay)
+    const consumed = await this.dbStore.consumeAuthAttempt(attempt.id);
+    if (!consumed) {
+      throw new ReplayError('OIDC state parameter already consumed (concurrent race detected)');
+    }
 
     // 5. Pseudonymize World ID subject using HMAC-SHA256
     const subjectHmac = computeSubjectHmac(claims.sub, this.config.hmacSecret);
@@ -368,7 +380,7 @@ export class MockWorldOidcService extends LiveWorldOidcService {
     const claims: IdTokenClaims = this.mockTokenClaims
       ? {
           ...this.mockTokenClaims,
-          nonce: (input as any).mockNonce ?? this.mockTokenClaims.nonce
+          nonce: input.mockNonce ?? this.mockTokenClaims.nonce
         }
       : {
           sub: 'world_user_sub_12345',
@@ -378,7 +390,7 @@ export class MockWorldOidcService extends LiveWorldOidcService {
           auth_time: Math.floor(Date.now() / 1000),
           acr: this['config'].requiredAcr,
           amr: [this['config'].requiredAcr],
-          nonce: (input as any).mockNonce
+          nonce: input.mockNonce
         };
 
     return this.validateAndFinalizeSession(attempt, claims);

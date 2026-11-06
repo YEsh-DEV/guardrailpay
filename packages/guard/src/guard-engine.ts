@@ -53,8 +53,8 @@ export class GuardEngine implements IGuardEngine {
     };
 
     const verdict = evaluate(
-      request.selectedRequirement as any,
-      request.challenge.accepts as any,
+      request.selectedRequirement,
+      request.challenge.accepts,
       profile,
       anchors,
       request.buyerOriginalUrl,

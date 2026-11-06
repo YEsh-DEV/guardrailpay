@@ -89,7 +89,7 @@ export const worldRoutes: FastifyPluginAsync<WorldRouteOptions> = async (app, op
       code,
       state,
       proposalHash,
-      ...(mockNonce ? { mockNonce } as any : {})
+      mockNonce
     });
 
     // 2. Generate EIP-712 Attestation signed by QuoteSeal Attestor
