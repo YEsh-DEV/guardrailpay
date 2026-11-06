@@ -65,7 +65,7 @@ export default function HeroSection() {
             transition={{ duration: 0.65, delay: 0.2 }}
             className="text-silver-400 text-base sm:text-lg max-w-[46ch] leading-relaxed font-normal"
           >
-            Join autonomous networks already protecting their transactions with QuoteSeal — verifying the payee against the merchant&apos;s ENSv2 identity before the wallet ever signs.
+            Join autonomous networks already protecting their transactions with GuardRail Pay — verifying the payee against the merchant&apos;s ENSv2 identity before the wallet ever signs.
           </motion.p>
 
           {/* Violet Primary CTA Button */}

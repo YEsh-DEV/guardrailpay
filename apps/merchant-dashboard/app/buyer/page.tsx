@@ -43,9 +43,9 @@ export default function BuyerConsole() {
 
         setConsoleOutput((prev) => [
           ...prev,
-          `[QuoteSeal Guard] Resolving ENSv2 records for researchpro.eth...`,
-          `[QuoteSeal Guard] Matched expected payTo: 0x71Cf3D14...8f4B ✓`,
-          `[QuoteSeal Guard] Verdict: PASS (latency: ${newLog.latencyMs}ms)`,
+          `[GuardRail Pay Guard] Resolving ENSv2 records for researchpro.eth...`,
+          `[GuardRail Pay Guard] Matched expected payTo: 0x71Cf3D14...8f4B ✓`,
+          `[GuardRail Pay Guard] Verdict: PASS (latency: ${newLog.latencyMs}ms)`,
           `[Hedera Settlement] Signer invoked (callCount = 1). Transaction submitted!`,
           `[Hedera Settlement] Settled on Hedera Testnet! TxId: ${newLog.txId}`,
         ]);
@@ -81,10 +81,10 @@ export default function BuyerConsole() {
           ...prev,
           `[Attack Proxy] Injected payload modification (${attackVector})!`,
           `[Attack Proxy] Tampered payTo: ${tamperedAddress}`,
-          `[QuoteSeal Guard] Resolving ENSv2 records for researchpro.eth...`,
-          `[QuoteSeal Guard] Expected: 0x71Cf3D14...8f4B | Received: ${tamperedAddress.slice(0, 14)}...`,
-          `[QuoteSeal Guard] ALERT: Recipient mismatch detected!`,
-          `[QuoteSeal Guard] Verdict: ${newLog.status} (latency: ${newLog.latencyMs}ms)`,
+          `[GuardRail Pay Guard] Resolving ENSv2 records for researchpro.eth...`,
+          `[GuardRail Pay Guard] Expected: 0x71Cf3D14...8f4B | Received: ${tamperedAddress.slice(0, 14)}...`,
+          `[GuardRail Pay Guard] ALERT: Recipient mismatch detected!`,
+          `[GuardRail Pay Guard] Verdict: ${newLog.status} (latency: ${newLog.latencyMs}ms)`,
           `[CRITICAL PROTECTION] Signer was NOT called. Wallet balance safe.`,
         ]);
 
@@ -113,7 +113,7 @@ export default function BuyerConsole() {
                 </svg>
               </span>
               <span className="font-title-sans text-lg font-bold text-[#FFFFFF] group-hover:text-[#DD60F7] transition-colors">
-                QuoteSeal
+                GuardRail Pay
               </span>
             </Link>
             <span className="text-[#262626]">/</span>
@@ -226,7 +226,7 @@ export default function BuyerConsole() {
                         ? 'text-rose-400 font-bold'
                         : line.includes('PASS') || line.includes('Settled')
                         ? 'text-emerald-400 font-bold'
-                        : line.includes('QuoteSeal')
+                        : line.includes('GuardRail') || line.includes('QuoteSeal')
                         ? 'text-[#DD60F7]'
                         : 'text-[#94A3B8]'
                     }

@@ -128,7 +128,7 @@ export default function AIChatDemoSection() {
             </span>
           </h2>
           <p className="text-[#94A3B8] text-sm sm:text-base max-w-xl mx-auto">
-            Test the interceptor in real time. Watch how QuoteSeal protects an autonomous AI agent when encountering hostile 402 responses.
+            Test the interceptor in real time. Watch how GuardRail Pay protects an autonomous AI agent when encountering hostile 402 responses.
           </p>
         </motion.div>
 
@@ -177,7 +177,7 @@ export default function AIChatDemoSection() {
               {[
                 { color: '#D152F5', label: 'AI Buyer Agent', desc: 'claude-agent/2.0 initiating query' },
                 { color: '#94A3B8', label: 'HTTP 402 Response', desc: mode === 'attack' ? 'Compromised proxy' : 'Merchant API' },
-                { color: mode === 'pass' ? '#34D399' : '#F43F5E', label: 'QuoteSeal Guard', desc: mode === 'pass' ? 'Verdict: PASS' : 'Verdict: BLOCK' },
+                { color: mode === 'pass' ? '#34D399' : '#F43F5E', label: 'GuardRail Pay Guard', desc: mode === 'pass' ? 'Verdict: PASS' : 'Verdict: BLOCK' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
@@ -201,7 +201,7 @@ export default function AIChatDemoSection() {
                 <span className="w-3 h-3 rounded-full bg-[#FF5F57]" />
                 <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
                 <span className="w-3 h-3 rounded-full bg-[#28C840]" />
-                <span className="font-mono text-xs text-[#E2E8F0] font-bold ml-3">QuoteSeal Agent Gateway</span>
+                <span className="font-mono text-xs text-[#E2E8F0] font-bold ml-3">GuardRail Pay Agent Gateway</span>
               </div>
               <span className={`font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 ${
                 mode === 'attack'
@@ -291,7 +291,7 @@ export default function AIChatDemoSection() {
                         }`}>
                           <div className="flex items-center gap-2 mb-2 pb-2 border-b border-[#262626]">
                             <span className={`w-2 h-2 rounded-full ${isBlock ? 'bg-rose-500' : 'bg-[#34D399]'}`} />
-                            <span className="font-title-sans text-xs font-bold text-[#FFFFFF]">QuoteSeal Guard</span>
+                            <span className="font-title-sans text-xs font-bold text-[#FFFFFF]">GuardRail Pay Guard</span>
                           </div>
                           <div className="font-mono text-xs leading-relaxed whitespace-pre-wrap">
                             {typingIndex === i ? (

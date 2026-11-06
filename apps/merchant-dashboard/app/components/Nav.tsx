@@ -16,7 +16,7 @@ export default function Nav() {
             </svg>
           </span>
           <span className="font-sans font-bold text-lg text-white tracking-tight group-hover:text-silver-200 transition-colors">
-            QuoteSeal
+            GuardRail Pay
           </span>
         </Link>
 

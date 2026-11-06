@@ -99,7 +99,7 @@ export default function MerchantDashboard() {
                 </svg>
               </span>
               <span className="font-title-sans text-lg font-bold text-[#FFFFFF] group-hover:text-[#DD60F7] transition-colors">
-                QuoteSeal
+                GuardRail Pay
               </span>
             </Link>
             <span className="text-[#262626]">/</span>
@@ -218,7 +218,7 @@ export default function MerchantDashboard() {
               <div className="p-4 rounded-2xl border border-[#D152F5]/25 bg-[#D152F5]/10 flex items-start gap-3">
                 <span className="text-xl">ℹ️</span>
                 <p className="text-xs text-[#E2E8F0] leading-relaxed">
-                  These text records are read directly by QuoteSeal PayeeGuard during pre-flight checks. AI agents will immediately block payments if a merchant's 402 header deviates from these verified on-chain entries.
+                  These text records are read directly by GuardRail Pay PayeeGuard during pre-flight checks. AI agents will immediately block payments if a merchant's 402 header deviates from these verified on-chain entries.
                 </p>
               </div>
             </div>

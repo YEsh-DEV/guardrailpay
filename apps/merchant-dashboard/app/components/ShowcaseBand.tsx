@@ -6,13 +6,13 @@ import { motion } from 'framer-motion';
 export default function ShowcaseBand() {
   return (
     <section className="relative w-full overflow-hidden bg-gradient-to-b from-[#F5D3FE] via-[#F1BDFF] to-[#EA9DFD] py-24 sm:py-32 px-6">
-      {/* Giant Cropped Watermark Word "QuoteSeal" Behind Monitor (~28vw) */}
+      {/* Giant Cropped Watermark Word "GuardRail Pay" Behind Monitor (~28vw) */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none z-0">
         <span
-          className="font-sans font-black text-[26vw] leading-none tracking-[-0.05em] text-[#EA9DFD]/70 whitespace-nowrap opacity-90"
+          className="font-sans font-black text-[22vw] leading-none tracking-[-0.05em] text-[#EA9DFD]/70 whitespace-nowrap opacity-90"
           style={{ textShadow: '0 20px 60px rgba(127, 53, 155, 0.15)' }}
         >
-          QuoteSeal
+          GuardRail Pay
         </span>
       </div>
 
@@ -29,7 +29,7 @@ export default function ShowcaseBand() {
                   <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
                   <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
                   <span className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
-                  <span className="font-mono text-xs text-silver-400 ml-3">quoteseal.guard // autonomous-node-01</span>
+                  <span className="font-mono text-xs text-silver-400 ml-3">guardrail.pay // autonomous-node-01</span>
                 </div>
                 <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-mono text-[10px] font-bold">
                   ● ACTIVE ARBITRATION

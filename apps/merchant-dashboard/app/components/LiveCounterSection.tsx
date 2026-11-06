@@ -82,7 +82,7 @@ export default function LiveCounterSection() {
           <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#D152F5]/10 text-[#DD60F7] font-mono text-[11px] font-bold uppercase tracking-wider mb-2 border border-[#D152F5]/25">
             Live — since you opened this page
           </span>
-          <p className="text-[#94A3B8] text-xs sm:text-sm mb-4">Payments verified by QuoteSeal Guard</p>
+          <p className="text-[#94A3B8] text-xs sm:text-sm mb-4">Payments verified by GuardRail Pay Guard</p>
         </motion.div>
 
         {/* Big counter */}

@@ -7,7 +7,7 @@ export default function DesignPage() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#E2E8F0] px-8 py-16 max-w-6xl mx-auto space-y-16">
       <div>
-        <h1 className="text-4xl font-bold text-silver-gradient mb-2">QuoteSeal Finovate Tokens & Components</h1>
+        <h1 className="text-4xl font-bold text-silver-gradient mb-2">GuardRail Pay Finovate Tokens & Components</h1>
         <p className="text-silver-400">Three-layer palette: Deep Black base, Violet accent, and Cool Silver #E2E8F0.</p>
       </div>
 

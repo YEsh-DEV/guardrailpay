@@ -74,7 +74,7 @@ export default function FinalCTAAndFooter() {
                   <path d="M9 12L11 14L15 10" stroke="#050505" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
-              <span className="font-title-sans text-lg font-bold text-[#FFFFFF]">QuoteSeal</span>
+              <span className="font-title-sans text-lg font-bold text-[#FFFFFF]">GuardRail Pay</span>
             </div>
             <p className="text-sm text-[#94A3B8] leading-relaxed max-w-[260px]">
               Payment identity guard for autonomous AI agents. Built on Hedera x402 and ENSv2.
@@ -117,7 +117,7 @@ export default function FinalCTAAndFooter() {
 
         <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-[#262626] gap-4">
           <p className="font-mono text-[11px] text-[#64748B]">
-            © 2026 QuoteSeal. MIT License. ETHGlobal Mumbai 2026.
+            © 2026 GuardRail Pay. MIT License. ETHGlobal Mumbai 2026.
           </p>
           <p className="font-mono text-[11px] text-[#64748B]">
             Built with Hedera x402 · ENSv2 · World ID

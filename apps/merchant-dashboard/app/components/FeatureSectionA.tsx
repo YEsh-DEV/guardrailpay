@@ -12,7 +12,7 @@ const steps = [
   {
     num: '02',
     title: 'ENS identity resolved',
-    body: "QuoteSeal resolves the merchant's ENSv2 name in real-time, reading the x402.payTo text record from the on-chain resolver — the single source of truth for the payment address.",
+    body: "GuardRail Pay resolves the merchant's ENSv2 name in real-time, reading the x402.payTo text record from the on-chain resolver — the single source of truth for the payment address.",
   },
   {
     num: '03',
@@ -83,7 +83,7 @@ export default function FeatureSectionA() {
           </h2>
 
           <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed max-w-4xl">
-            Autonomous agents shouldn't blind-sign. QuoteSeal sits directly between the HTTP 402 response and the wallet signer.
+            Autonomous agents shouldn't blind-sign. GuardRail Pay sits directly between the HTTP 402 response and the wallet signer.
           </p>
         </motion.div>
 

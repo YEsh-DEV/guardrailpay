@@ -9,7 +9,7 @@ const rotationSteps = [
     num: '01',
     title: 'Propose',
     subtitle: 'New address submitted',
-    desc: 'The merchant operator submits a new payTo address through the QuoteSeal dashboard. This triggers an on-chain rotation proposal in the ENS Authorized Controller contract.',
+    desc: 'The merchant operator submits a new payTo address through the GuardRail Pay dashboard. This triggers an on-chain rotation proposal in the ENS Authorized Controller contract.',
     accent: '#D152F5',
   },
   {
@@ -17,7 +17,7 @@ const rotationSteps = [
     num: '02',
     title: 'World ID Check',
     subtitle: 'Human operator verified',
-    desc: 'A World ID Agent Pass proof is generated for the operator. QuoteSeal verifies on-chain that the proposer is a unique human — no bots can authorize a payout address change.',
+    desc: 'A World ID Agent Pass proof is generated for the operator. GuardRail Pay verifies on-chain that the proposer is a unique human — no bots can authorize a payout address change.',
     accent: '#DD60F7',
   },
   {

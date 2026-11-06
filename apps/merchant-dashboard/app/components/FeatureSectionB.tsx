@@ -232,7 +232,7 @@ export default function FeatureSectionB() {
               </span>
             </h2>
             <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed mb-6">
-              Every merchant's ENSv2 name contains a cryptographically signed payment profile. QuoteSeal
+              Every merchant's ENSv2 name contains a cryptographically signed payment profile. GuardRail Pay
               resolves it on every transaction — network, address, asset, limit, version. Flip the card
               to see the full on-chain record set.
             </p>

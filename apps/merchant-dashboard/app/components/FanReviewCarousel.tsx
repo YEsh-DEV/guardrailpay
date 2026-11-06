@@ -9,7 +9,7 @@ const attackReviews = [
     title: 'PayTo Tamper Exploit',
     target: '402 Header Hijacking',
     verdict: 'BLOCKED',
-    quote: 'RPC MITM tried swapping payment address to an attacker wallet. QuoteSeal compared against ENS records and rejected it with 0 gas spent.',
+    quote: 'RPC MITM tried swapping payment address to an attacker wallet. GuardRail Pay compared against ENS records and rejected it with 0 gas spent.',
     highlight: 'rejected it with 0 gas spent',
     badgeBg: '#F43F5E',
     badgeText: '#FFFFFF',
@@ -70,7 +70,7 @@ export default function FanReviewCarousel() {
           </span>
         </h2>
         <p className="text-sm sm:text-base lg:text-lg text-[#94A3B8] max-w-xl mx-auto">
-          How QuoteSeal defends autonomous agents against hostile 402 endpoints and payment manipulation in the wild.
+          How GuardRail Pay defends autonomous agents against hostile 402 endpoints and payment manipulation in the wild.
         </p>
       </div>
 
@@ -136,7 +136,7 @@ export default function FanReviewCarousel() {
 
               <div className="flex items-center justify-between pt-4 border-t border-[#262626] text-[12px] font-mono text-[#64748B]">
                 <span>Scenario #{idx + 1}</span>
-                <span className="text-[#E2E8F0]">QuoteSeal Guard Engine</span>
+                <span className="text-[#E2E8F0]">GuardRail Pay Guard Engine</span>
               </div>
             </motion.div>
           );

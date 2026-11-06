@@ -3,9 +3,9 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: "QuoteSeal — Your Agent's Gateway to Safer Payments",
+  title: "GuardRail Pay — Your Agent's Gateway to Safer Payments",
   description:
-    "QuoteSeal intercepts and verifies every AI agent payment against the merchant's ENS identity before the wallet signs.",
+    "GuardRail Pay intercepts and verifies every AI agent payment against the merchant's ENS identity before the wallet signs.",
   keywords: ['AI agents', 'x402', 'ENS', 'Hedera', 'payment security', 'Web3', 'fintech'],
 };
 
