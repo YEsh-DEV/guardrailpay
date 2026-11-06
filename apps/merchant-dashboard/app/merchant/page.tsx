@@ -60,13 +60,13 @@ export default function MerchantDashboard() {
       setIsSubmitting(false);
       setRotation({
         id: `rot_${Date.now()}`,
+        status: 'IN_DELAY',
         proposedPayTo: newPayTo,
         proposer: '0x89201C3...2a1b',
         proposedTimestamp: Date.now(),
         unlockTimestamp: Date.now() + 48 * 3600 * 1000,
         worldIdVerified: true,
-        nullifierHash: '0x' + Array.from({ length: 40 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
-        status: 'IN_DELAY',
+        nullifierHash: '0x' + Math.random().toString(16).slice(2, 10),
       });
       setTimeLeft({ hours: 48, minutes: 0, seconds: 0 });
       setFormSuccess('Rotation proposal created and broadcast on-chain! 48h timelock initiated.');
@@ -76,37 +76,46 @@ export default function MerchantDashboard() {
     }, 1200);
   };
 
+  const recordsList = [
+    { key: 'x402.payTo', value: profile.activePayTo },
+    { key: 'x402.network', value: profile.network },
+    { key: 'x402.maxAmount', value: `$${profile.maxAmountUsdc.toFixed(2)} USDC` },
+    { key: 'x402.asset', value: profile.allowedAsset },
+    { key: 'x402.version', value: profile.version },
+    { key: 'x402.resolver', value: profile.resolverAddress },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#03045E] text-[#CAF0F8]">
+    <div className="min-h-screen bg-[#FFFFFF] text-[#0F172A]">
       {/* Top Bar */}
-      <header className="border-b border-[#0077B6]/30 bg-[#02033B]/85 backdrop-blur-xl sticky top-0 z-50 px-6 py-4">
+      <header className="border-b border-slate-200 bg-white/90 backdrop-blur-xl sticky top-0 z-50 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-2 group">
-              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00B4D8] to-[#0077B6] flex items-center justify-center shadow-[0_0_15px_rgba(0,180,216,0.4)]">
+              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1A6CFF] to-[#0052E0] flex items-center justify-center shadow-[0_0_15px_rgba(26,108,255,0.4)]">
                 <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4">
-                  <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#03045E"/>
-                  <path d="M9 12L11 14L15 10" stroke="#CAF0F8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#FFFFFF"/>
+                  <path d="M9 12L11 14L15 10" stroke="#1A6CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
-              <span className="font-display text-lg text-white group-hover:text-[#00B4D8] transition-colors">
+              <span className="font-display text-lg font-bold text-[#0F172A] group-hover:text-[#1A6CFF] transition-colors">
                 QuoteSeal
               </span>
             </Link>
-            <span className="text-white/20">/</span>
-            <span className="font-mono text-xs text-[#90E0EF] uppercase tracking-wider">Merchant Dashboard</span>
+            <span className="text-slate-300">/</span>
+            <span className="font-mono text-xs text-[#64748B] uppercase tracking-wider font-semibold">Merchant Dashboard</span>
           </div>
 
           <div className="flex items-center gap-4">
             <Link
               href="/buyer"
-              className="text-xs font-mono text-[#90E0EF] hover:text-white px-3 py-1.5 rounded-lg border border-[#0077B6]/40 hover:border-[#00B4D8] transition-all bg-[#0077B6]/10"
+              className="text-xs font-mono text-[#1A6CFF] hover:text-[#0052E0] px-3.5 py-1.5 rounded-lg border border-slate-200 hover:border-[#1A6CFF] transition-all bg-[#F8FAFC]"
             >
               Open Buyer Console →
             </Link>
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00B4D8]/15 border border-[#00B4D8]/35">
-              <span className="w-2 h-2 rounded-full bg-[#00B4D8] animate-pulse" />
-              <span className="font-mono text-xs text-[#CAF0F8] font-semibold">{profile.ensName}</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#E8F1FF] border border-[#1A6CFF]/20">
+              <span className="w-2 h-2 rounded-full bg-[#1A6CFF] animate-pulse" />
+              <span className="font-mono text-xs text-[#1A6CFF] font-bold">{profile.ensName}</span>
             </div>
           </div>
         </div>
@@ -115,7 +124,7 @@ export default function MerchantDashboard() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-10 space-y-8">
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-2 border-b border-[#0077B6]/30 pb-4">
+        <div className="flex items-center gap-2 border-b border-slate-200 pb-4">
           {[
             { id: 'profile', label: '1. ENS Profile & Records' },
             { id: 'rotation', label: '2. Payout Rotation Timelock' },
@@ -124,10 +133,10 @@ export default function MerchantDashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-5 py-2.5 rounded-full font-mono text-xs font-medium transition-all ${
+              className={`px-5 py-2.5 rounded-full font-mono text-xs transition-all ${
                 activeTab === tab.id
-                  ? 'bg-[#00B4D8] text-[#03045E] font-bold shadow-[0_0_20px_rgba(0,180,216,0.5)]'
-                  : 'text-[#90E0EF]/70 hover:text-white hover:bg-[#0077B6]/20'
+                  ? 'bg-[#1A6CFF] text-white font-bold shadow-[0_4px_16px_rgba(26,108,255,0.35)]'
+                  : 'text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100'
               }`}
             >
               {tab.label}
@@ -138,266 +147,205 @@ export default function MerchantDashboard() {
         {/* Tab 1: Profile View */}
         {activeTab === 'profile' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* 3D Profile Summary Card */}
-            <div className="lg:col-span-1 rounded-[28px] border border-[#0077B6]/40 bg-gradient-to-br from-[#02033B] via-[#03045E] to-[#01021F] p-7 shadow-[0_30px_70px_rgba(2,3,59,0.8)] flex flex-col justify-between">
-              <div>
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <span className="font-mono text-[10px] text-[#00B4D8] uppercase tracking-widest block mb-1 font-semibold">
-                      Verified Identity
-                    </span>
-                    <h2 className="font-display text-3xl text-white">{profile.ensName}</h2>
-                    <p className="font-mono text-xs text-[#90E0EF]/60 mt-1">{profile.domain}</p>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-[#00B4D8]/15 border border-[#00B4D8]/35">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" stroke="#00B4D8" strokeWidth="1.5"/>
-                      <path d="M9 12L11 14L15 10" stroke="#CAF0F8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
+            {/* Identity Card */}
+            <div className="lg:col-span-1 p-7 rounded-[28px] border border-slate-200 bg-white shadow-xl space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <span className="font-mono text-xs text-[#64748B] uppercase tracking-wider font-semibold">Active Identity</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 font-mono text-[11px] font-bold">
+                  ● Verified ENSv2
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                <p className="font-title-sans text-3xl font-bold text-[#0F172A]">{profile.ensName}</p>
+                <p className="font-mono text-xs text-[#64748B]">Domain: {profile.domain}</p>
+              </div>
+
+              <div className="space-y-3 pt-2">
+                <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-200/80 space-y-1">
+                  <span className="font-mono text-[11px] text-[#64748B] uppercase tracking-wider">Active Payout payTo</span>
+                  <p className="font-mono text-sm text-[#1A6CFF] font-bold break-all">{profile.activePayTo}</p>
                 </div>
 
-                <div className="space-y-4 my-6">
-                  <div className="p-3 rounded-xl bg-[#02033B]/70 border border-[#0077B6]/30">
-                    <p className="font-mono text-[10px] text-[#90E0EF]/60 uppercase tracking-wider mb-1">Active Payout (payTo)</p>
-                    <p className="font-mono text-xs text-[#00B4D8] break-all font-semibold">{profile.activePayTo}</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-slate-200/80">
+                    <span className="font-mono text-[10px] text-[#64748B] uppercase">Target Network</span>
+                    <p className="font-mono text-xs text-[#0F172A] font-semibold mt-0.5">{profile.network}</p>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 rounded-xl bg-[#02033B]/70 border border-[#0077B6]/30">
-                      <p className="font-mono text-[10px] text-[#90E0EF]/60 uppercase mb-1">Network</p>
-                      <p className="font-mono text-xs text-white">{profile.network}</p>
-                    </div>
-                    <div className="p-3 rounded-xl bg-[#02033B]/70 border border-[#0077B6]/30">
-                      <p className="font-mono text-[10px] text-[#90E0EF]/60 uppercase mb-1">Max Cap</p>
-                      <p className="font-mono text-xs text-[#00B4D8] font-bold">${profile.maxAmountUsdc.toFixed(2)} USDC</p>
-                    </div>
+                  <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-slate-200/80">
+                    <span className="font-mono text-[10px] text-[#64748B] uppercase">Max Ticket Cap</span>
+                    <p className="font-mono text-xs text-emerald-600 font-semibold mt-0.5">${profile.maxAmountUsdc.toFixed(2)}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#0077B6]/30 flex items-center justify-between">
-                <span className="font-mono text-[11px] text-[#90E0EF]/60">ENS Version: {profile.version}</span>
-                <span className="px-2.5 py-1 rounded-full bg-[#00B4D8]/20 border border-[#00B4D8]/40 text-[#00B4D8] font-mono text-[10px] font-bold">
-                  EAC v2.4 Live
-                </span>
+              <div className="pt-2 border-t border-slate-100 space-y-2 text-xs font-mono text-[#64748B]">
+                <div className="flex justify-between">
+                  <span>Version</span>
+                  <span className="text-[#0F172A] font-medium">{profile.version}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Chain ID</span>
+                  <span className="text-[#0F172A] font-medium">{profile.chainId}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Resolver</span>
+                  <span className="text-[#0F172A] font-medium truncate max-w-[150px]">{profile.resolverAddress}</span>
+                </div>
               </div>
             </div>
 
-            {/* ENS On-Chain Records Details */}
-            <div className="lg:col-span-2 space-y-6">
-              <div className="p-7 rounded-[28px] border border-[#0077B6]/30 bg-[#02033B]/70 backdrop-blur-xl">
-                <h3 className="font-display text-xl text-white mb-2">On-Chain ENS Resolver Records</h3>
-                <p className="text-sm text-[#90E0EF]/70 mb-6">
-                  These records are resolved dynamically by QuoteSeal Guard before every payment proposal is signed.
-                </p>
-
-                <div className="space-y-3 font-mono text-xs">
-                  {[
-                    { key: 'x402.payTo', value: profile.activePayTo, highlight: true },
-                    { key: 'x402.network', value: `eip155:${profile.chainId} (Hedera Testnet)`, highlight: false },
-                    { key: 'x402.asset', value: profile.allowedAsset, highlight: false },
-                    { key: 'x402.maxAmount', value: `${profile.maxAmountUsdc * 1000000} (50.00 USDC in 6 decimals)`, highlight: false },
-                    { key: 'x402.version', value: profile.version, highlight: false },
-                    { key: 'x402.resolver', value: profile.resolverAddress, highlight: false },
-                  ].map((rec) => (
-                    <div
-                      key={rec.key}
-                      className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl bg-[#03045E]/40 border border-[#0077B6]/25 hover:border-[#00B4D8]/50 transition-all gap-2"
-                    >
-                      <span className="text-[#00B4D8] font-semibold">{rec.key}</span>
-                      <span className={rec.highlight ? 'text-[#CAF0F8] break-all font-semibold' : 'text-[#90E0EF]/80 break-all'}>
-                        {rec.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+            {/* Live On-Chain Records */}
+            <div className="lg:col-span-2 p-7 rounded-[28px] border border-slate-200 bg-white shadow-xl space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <span className="font-mono text-xs text-[#64748B] uppercase tracking-wider font-semibold">On-Chain x402 ENS Records</span>
+                <span className="font-mono text-xs text-[#64748B]">Sepolia Contract: 0x9841...82</span>
               </div>
 
-              {/* Status and Diagnostics */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-5 rounded-2xl border border-[#0077B6]/30 bg-[#02033B]/70">
-                  <p className="font-mono text-xs text-[#90E0EF]/60 uppercase mb-2">RFC /.well-known Binding</p>
-                  <p className="font-mono text-sm text-[#00B4D8] flex items-center gap-2 font-semibold">
-                    <span>✓</span> Verified (https://{profile.domain})
-                  </p>
-                  <p className="text-xs text-[#90E0EF]/70 mt-2">
-                    Ensures DNS domain ownership cryptographically matches the ENS registrant.
-                  </p>
-                </div>
-                <div className="p-5 rounded-2xl border border-[#0077B6]/30 bg-[#02033B]/70">
-                  <p className="font-mono text-xs text-[#90E0EF]/60 uppercase mb-2">Active Payee Guard Health</p>
-                  <p className="font-mono text-sm text-[#00B4D8] flex items-center gap-2 font-semibold">
-                    <span>✓</span> 100% Operational (P99 8.2ms)
-                  </p>
-                  <p className="text-xs text-[#90E0EF]/70 mt-2">
-                    All agent payments strictly gated. Unannounced payee drift will be immediately blocked.
-                  </p>
-                </div>
+              <div className="space-y-3 font-mono text-xs">
+                {recordsList.map((r) => (
+                  <div
+                    key={r.key}
+                    className="p-3.5 rounded-2xl border border-slate-200/80 bg-[#F8FAFC] flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:border-[#1A6CFF]/40 transition-colors"
+                  >
+                    <span className="text-[#64748B] font-semibold">{r.key}</span>
+                    <span className="text-[#0F172A] font-medium break-all">{r.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-4 rounded-2xl border border-blue-200 bg-[#E8F1FF]/60 flex items-start gap-3">
+                <span className="text-xl">ℹ️</span>
+                <p className="text-xs text-[#0F172A] leading-relaxed">
+                  These text records are read directly by QuoteSeal PayeeGuard during pre-flight checks. AI agents will immediately block payments if a merchant's 402 header deviates from these verified on-chain entries.
+                </p>
               </div>
             </div>
           </div>
         )}
 
-        {/* Tab 2: Payout Rotation */}
+        {/* Tab 2: Payout Rotation Timelock */}
         {activeTab === 'rotation' && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Active Rotation Timeline */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="p-7 rounded-[28px] border border-[#0077B6]/30 bg-[#02033B]/70 backdrop-blur-xl">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <span className="font-mono text-[10px] text-[#00B4D8] uppercase tracking-widest block mb-1">
-                      Status: In 48h Time-Lock
+          <div className="space-y-8">
+            {/* Active Rotation Notice */}
+            {rotation && (
+              <div className="p-7 rounded-[28px] border border-blue-200 bg-[#F0F5FF] shadow-lg space-y-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#1A6CFF] animate-ping" />
+                    <span className="font-mono text-xs text-[#1A6CFF] font-bold uppercase tracking-wider">
+                      Active Rotation In Progress ({rotation.status})
                     </span>
-                    <h3 className="font-display text-2xl text-white">Active Rotation Proposal</h3>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-[#0077B6]/25 border border-[#00B4D8]/35 text-[#CAF0F8] font-mono text-xs font-semibold">
-                    Proposal {rotation.id}
-                  </span>
+                  <span className="font-mono text-xs text-[#64748B]">Proposal ID: {rotation.id}</span>
                 </div>
 
-                <div className="my-6 p-6 rounded-2xl bg-[#03045E]/40 border border-[#0077B6]/25 flex flex-col sm:flex-row items-center justify-between gap-6">
-                  {/* Countdown display */}
-                  <div className="text-center sm:text-left">
-                    <p className="font-mono text-[11px] text-[#90E0EF]/60 uppercase mb-1">Time until activation unlock</p>
-                    <p className="font-mono text-3xl font-bold text-[#00B4D8]">
-                      {String(timeLeft.hours).padStart(2, '0')}h {String(timeLeft.minutes).padStart(2, '0')}m {String(timeLeft.seconds).padStart(2, '0')}s
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200">
+                    <p className="font-mono text-xs text-[#64748B] mb-1">Current Payout Address</p>
+                    <p className="font-mono text-xs text-[#0F172A] break-all font-semibold">{profile.activePayTo}</p>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200">
+                    <p className="font-mono text-xs text-[#64748B] mb-1">Proposed New Address</p>
+                    <p className="font-mono text-xs text-emerald-600 break-all font-bold">{rotation.proposedPayTo}</p>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white border border-blue-200">
+                    <p className="font-mono text-xs text-[#1A6CFF] mb-1 font-bold">Timelock Window Remaining</p>
+                    <p className="font-mono text-xl text-[#1A6CFF] font-bold">
+                      {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
                     </p>
-                    <p className="font-mono text-xs text-[#90E0EF]/50 mt-1">Autonomous agents still pay current payTo</p>
-                  </div>
-
-                  {/* World ID verification stamp */}
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-[#00B4D8]/15 border border-[#00B4D8]/35">
-                    <div className="w-8 h-8 rounded-full bg-[#00B4D8]/20 flex items-center justify-center text-[#00B4D8] font-bold">
-                      ✓
-                    </div>
-                    <div>
-                      <p className="font-mono text-xs text-[#00B4D8] font-bold">World ID Verified</p>
-                      <p className="font-mono text-[10px] text-[#90E0EF]/60">Nullifier: {rotation.nullifierHash.slice(0, 12)}...</p>
-                    </div>
                   </div>
                 </div>
 
-                {/* 4-Stage Step Tracker */}
-                <div className="space-y-4 pt-2">
-                  <p className="font-mono text-xs text-[#90E0EF]/60 uppercase tracking-wider">Lifecycle Progress</p>
-                  <div className="grid grid-cols-4 gap-2">
-                    {[
-                      { num: '1', title: 'Proposed', done: true },
-                      { num: '2', title: 'World ID', done: true },
-                      { num: '3', title: '48h Delay', done: true, current: true },
-                      { num: '4', title: 'Activate', done: false },
-                    ].map((st) => (
-                      <div
-                        key={st.num}
-                        className={`p-3 rounded-xl text-center border font-mono text-xs transition-all ${
-                          st.current
-                            ? 'bg-[#00B4D8]/20 border-[#00B4D8]/50 text-[#00B4D8] font-bold'
-                            : st.done
-                            ? 'bg-[#0077B6]/25 border-[#0077B6]/40 text-[#CAF0F8]'
-                            : 'bg-white/5 border-white/5 text-white/30'
-                        }`}
-                      >
-                        <p className="font-bold">{st.num}. {st.title}</p>
-                        <p className="text-[10px] mt-0.5 opacity-75">
-                          {st.current ? 'Pending...' : st.done ? 'Complete' : 'Locked'}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-[#0077B6]/30 flex items-center justify-between">
-                  <div>
-                    <p className="font-mono text-[10px] text-[#90E0EF]/60 uppercase">Proposed Address</p>
-                    <p className="font-mono text-xs text-[#00B4D8] break-all font-semibold">{rotation.proposedPayTo}</p>
-                  </div>
-                  <button
-                    disabled
-                    className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white/30 font-mono text-xs cursor-not-allowed"
-                  >
-                    Activate (Unlocks in 12h)
-                  </button>
+                <div className="flex items-center justify-between text-xs font-mono text-[#64748B] pt-2 border-t border-slate-200">
+                  <span>Proposer: {rotation.proposer}</span>
+                  <span className="text-emerald-600 font-bold">World ID Verified: {rotation.worldIdVerified ? 'YES ✓' : 'NO'}</span>
+                  <span>Nullifier: {rotation.nullifierHash}</span>
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Propose New Rotation Form */}
-            <div className="lg:col-span-5">
-              <div className="p-7 rounded-[28px] border border-[#0077B6]/30 bg-[#02033B]/70 backdrop-blur-xl">
-                <h3 className="font-display text-xl text-white mb-2">Propose New Payout Address</h3>
-                <p className="text-sm text-[#90E0EF]/70 mb-6">
-                  Initiate a controlled migration. Requires World ID human proof and starts the mandatory 48-hour challenge delay.
+            {/* Form to Propose New Rotation */}
+            <div className="p-7 rounded-[28px] border border-slate-200 bg-white shadow-xl space-y-6">
+              <div>
+                <h3 className="font-title-sans text-2xl font-bold text-[#0F172A] mb-2">Propose Safe Payout Address Change</h3>
+                <p className="text-sm text-[#64748B]">
+                  Address rotations require a mandatory 48-hour delay timelock and biometric proof of personhood via World ID Agent Pass to prevent compromised keys from hijacking agent payouts.
                 </p>
+              </div>
 
-                {formSuccess && (
-                  <div className="mb-6 p-4 rounded-xl bg-[#00B4D8]/15 border border-[#00B4D8]/40 text-[#00B4D8] font-mono text-xs font-semibold">
-                    {formSuccess}
-                  </div>
-                )}
+              {formSuccess && (
+                <div className="p-4 rounded-2xl border border-emerald-200 bg-emerald-50 text-emerald-700 font-mono text-xs">
+                  {formSuccess}
+                </div>
+              )}
 
-                <form onSubmit={handlePropose} className="space-y-4 font-mono text-xs">
-                  <div>
-                    <label className="block text-[#90E0EF]/70 mb-2 uppercase">New payTo Address (EVM / Hedera)</label>
-                    <input
-                      type="text"
-                      placeholder="0x..."
-                      value={newPayTo}
-                      onChange={(e) => setNewPayTo(e.target.value)}
-                      required
-                      className="w-full px-4 py-3 rounded-xl bg-[#02033B] border border-[#0077B6]/40 text-white placeholder-white/20 focus:outline-none focus:border-[#00B4D8] transition-colors"
-                    />
-                  </div>
+              <form onSubmit={handlePropose} className="space-y-4">
+                <div>
+                  <label className="block font-mono text-xs text-[#0F172A] font-bold mb-2">
+                    New payTo Address (EVM / Hedera Hex)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="0x..."
+                    value={newPayTo}
+                    onChange={(e) => setNewPayTo(e.target.value)}
+                    className="w-full px-4 py-3 rounded-2xl bg-[#F8FAFC] border border-slate-200 text-[#0F172A] placeholder-slate-400 font-mono text-xs focus:outline-none focus:border-[#1A6CFF] transition-colors"
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-[#90E0EF]/70 mb-2 uppercase">Rotation Reason</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Cold storage multisig transition"
-                      value={proposedReason}
-                      onChange={(e) => setProposedReason(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-[#02033B] border border-[#0077B6]/40 text-white placeholder-white/20 focus:outline-none focus:border-[#00B4D8] transition-colors"
-                    />
-                  </div>
+                <div>
+                  <label className="block font-mono text-xs text-[#0F172A] font-bold mb-2">
+                    Rotation Reason / Governance Memo
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Migration to cold multisig vault"
+                    value={proposedReason}
+                    onChange={(e) => setProposedReason(e.target.value)}
+                    className="w-full px-4 py-3 rounded-2xl bg-[#F8FAFC] border border-slate-200 text-[#0F172A] placeholder-slate-400 font-mono text-xs focus:outline-none focus:border-[#1A6CFF] transition-colors"
+                  />
+                </div>
 
-                  <div className="p-4 rounded-xl bg-[#03045E]/40 border border-[#0077B6]/30 space-y-3">
-                    <div className="flex items-start gap-3">
-                      <input
-                        type="checkbox"
-                        id="worldId"
-                        checked={worldIdChecked}
-                        onChange={(e) => setWorldIdChecked(e.target.checked)}
-                        className="mt-1 h-4 w-4 rounded border-[#0077B6] bg-[#02033B] text-[#00B4D8] focus:ring-[#00B4D8]"
-                      />
-                      <label htmlFor="worldId" className="text-white/80 cursor-pointer">
-                        <span className="font-semibold text-white block">Simulate World ID Agent Pass</span>
-                        <span className="text-[11px] text-[#90E0EF]/70 block">
-                          Confirms proof of unique personhood for rotation operator role.
-                        </span>
-                      </label>
+                <div className="p-4 rounded-2xl border border-slate-200 bg-[#F8FAFC] flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold text-sm">
+                      🆔
+                    </span>
+                    <div>
+                      <p className="font-mono text-xs text-[#0F172A] font-bold">World ID Agent Pass</p>
+                      <p className="font-mono text-[11px] text-[#64748B]">Biometric Proof of Unique Human Operator</p>
                     </div>
                   </div>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={worldIdChecked}
+                      onChange={(e) => setWorldIdChecked(e.target.checked)}
+                      className="w-4 h-4 accent-[#1A6CFF]"
+                    />
+                    <span className="font-mono text-xs text-[#0F172A] font-medium">Verify Proposer Proof</span>
+                  </label>
+                </div>
 
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-3.5 rounded-full font-sans font-bold text-sm bg-[#00B4D8] text-[#03045E] hover:bg-[#90E0EF] shadow-[0_0_20px_rgba(0,180,216,0.4)] transition-all disabled:opacity-50"
-                  >
-                    {isSubmitting ? 'Broadcasting Proposal...' : 'Submit Proposal (World ID)'}
-                  </button>
-                </form>
-              </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-3.5 rounded-full font-sans font-bold text-sm bg-[#1A6CFF] text-white hover:bg-[#0052E0] shadow-[0_4px_16px_rgba(26,108,255,0.35)] transition-all disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Broadcasting Proposal...' : 'Submit Proposal (World ID)'}
+                </button>
+              </form>
             </div>
           </div>
         )}
 
         {/* Tab 3: EAC Roles & Permissions */}
         {activeTab === 'roles' && (
-          <div className="p-7 rounded-[28px] border border-[#0077B6]/30 bg-[#02033B]/70 backdrop-blur-xl space-y-6">
+          <div className="p-7 rounded-[28px] border border-slate-200 bg-white shadow-xl space-y-6">
             <div>
-              <h3 className="font-display text-2xl text-white mb-2">EAC Contract Roles & Access Controls</h3>
-              <p className="text-sm text-[#90E0EF]/70">
+              <h3 className="font-title-sans text-2xl font-bold text-[#0F172A] mb-2">EAC Contract Roles & Access Controls</h3>
+              <p className="text-sm text-[#64748B]">
                 Enhanced Access Control (EAC) rules ensure that only verified cryptographic keys and human operators can touch payment configurations.
               </p>
             </div>
@@ -406,19 +354,19 @@ export default function MerchantDashboard() {
               {roles.map((r) => (
                 <div
                   key={r.role}
-                  className="p-5 rounded-2xl border border-[#0077B6]/30 bg-[#03045E]/40 hover:border-[#00B4D8]/50 transition-all space-y-3"
+                  className="p-5 rounded-2xl border border-slate-200 bg-[#F8FAFC] hover:border-[#1A6CFF]/50 transition-all space-y-3"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-full bg-[#00B4D8]/15 border border-[#00B4D8]/35 text-[#00B4D8] font-mono text-[11px] font-bold">
+                    <span className="px-2.5 py-1 rounded-full bg-[#E8F1FF] border border-[#1A6CFF]/20 text-[#1A6CFF] font-mono text-[11px] font-bold">
                       {r.role}
                     </span>
-                    <span className="font-mono text-[10px] text-[#90E0EF]/50">Assigned {r.assignedAt}</span>
+                    <span className="font-mono text-[10px] text-[#64748B]">Assigned {r.assignedAt}</span>
                   </div>
                   <div>
-                    <p className="font-mono text-xs text-[#90E0EF]/60 mb-1">Assigned Address</p>
-                    <p className="font-mono text-xs text-[#00B4D8] break-all font-semibold">{r.address}</p>
+                    <p className="font-mono text-xs text-[#64748B] mb-1">Assigned Address</p>
+                    <p className="font-mono text-xs text-[#1A6CFF] break-all font-semibold">{r.address}</p>
                   </div>
-                  <p className="text-xs text-[#90E0EF]/80 leading-relaxed">{r.description}</p>
+                  <p className="text-xs text-[#64748B] leading-relaxed">{r.description}</p>
                 </div>
               ))}
             </div>
@@ -428,4 +376,3 @@ export default function MerchantDashboard() {
     </div>
   );
 }
-
