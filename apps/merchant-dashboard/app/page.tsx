@@ -4,7 +4,6 @@ import CustomCursor from './components/CustomCursor';
 import Nav from './components/Nav';
 import HeroSection from './components/HeroSection';
 import FeatureSectionA from './components/FeatureSectionA';
-import GreenCardBand from './components/GreenCardBand';
 import FeatureSectionB from './components/FeatureSectionB';
 import AIChatDemoSection from './components/AIChatDemoSection';
 import SafeRotationSection from './components/SafeRotationSection';
@@ -24,9 +23,6 @@ export default function HomePage() {
 
         {/* Feature A: Pinned Policy Guard Screen */}
         <FeatureSectionA />
-
-        {/* Green Band: Interactive 3D Card (Almighty Card) */}
-        <GreenCardBand />
 
         {/* Feature B: Move Money & Verdict Log */}
         <FeatureSectionB />
