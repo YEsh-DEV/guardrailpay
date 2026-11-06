@@ -1,0 +1,23 @@
+{
+  "name": "hedera-x402-spike",
+  "version": "1.0.0",
+  "description": "QuoteSeal Spike 2 — Hedera x402 integration validation and independent security testing",
+  "main": "index.js",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "tsx --test *.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@x402/core": "2.30.0",
+    "@x402/hedera": "2.30.0",
+    "@x402/fetch": "2.30.0",
+    "@hiero-ledger/sdk": "2.90.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.0",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}
