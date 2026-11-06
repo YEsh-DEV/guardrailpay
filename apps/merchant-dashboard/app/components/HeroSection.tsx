@@ -103,28 +103,28 @@ export default function HeroSection() {
             initial={prefersReduced ? false : { opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.2 }}
-            className="text-white/90 text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-6 sm:mb-8 font-normal drop-shadow-[0_1px_8px_rgba(0,30,100,0.3)]"
+            className="text-white/85 text-xs sm:text-sm md:text-base leading-relaxed max-w-xl mx-auto mb-5 sm:mb-6 font-normal drop-shadow-[0_1px_6px_rgba(0,30,100,0.3)]"
           >
             QuoteSeal intercepts every x402 micropayment your agent builds — verifying the payee against
             the merchant&apos;s ENSv2 identity on Sepolia before the wallet ever signs.
           </motion.p>
 
-          {/* Input / Action Pill (Gabrun Style Input Container) */}
+          {/* Input / Action Pill (Gabrun Style Input Container - Compact & Sleek) */}
           <motion.div
             initial={prefersReduced ? false : { opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.65, delay: 0.35 }}
-            className="w-full max-w-md p-1.5 rounded-full bg-white/20 backdrop-blur-xl border border-white/35 flex items-center justify-between shadow-[0_15px_40px_rgba(0,40,140,0.25)]"
+            className="w-full max-w-sm p-1 rounded-full bg-white/20 backdrop-blur-xl border border-white/30 flex items-center justify-between shadow-[0_10px_25px_rgba(0,40,140,0.2)]"
           >
-            <span className="pl-4 sm:pl-5 text-xs sm:text-sm font-mono text-white/85 truncate">
+            <span className="pl-4 text-xs font-mono text-white/90 truncate">
               researchpro.eth
             </span>
             <a
               href="#demo"
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white text-[#1A6CFF] hover:bg-[#F0F5FF] text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-95 shrink-0"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-[#1A6CFF] hover:bg-[#F0F5FF] text-xs font-bold shadow-sm hover:shadow-md transition-all active:scale-95 shrink-0"
             >
               <span>Get Started</span>
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8H13M13 8L8.5 3.5M13 8L8.5 12.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </a>
