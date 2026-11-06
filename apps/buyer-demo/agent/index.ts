@@ -1,4 +1,4 @@
-import { createGuardedSigner, PaymentRequest, BuyerPolicy } from '@quoteseal/payee-guard';
+import { createGuardedSigner, PaymentRequest, BuyerPolicy, MerchantProfile } from '@quoteseal/payee-guard';
 import { resolveProfile, EnsMerchantProfile } from '@quoteseal/ens-profile';
 import { executeHederaPayment } from '@quoteseal/hedera-x402';
 import { createLogger, getHashScanUrl } from '@quoteseal/shared';
@@ -100,8 +100,13 @@ export async function runAgentPurchase(
       });
     },
     {
-      resolveProfile: async (key: string) => {
-        if (options.mockProfile) return options.mockProfile;
+      resolveProfile: async (key: string): Promise<MerchantProfile | null> => {
+        if (options.mockProfile) {
+          return {
+            ...options.mockProfile,
+            network: options.mockProfile.hederaNetwork || 'hedera:testnet',
+          };
+        }
         const mockMap = new Map<string, EnsMerchantProfile>();
         mockMap.set('researchpro.eth', {
           ensName: 'researchpro.eth',
@@ -113,7 +118,12 @@ export async function runAgentPurchase(
           profileVersion: 1,
           rotationStatus: 'none',
         });
-        return resolveProfile(key, { mockRegistry: mockMap });
+        const profile = await resolveProfile(key, { mockRegistry: mockMap });
+        if (!profile) return null;
+        return {
+          ...profile,
+          network: profile.hederaNetwork || 'hedera:testnet',
+        };
       },
       policy,
     }
@@ -148,8 +158,8 @@ export async function runAgentPurchase(
     },
   });
 
-  const content = await paidResponse.json();
-  logger.info(`Successfully retrieved purchased content! Title: ${content.title}`);
+  const content = (await paidResponse.json()) as any;
+  logger.info(`Successfully retrieved purchased content! Title: ${content?.title}`);
 
   return {
     step: 'COMPLETED',

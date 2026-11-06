@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Merchant-authorized payment identity for autonomous x402 agents",
+  "packageManager": "npm@12.0.2",
   "workspaces": [
     "apps/*",
     "packages/*",
