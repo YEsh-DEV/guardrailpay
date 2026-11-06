@@ -81,12 +81,6 @@ export default function HeroSection() {
             >
               Get Started
             </a>
-            <a
-              href="#verification"
-              className="px-6 py-3.5 rounded-btn glass-silver-pill text-silver-200 hover:text-white font-medium text-sm transition-all"
-            >
-              Explore Rail
-            </a>
           </motion.div>
 
           {/* Lower-left Avatar Stack & Stats */}

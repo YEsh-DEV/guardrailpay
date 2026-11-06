@@ -20,14 +20,6 @@ export default function Nav() {
           </span>
         </Link>
 
-        {/* Centered Nav Links */}
-        <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-silver-400">
-          <a href="#how-it-works" className="hover:text-silver-200 transition-colors">How It Works</a>
-          <a href="#features" className="hover:text-silver-200 transition-colors">Features</a>
-          <a href="#verification" className="hover:text-silver-200 transition-colors">Verification</a>
-          <a href="#resources" className="hover:text-silver-200 transition-colors">Resources</a>
-        </nav>
-
         {/* Violet Right CTA */}
         <div className="flex items-center gap-3">
           <Link
