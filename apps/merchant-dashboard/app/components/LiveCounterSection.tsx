@@ -60,7 +60,7 @@ export default function LiveCounterSection() {
   const digits = formatted.split('');
 
   return (
-    <section className="relative py-32 md:py-44 overflow-hidden bg-[#FFFFFF] text-[#0F172A] border-t border-slate-200/80">
+    <section className="relative py-14 md:py-20 overflow-hidden bg-[#FFFFFF] text-[#0F172A] border-t border-slate-200/80">
       {/* Background radial glow */}
       <div className="absolute inset-0">
         <div
@@ -72,17 +72,17 @@ export default function LiveCounterSection() {
         />
       </div>
 
-      <div ref={sectionRef} className="max-w-5xl mx-auto px-6 md:px-12 relative z-10 text-center">
+      <div ref={sectionRef} className="max-w-5xl mx-auto px-4 sm:px-6 md:px-12 relative z-10 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          className="mb-8"
+          className="mb-6"
         >
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-4 border border-[#1A6CFF]/20">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-3 border border-[#1A6CFF]/20">
             Live — since you opened this page
           </span>
-          <p className="text-[#64748B] text-lg mb-12">Payments verified by QuoteSeal Guard</p>
+          <p className="text-[#64748B] text-base sm:text-lg mb-8">Payments verified by QuoteSeal Guard</p>
         </motion.div>
 
         {/* Big counter */}
@@ -91,7 +91,7 @@ export default function LiveCounterSection() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
-          className="inline-flex flex-wrap items-center justify-center font-mono font-semibold text-[clamp(44px,8vw,96px)] text-[#1A6CFF] leading-none mb-4 tracking-tight"
+          className="inline-flex flex-wrap items-center justify-center font-mono font-semibold text-[clamp(36px,7vw,88px)] text-[#1A6CFF] leading-none mb-3 tracking-tight"
           style={{ textShadow: '0 10px 40px rgba(26,108,255,0.25)' }}
         >
           {digits.map((d, i) => (
@@ -104,7 +104,7 @@ export default function LiveCounterSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="font-mono text-[11px] text-[#94A3B8] uppercase tracking-widest mt-6"
+          className="font-mono text-[10px] sm:text-[11px] text-[#94A3B8] uppercase tracking-widest mt-4"
         >
           USDC value · Hedera Testnet · Mock data
         </motion.p>
@@ -115,16 +115,16 @@ export default function LiveCounterSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-10 sm:mt-12"
         >
           {[
             { value: '0', label: 'Missed attacks', color: '#1A6CFF' },
             { value: '100%', label: 'Guard coverage', color: '#1A6CFF' },
             { value: '<12ms', label: 'Avg verdict time', color: '#0052E0' },
           ].map((s) => (
-            <div key={s.label} className="p-6 rounded-2xl border border-slate-200/80 bg-white shadow-sm">
-              <p className="font-mono text-3xl font-bold mb-1" style={{ color: s.color }}>{s.value}</p>
-              <p className="font-mono text-[11px] text-[#64748B] uppercase tracking-wider">{s.label}</p>
+            <div key={s.label} className="p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200/80 bg-white shadow-sm">
+              <p className="font-mono text-2xl sm:text-3xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</p>
+              <p className="font-mono text-[10px] sm:text-[11px] text-[#64748B] uppercase tracking-wider">{s.label}</p>
             </div>
           ))}
         </motion.div>

@@ -181,7 +181,7 @@ export default function SafeRotationSection() {
   const [activeStep, setActiveStep] = useState(0);
 
   return (
-    <section className="relative py-32 md:py-40 overflow-hidden bg-[#FFFFFF] text-[#0F172A] border-t border-slate-200/80">
+    <section className="relative py-12 md:py-16 overflow-hidden bg-[#FFFFFF] text-[#0F172A] border-t border-slate-200/80">
       {/* Background ambient lighting */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] opacity-10 pointer-events-none"
@@ -191,22 +191,22 @@ export default function SafeRotationSection() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
         {/* Section Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-12"
         >
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-4 border border-[#1A6CFF]/20">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-3 border border-[#1A6CFF]/20">
             Safe Payout Rotation
           </span>
-          <h2 className="font-title-sans text-[clamp(36px,5vw,60px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-4">
+          <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-3">
             From Propose to Live{' '}
             <em className="font-serif-accent not-italic text-[#1A6CFF]">in 48 Hours.</em>
           </h2>
-          <p className="text-[#64748B] text-lg max-w-xl mx-auto">
+          <p className="text-[#64748B] text-sm sm:text-base max-w-xl mx-auto">
             Legitimate payout changes go through an announced, delayed, human-approved rotation guarded by World ID Agent Pass.
           </p>
         </motion.div>

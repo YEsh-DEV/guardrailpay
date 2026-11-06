@@ -61,9 +61,9 @@ export default function HeroSection() {
   const prefersReduced = useReducedMotion();
 
   return (
-    <section className="relative px-4 sm:px-6 pt-24 pb-8 bg-[#FFFFFF]">
+    <section className="relative px-3 sm:px-6 pt-20 sm:pt-24 pb-4 sm:pb-6 bg-[#FFFFFF]">
       {/* Contained Curved Hero Canvas (Gabrun Blueprint) */}
-      <div className="relative w-full max-w-[1340px] mx-auto rounded-[36px] sm:rounded-[44px] overflow-hidden bg-gradient-to-b from-[#1A6CFF] via-[#0055E6] to-[#0041B8] text-white shadow-[0_30px_90px_rgba(0,65,184,0.3)]">
+      <div className="relative w-full max-w-[1340px] mx-auto rounded-[28px] sm:rounded-[40px] overflow-hidden bg-gradient-to-b from-[#1A6CFF] via-[#0055E6] to-[#0041B8] text-white shadow-[0_20px_60px_rgba(0,65,184,0.25)]">
         {/* Ambient Top Spotlight Rays & Mesh Glows */}
         <div className="absolute inset-0 pointer-events-none">
           <div
@@ -83,13 +83,13 @@ export default function HeroSection() {
         </div>
 
         {/* Content Container */}
-        <div className="relative z-10 flex flex-col items-center justify-center pt-16 sm:pt-24 pb-14 sm:pb-16 px-6 sm:px-10 text-center max-w-4xl mx-auto">
+        <div className="relative z-10 flex flex-col items-center justify-center pt-12 sm:pt-20 pb-12 sm:pb-14 px-4 sm:px-8 text-center max-w-4xl mx-auto">
           {/* Top Badge */}
           <motion.div
             initial={prefersReduced ? false : { opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-medium tracking-wide mb-6 shadow-sm"
+            className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-[11px] sm:text-xs font-medium tracking-wide mb-5 shadow-sm"
           >
             <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
             <span>Autonomous x402 Payment Security</span>
@@ -103,7 +103,7 @@ export default function HeroSection() {
             initial={prefersReduced ? false : { opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.2 }}
-            className="text-white/90 text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl mx-auto mb-8 font-normal drop-shadow-[0_1px_8px_rgba(0,30,100,0.3)]"
+            className="text-white/90 text-base sm:text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-6 sm:mb-8 font-normal drop-shadow-[0_1px_8px_rgba(0,30,100,0.3)]"
           >
             QuoteSeal intercepts every x402 micropayment your agent builds — verifying the payee against
             the merchant&apos;s ENSv2 identity on Sepolia before the wallet ever signs.
@@ -116,12 +116,12 @@ export default function HeroSection() {
             transition={{ duration: 0.65, delay: 0.35 }}
             className="w-full max-w-md p-1.5 rounded-full bg-white/20 backdrop-blur-xl border border-white/35 flex items-center justify-between shadow-[0_15px_40px_rgba(0,40,140,0.25)]"
           >
-            <span className="pl-5 text-sm font-mono text-white/85 truncate">
+            <span className="pl-4 sm:pl-5 text-xs sm:text-sm font-mono text-white/85 truncate">
               researchpro.eth
             </span>
             <a
               href="#demo"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#1A6CFF] hover:bg-[#F0F5FF] text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-95 shrink-0"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white text-[#1A6CFF] hover:bg-[#F0F5FF] text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-95 shrink-0"
             >
               <span>Get Started</span>
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -133,15 +133,15 @@ export default function HeroSection() {
       </div>
 
       {/* Trusted Logos Band Under Hero (Matching Gabrun) */}
-      <div className="max-w-5xl mx-auto mt-8 px-4 text-center">
-        <p className="font-title-sans text-sm font-semibold text-[#64748B] mb-4 tracking-wide">
+      <div className="max-w-5xl mx-auto mt-6 sm:mt-8 px-4 text-center">
+        <p className="font-title-sans text-xs sm:text-sm font-semibold text-[#64748B] mb-3 tracking-wide">
           Trusted By More Than <span className="text-[#1A6CFF] font-bold">+10,000 AI Agent Transactions</span>
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
           {partners.map((partner) => (
             <div
               key={partner}
-              className="px-5 py-2 rounded-full bg-slate-50 border border-slate-200/80 font-mono text-xs font-bold text-[#0F172A] shadow-sm hover:border-[#1A6CFF]/50 transition-colors"
+              className="px-4 py-1.5 rounded-full bg-slate-50 border border-slate-200/80 font-mono text-[11px] sm:text-xs font-bold text-[#0F172A] shadow-sm hover:border-[#1A6CFF]/50 transition-colors"
             >
               {partner}
             </div>

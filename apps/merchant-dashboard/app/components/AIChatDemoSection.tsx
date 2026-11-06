@@ -102,7 +102,7 @@ export default function AIChatDemoSection() {
   }, [mode, inView]);
 
   return (
-    <section id="demo" className="relative pt-10 pb-20 md:pt-14 md:pb-28 overflow-hidden bg-[#FFFFFF] text-[#0F172A]">
+    <section id="demo" className="relative pt-6 pb-12 md:pt-10 md:pb-16 overflow-hidden bg-[#FFFFFF] text-[#0F172A]">
       {/* Background Lighting */}
       <div className="absolute inset-0 pointer-events-none opacity-20">
         <div
@@ -110,22 +110,22 @@ export default function AIChatDemoSection() {
         />
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
         {/* Section Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-12"
         >
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-4 border border-[#1A6CFF]/20">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-3 border border-[#1A6CFF]/20">
             Interactive Agent Terminal
           </span>
-          <h2 className="font-title-sans text-[clamp(36px,5vw,60px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-4">
+          <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-3">
             Rewards That are Endlessly{' '}
             <em className="font-serif-accent not-italic text-[#1A6CFF]">Rewarding.</em>
           </h2>
-          <p className="text-[#64748B] text-lg max-w-xl mx-auto">
+          <p className="text-[#64748B] text-sm sm:text-base max-w-xl mx-auto">
             Test the interceptor in real time. Watch how QuoteSeal protects an autonomous AI agent when encountering hostile 402 responses.
           </p>
         </motion.div>

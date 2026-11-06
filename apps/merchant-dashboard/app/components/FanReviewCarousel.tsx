@@ -65,17 +65,17 @@ export default function FanReviewCarousel() {
   }, []);
 
   return (
-    <section className="relative w-full bg-[#FFFFFF] py-32 px-6 lg:px-20 overflow-hidden text-[#0F172A] border-t border-slate-200/80">
+    <section className="relative w-full bg-[#FFFFFF] py-14 md:py-20 px-4 sm:px-6 lg:px-20 overflow-hidden text-[#0F172A] border-t border-slate-200/80">
       {/* Header */}
-      <div className="max-w-3xl mx-auto text-center mb-20">
-        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#E8F1FF] border border-[#1A6CFF]/20 text-[#1A6CFF] text-[12px] font-mono uppercase tracking-[0.08em] font-bold mb-4">
+      <div className="max-w-3xl mx-auto text-center mb-10 sm:mb-14">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] border border-[#1A6CFF]/20 text-[#1A6CFF] text-[11px] sm:text-[12px] font-mono uppercase tracking-[0.08em] font-bold mb-3">
           Battle Tested Security
         </span>
-        <h2 className="font-title-sans text-[clamp(36px,4.5vw,56px)] leading-[1.05] tracking-[-0.03em] font-bold text-[#0F172A] mb-4">
+        <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] leading-[1.05] tracking-[-0.03em] font-bold text-[#0F172A] mb-3">
           Real attacks.{' '}
           <em className="font-serif-accent not-italic text-[#1A6CFF]">Zero loss.</em>
         </h2>
-        <p className="text-[18px] lg:text-[20px] text-[#64748B] max-w-xl mx-auto">
+        <p className="text-sm sm:text-base lg:text-lg text-[#64748B] max-w-xl mx-auto">
           How QuoteSeal defends autonomous agents against hostile 402 endpoints and payment manipulation in the wild.
         </p>
       </div>

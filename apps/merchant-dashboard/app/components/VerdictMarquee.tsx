@@ -139,22 +139,22 @@ export default function VerdictMarquee() {
   const row2 = attackCards.slice(half - 1);
 
   return (
-    <section className="relative py-32 overflow-hidden bg-[#F8FAFC] text-[#0F172A] border-y border-slate-200/80">
+    <section className="relative py-12 md:py-16 overflow-hidden bg-[#F8FAFC] text-[#0F172A] border-y border-slate-200/80">
       {/* Background ambient glow */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 mb-14 text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10 mb-8 sm:mb-10 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
         >
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-4 border border-[#1A6CFF]/20">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-3 border border-[#1A6CFF]/20">
             Threat Landscape
           </span>
-          <h2 className="font-title-sans text-[clamp(32px,4.5vw,56px)] leading-[1.1] font-bold text-[#0F172A] mb-4">
+          <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] leading-[1.1] font-bold text-[#0F172A] mb-3">
             Every known vector.{' '}
             <em className="font-serif-accent not-italic text-[#1A6CFF]">Every one blocked.</em>
           </h2>
-          <p className="text-[#64748B] text-lg max-w-lg mx-auto">
+          <p className="text-[#64748B] text-sm sm:text-base max-w-lg mx-auto">
             Alternating threat scenario cards documented from real autonomous agent payment traffic.
           </p>
         </motion.div>

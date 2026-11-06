@@ -192,7 +192,7 @@ function MerchantCard() {
 
 export default function FeatureSectionB() {
   return (
-    <section id="card" className="relative py-14 md:py-20 overflow-hidden bg-[#FFFFFF]">
+    <section id="card" className="relative py-10 md:py-16 overflow-hidden bg-[#FFFFFF]">
       {/* Background glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10 pointer-events-none"
@@ -202,15 +202,15 @@ export default function FeatureSectionB() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Left — Card 3D */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
-            className="flex items-center justify-center py-12"
+            className="flex items-center justify-center py-6 sm:py-8"
           >
             <MerchantCard />
           </motion.div>
@@ -222,30 +222,30 @@ export default function FeatureSectionB() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 0.1 }}
           >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-4 border border-[#1A6CFF]/20">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-3 border border-[#1A6CFF]/20">
               The payment profile
             </span>
-            <h2 className="font-title-sans text-[clamp(36px,5vw,56px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-6">
+            <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-4">
               Keep Your Money Secure{' '}
               <em className="font-serif-accent not-italic text-[#1A6CFF]">Always.</em>
             </h2>
-            <p className="text-[#64748B] text-lg leading-relaxed mb-8">
+            <p className="text-[#64748B] text-base sm:text-lg leading-relaxed mb-6">
               Every merchant's ENSv2 name contains a cryptographically signed payment profile. QuoteSeal
               resolves it on every transaction — network, address, asset, limit, version. Flip the card
               to see the full on-chain record set.
             </p>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {[
                 { icon: '🔐', title: 'Single source of truth', desc: 'payTo lives only in the ENS resolver — not in your code, not in a database.' },
                 { icon: '⚡', title: 'Sub-second resolution', desc: 'Cached with TTL-aware invalidation. No latency penalty on the happy path.' },
                 { icon: '🔄', title: 'Protected rotation', desc: '48-hour timelock + World ID Agent Pass before any address change activates.' },
               ].map((item) => (
-                <div key={item.title} className="flex gap-4 p-4 rounded-2xl border border-slate-200/80 bg-[#F8FAFC] hover:border-[#1A6CFF]/40 hover:bg-white transition-all duration-300 group shadow-sm">
+                <div key={item.title} className="flex gap-3.5 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/80 bg-[#F8FAFC] hover:border-[#1A6CFF]/40 hover:bg-white transition-all duration-300 group shadow-sm">
                   <span className="text-xl mt-0.5">{item.icon}</span>
                   <div>
-                    <p className="font-semibold text-sm text-[#0F172A] mb-1 group-hover:text-[#1A6CFF] transition-colors">{item.title}</p>
-                    <p className="text-sm text-[#64748B]">{item.desc}</p>
+                    <p className="font-semibold text-sm text-[#0F172A] mb-0.5 group-hover:text-[#1A6CFF] transition-colors">{item.title}</p>
+                    <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
               ))}
