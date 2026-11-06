@@ -161,3 +161,4 @@ export const initialVerdictLogs: VerdictLog[] = [
     hashScanUrl: 'https://hashscan.io/testnet/transaction/0.0.9841288@1730911882',
   },
 ];
+

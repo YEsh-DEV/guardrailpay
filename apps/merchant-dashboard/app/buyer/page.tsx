@@ -357,3 +357,4 @@ export default function BuyerConsole() {
     </div>
   );
 }
+
