@@ -10,10 +10,10 @@ const rotationSteps = [
     title: 'Propose',
     subtitle: 'New address submitted',
     desc: 'The merchant operator submits a new payTo address through the QuoteSeal dashboard. This triggers an on-chain rotation proposal in the ENS Authorized Controller contract.',
-    bg: '#D6E3CB', // Pastel Mint
-    text: '#293B26', // Forest Ink
-    accent: '#1F5E24',
-    border: 'rgba(41, 59, 38, 0.2)',
+    bg: '#E3F2FD', // Frost Icy
+    text: '#0A192F', // Navy Ink
+    accent: '#0D47A1',
+    border: 'rgba(13, 71, 161, 0.2)',
   },
   {
     id: 'worldid',
@@ -21,10 +21,10 @@ const rotationSteps = [
     title: 'World ID Check',
     subtitle: 'Human operator verified',
     desc: 'A World ID Agent Pass proof is generated for the operator. QuoteSeal verifies on-chain that the proposer is a unique human — no bots can authorize a payout address change.',
-    bg: '#F2E890', // Pastel Butter
-    text: '#33321F', // Bronze Ink
-    accent: '#8C6C00',
-    border: 'rgba(51, 50, 31, 0.2)',
+    bg: '#D0E6FA', // Soft Sky
+    text: '#0A192F',
+    accent: '#2196F3',
+    border: 'rgba(33, 150, 243, 0.25)',
   },
   {
     id: 'delay',
@@ -32,10 +32,10 @@ const rotationSteps = [
     title: '48h Time-Lock',
     subtitle: 'Emergency window open',
     desc: 'The proposal enters a 48-hour delay period. During this window, any observer can raise an alarm. AI agents continue paying the existing address safely.',
-    bg: '#F2D9CD', // Pastel Peach
-    text: '#493128', // Espresso Ink
-    accent: '#B04B26',
-    border: 'rgba(73, 49, 40, 0.2)',
+    bg: '#90CAF9', // Mist Azure
+    text: '#0A192F',
+    accent: '#0D47A1',
+    border: 'rgba(13, 71, 161, 0.3)',
   },
   {
     id: 'activate',
@@ -43,10 +43,10 @@ const rotationSteps = [
     title: 'Activate',
     subtitle: 'New address goes live',
     desc: 'After the delay passes with no objections and the World ID proof is confirmed valid, the new payTo address is written to the ENS resolver and immediately enforced.',
-    bg: '#CBDDEB', // Pastel Sky
-    text: '#263948', // Slate Navy Ink
-    accent: '#1B5B8E',
-    border: 'rgba(38, 57, 72, 0.2)',
+    bg: '#C7E2FE', // Pale Azure
+    text: '#0A192F',
+    accent: '#2196F3',
+    border: 'rgba(33, 150, 243, 0.3)',
   },
 ];
 

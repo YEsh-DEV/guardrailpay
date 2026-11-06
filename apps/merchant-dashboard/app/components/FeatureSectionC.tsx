@@ -8,9 +8,9 @@ const nodes = [
     id: 'agent',
     label: 'AI Agent',
     sublabel: 'claude-agent/2.0',
-    bg: '#D6E3CB', // Pastel Mint
-    textColor: '#293B26',
-    border: '#A8C59A',
+    bg: '#E3F2FD', // Frost Icy
+    textColor: '#0A192F',
+    border: '#90CAF9',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="2"/>
@@ -22,9 +22,9 @@ const nodes = [
     id: 'guard',
     label: 'QuoteSeal Guard',
     sublabel: 'ENS identity verify',
-    bg: '#00FF59', // Electric Action Neon
-    textColor: '#081014',
-    border: '#00C94C',
+    bg: '#2196F3', // Electric Action Azure
+    textColor: '#FFFFFF',
+    border: '#0D47A1',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <path d="M12 2L4 7V12C4 16.5 7.5 20 12 20C16.5 20 20 16.5 20 12V7L12 2Z" stroke="currentColor" strokeWidth="2"/>
@@ -36,9 +36,9 @@ const nodes = [
     id: 'hedera',
     label: 'Hedera Network',
     sublabel: 'Consensus 296',
-    bg: '#CBDDEB', // Pastel Sky
-    textColor: '#263948',
-    border: '#9EBFD8',
+    bg: '#90CAF9', // Pastel Sky
+    textColor: '#0A192F',
+    border: '#2196F3',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <path d="M12 2L19 6.5V17.5L12 22L5 17.5V6.5L12 2Z" stroke="currentColor" strokeWidth="2"/>
@@ -50,9 +50,9 @@ const nodes = [
     id: 'hashscan',
     label: 'HashScan',
     sublabel: 'Settled & verified',
-    bg: '#F2D9CD', // Pastel Peach
-    textColor: '#493128',
-    border: '#DEB5A0',
+    bg: '#0D47A1', // Deep Imperial Sapphire
+    textColor: '#FFFFFF',
+    border: '#2196F3',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" strokeWidth="2"/>
@@ -84,12 +84,12 @@ export default function FeatureSectionC() {
   }, [nodeProgress]);
 
   return (
-    <section ref={sectionRef} className="relative py-32 md:py-40 overflow-hidden bg-[#05090C] text-white">
+    <section ref={sectionRef} className="relative py-32 md:py-40 overflow-hidden bg-[#060E1A] text-white">
       {/* Background subtle grid */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.04]"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,255,89,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,89,0.5) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(33,150,243,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(33,150,243,0.5) 1px, transparent 1px)`,
           backgroundSize: '48px 48px',
         }}
       />
@@ -103,19 +103,19 @@ export default function FeatureSectionC() {
           transition={{ duration: 0.7 }}
           className="text-center mb-20"
         >
-          <span className="font-mono text-xs font-semibold text-[#00FF59] uppercase tracking-widest mb-3 block">
+          <span className="font-mono text-xs font-semibold text-[#2196F3] uppercase tracking-widest mb-3 block">
             Payment Flow Architecture
           </span>
           <h2 className="font-title-sans text-[clamp(36px,5vw,60px)] leading-[1.1] text-white mb-4">
             Move money,{' '}
-            <em className="font-serif-accent not-italic text-[#00FF59]">not heaven and earth.</em>
+            <em className="font-serif-accent not-italic text-[#90CAF9]">not heaven and earth.</em>
           </h2>
-          <p className="text-[#9BA9B2] text-lg max-w-2xl mx-auto">
+          <p className="text-[#90CAF9]/80 text-lg max-w-2xl mx-auto">
             The full autonomous payment pipeline — from HTTP 402 challenge to on-chain HashScan confirmation.
           </p>
         </motion.div>
 
-        {/* Horizontal Flow Diagram with Tuyo Pastel Nodes */}
+        {/* Horizontal Flow Diagram with Cerulean Nodes */}
         <div className="relative">
           {/* Animated Connecting SVG Line */}
           <div className="hidden md:block absolute inset-0 pointer-events-none">
@@ -127,15 +127,15 @@ export default function FeatureSectionC() {
             >
               <defs>
                 <linearGradient id="tuyoRailGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#D6E3CB" stopOpacity="0.8" />
-                  <stop offset="33%" stopColor="#00FF59" stopOpacity="1" />
-                  <stop offset="66%" stopColor="#CBDDEB" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#F2D9CD" stopOpacity="0.8" />
+                  <stop offset="0%" stopColor="#E3F2FD" stopOpacity="0.9" />
+                  <stop offset="33%" stopColor="#2196F3" stopOpacity="1" />
+                  <stop offset="66%" stopColor="#90CAF9" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#0D47A1" stopOpacity="0.9" />
                 </linearGradient>
               </defs>
               <path
                 d="M 125 70 C 240 70 260 70 375 70 C 490 70 510 70 625 70 C 740 70 760 70 875 70"
-                stroke="rgba(255,255,255,0.08)"
+                stroke="rgba(144,202,249,0.12)"
                 strokeWidth="2.5"
                 strokeLinecap="round"
               />
@@ -202,14 +202,14 @@ export default function FeatureSectionC() {
         {/* Bottom Technical Indicators */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20">
           {[
-            { label: 'Guard Latency', value: '<12ms', desc: 'Pre-flight ENS verification', color: '#00FF59' },
-            { label: 'Signer Protection', value: '100%', desc: 'Signer count = 0 on attack', color: '#CBDDEB' },
-            { label: 'Hedera Settlement', value: 'HashScan', desc: 'Cryptographic receipt verified', color: '#F2D9CD' },
+            { label: 'Guard Latency', value: '<12ms', desc: 'Pre-flight ENS verification', color: '#2196F3' },
+            { label: 'Signer Protection', value: '100%', desc: 'Signer count = 0 on attack', color: '#90CAF9' },
+            { label: 'Hedera Settlement', value: 'HashScan', desc: 'Cryptographic receipt verified', color: '#E3F2FD' },
           ].map((stat) => (
-            <div key={stat.label} className="p-6 rounded-2xl border border-white/8 bg-white/[0.02] text-center">
+            <div key={stat.label} className="p-6 rounded-2xl glass-panel-dark text-center">
               <p className="font-title-sans text-3xl mb-1" style={{ color: stat.color }}>{stat.value}</p>
               <p className="font-title-sans text-sm text-white mb-1">{stat.label}</p>
-              <p className="font-mono text-xs text-[#586974]">{stat.desc}</p>
+              <p className="font-mono text-xs text-[#90CAF9]/60">{stat.desc}</p>
             </div>
           ))}
         </div>
