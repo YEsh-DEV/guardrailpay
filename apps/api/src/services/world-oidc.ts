@@ -6,7 +6,8 @@ import {
   NotFoundError,
   OperatorRevokedError,
   ValidationError,
-  createLogger
+  createLogger,
+  type AuthAttemptRecord
 } from '@quoteseal/shared';
 import {
   computeSubjectHmac,
@@ -214,7 +215,7 @@ export class LiveWorldOidcService implements IWorldOidcService {
 
     const claims = (
       typeof tokens.claims === 'function'
-        ? (tokens.claims as () => unknown)()
+        ? (tokens.claims as () => Record<string, unknown>)()
         : {}
     ) as unknown as IdTokenClaims;
 
@@ -223,7 +224,7 @@ export class LiveWorldOidcService implements IWorldOidcService {
   }
 
   protected async validateAndFinalizeSession(
-    attempt: any,
+    attempt: AuthAttemptRecord,
     claims: IdTokenClaims
   ): Promise<VerifiedOidcSession> {
     const nowEpoch = Math.floor(Date.now() / 1000);
@@ -282,16 +283,11 @@ export class LiveWorldOidcService implements IWorldOidcService {
       throw new AuthenticationError('No World ID assurance policy configured (fail closed)');
     }
 
-    // 4. Mark attempt as consumed atomically (single-winner operation, prevents race condition replay)
-    const consumed = await this.dbStore.consumeAuthAttempt(attempt.id);
-    if (!consumed) {
-      throw new ReplayError('OIDC state parameter already consumed (concurrent race detected)');
-    }
-
-    // 5. Pseudonymize World ID subject using HMAC-SHA256
+    // 4. Pseudonymize World ID subject using HMAC-SHA256
     const subjectHmac = computeSubjectHmac(claims.sub, this.config.hmacSecret);
 
-    // 6. Verify enrolled operator identity
+    // 5. Verify enrolled operator identity, status, and expiry BEFORE consuming the attempt
+    // (Prevents unauthorized World ID tokens or operator status mismatches from burning/DoS-ing the auth attempt)
     const operator = await this.dbStore.findOperatorById(attempt.operatorId);
     if (!operator) {
       throw new NotFoundError('Enrolled operator not found');
@@ -307,6 +303,12 @@ export class LiveWorldOidcService implements IWorldOidcService {
 
     if (new Date(operator.expiresAt) < new Date()) {
       throw new AuthenticationError('Operator enrollment has expired');
+    }
+
+    // 6. Mark attempt as consumed atomically (single-winner compare-and-swap, prevents concurrent race replay)
+    const consumed = await this.dbStore.consumeAuthAttempt(attempt.id);
+    if (!consumed) {
+      throw new ReplayError('OIDC state parameter already consumed (concurrent race detected)');
     }
 
     this.logger.info(

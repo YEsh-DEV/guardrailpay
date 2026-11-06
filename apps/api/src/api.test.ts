@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createApp } from './app.js';
 import type { EnsProfileResolver, EnsProfileRecord } from '@quoteseal/ens-profile';
-import { createMockDatabase } from '@quoteseal/shared';
+import { createMockDatabase, ConfigurationError, validateEnv } from '@quoteseal/shared';
 
 describe('QuoteSeal Fastify API Endpoints', () => {
   const sampleProfile: EnsProfileRecord = {
@@ -141,6 +141,19 @@ describe('QuoteSeal Fastify API Endpoints', () => {
     expect(res.statusCode).toBe(503);
     const json = res.json();
     expect(json.status).toBe('unready');
+  });
+
+  it('M1 regression: throws ConfigurationError when rotationControllerClient is omitted in production', () => {
+    expect(() => {
+      createApp({
+        ensResolver: mockEnsResolver,
+        db: mockDb,
+        env: {
+          ...validateEnv(),
+          NODE_ENV: 'production'
+        }
+      });
+    }).toThrow(ConfigurationError);
   });
 
   it('GET /v1/merchants/:ensName/profile returns resolved profile data', async () => {

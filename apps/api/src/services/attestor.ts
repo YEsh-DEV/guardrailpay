@@ -133,7 +133,7 @@ export class AttestorService {
       );
     }
 
-    const rotationDelaySeconds = BigInt(merchant.rotationDelaySeconds ?? 86400);
+    const rotationDelaySeconds = 86400n;
     // Bind the proposal's canonical effectiveAt established at proposal time, per RotationController.sol
     const effectiveAt = proposal.effectiveAt
       ? BigInt(Math.floor(new Date(proposal.effectiveAt).getTime() / 1000))

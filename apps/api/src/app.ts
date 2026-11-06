@@ -1,9 +1,10 @@
-import Fastify, { type FastifyInstance, type FastifyBaseLogger } from 'fastify';
+import Fastify, { type FastifyInstance, type FastifyBaseLogger, type FastifyError } from 'fastify';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import sensible from '@fastify/sensible';
 import {
   QuoteSealError,
+  ConfigurationError,
   createLogger,
   createMockDatabase,
   validateEnv,
@@ -113,8 +114,15 @@ export function createApp(deps: AppDependencies): FastifyInstance {
       log
     );
 
-  const rotationControllerClient =
-    deps.rotationControllerClient ?? new MockRotationControllerClient();
+  let rotationControllerClient = deps.rotationControllerClient;
+  if (!rotationControllerClient) {
+    if (env.NODE_ENV === 'production') {
+      throw new ConfigurationError(
+        'rotationControllerClient must be explicitly provided in production environment (fail closed)'
+      );
+    }
+    rotationControllerClient = new MockRotationControllerClient();
+  }
 
   // Security headers & CORS
   app.register(helmet, {
@@ -129,7 +137,7 @@ export function createApp(deps: AppDependencies): FastifyInstance {
   app.register(sensible);
 
   // Global Error Handler
-  app.setErrorHandler((error: any, request, reply) => {
+  app.setErrorHandler((error: FastifyError | Error | QuoteSealError, request, reply) => {
     // Check if error is a known QuoteSeal domain error
     if (error instanceof QuoteSealError) {
       request.log.warn({
@@ -142,7 +150,7 @@ export function createApp(deps: AppDependencies): FastifyInstance {
     }
 
     // Fastify validation errors
-    if (error && error.validation) {
+    if ('validation' in error && error.validation) {
       return reply.status(400).send({
         error: {
           name: 'ValidationError',

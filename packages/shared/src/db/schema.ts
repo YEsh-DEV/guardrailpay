@@ -181,3 +181,25 @@ export const auditEvents = pgTable('audit_events', {
   metadataJson: jsonb('metadata_json'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull()
 });
+
+// =============================================================================
+// INFERRED TYPES FOR SCHEMA RECORDS
+// =============================================================================
+export type MerchantRecord = typeof merchants.$inferSelect;
+export type InsertMerchantRecord = typeof merchants.$inferInsert;
+
+export type OperatorRecord = typeof operators.$inferSelect;
+export type InsertOperatorRecord = typeof operators.$inferInsert;
+
+export type RotationProposalRecord = typeof rotationProposals.$inferSelect;
+export type InsertRotationProposalRecord = typeof rotationProposals.$inferInsert;
+
+export type AuthAttemptRecord = typeof authAttempts.$inferSelect;
+export type InsertAuthAttemptRecord = typeof authAttempts.$inferInsert;
+
+export type ApprovalRecord = typeof approvals.$inferSelect;
+export type InsertApprovalRecord = typeof approvals.$inferInsert;
+
+export type AuditEventRecord = typeof auditEvents.$inferSelect;
+export type InsertAuditEventRecord = typeof auditEvents.$inferInsert;
+

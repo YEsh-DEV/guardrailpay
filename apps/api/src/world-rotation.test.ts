@@ -569,6 +569,75 @@ describe('World OIDC & Payout Rotation Backend (Comprehensive Suite)', () => {
       expect(res.json().error.message).toContain('World ID subject does not match enrolled operator');
     });
 
+    it('L1 regression: mismatched operator subject does not consume the auth attempt, allowing subsequent valid retry', async () => {
+      const startRes = await app.inject({
+        method: 'POST',
+        url: '/v1/world/start',
+        payload: { proposalId, operatorAddress: operatorAccount.address }
+      });
+      const { state, nonce } = startRes.json().data;
+
+      // 1. Attacker attempts callback with wrong World ID
+      mockOidcService.setMockClaims({
+        sub: 'attacker_wrong_world_id',
+        acr: 'orb',
+        auth_time: Math.floor(Date.now() / 1000),
+        nonce
+      });
+
+      const failedCallback = await app.inject({
+        method: 'POST',
+        url: '/v1/world/callback',
+        payload: {
+          code: 'valid_code',
+          state,
+          proposalHash,
+          mockNonce: nonce
+        }
+      });
+
+      expect(failedCallback.statusCode).toBe(401);
+      expect(failedCallback.json().error.message).toContain('World ID subject does not match enrolled operator');
+
+      // 2. Legitimate operator retries with correct World ID credentials
+      mockOidcService.setMockClaims({
+        sub: validWorldSubject,
+        acr: 'orb',
+        auth_time: Math.floor(Date.now() / 1000),
+        nonce
+      });
+
+      const retryCallback = await app.inject({
+        method: 'POST',
+        url: '/v1/world/callback',
+        payload: {
+          code: 'valid_code',
+          state,
+          proposalHash,
+          mockNonce: nonce
+        }
+      });
+
+      expect(retryCallback.statusCode).toBe(200);
+      expect(retryCallback.json().data.status).toBe('VERIFIED');
+      expect(retryCallback.json().data.attestation.signature).toBeDefined();
+
+      // 3. Subsequent replay attempt is blocked
+      const replayCallback = await app.inject({
+        method: 'POST',
+        url: '/v1/world/callback',
+        payload: {
+          code: 'valid_code',
+          state,
+          proposalHash,
+          mockNonce: nonce
+        }
+      });
+
+      expect(replayCallback.statusCode).toBe(409);
+      expect(replayCallback.json().error.code).toBe('REPLAY_DETECTED');
+    });
+
     it('prevents replay attack: consuming an auth state once blocks any reuse', async () => {
       const startRes = await app.inject({
         method: 'POST',
