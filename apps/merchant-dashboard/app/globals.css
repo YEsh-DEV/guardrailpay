@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -34,6 +34,34 @@ body {
   color: #FFFFFF;
   margin: 0;
   padding: 0;
+}
+
+/* Typography Utility Classes matching Tuyo */
+.font-display-hero {
+  font-family: var(--font-instrument);
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.font-title-sans {
+  font-family: var(--font-manrope);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.font-serif-accent {
+  font-family: var(--font-instrument);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+
+.font-mono-tag {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* Custom Scrollbar */
@@ -77,7 +105,7 @@ html.lenis, html.lenis body {
 }
 
 .glass-nav {
-  background: rgba(8, 16, 20, 0.7);
+  background: rgba(8, 16, 20, 0.75);
   backdrop-filter: blur(20px) saturate(190%);
   -webkit-backdrop-filter: blur(20px) saturate(190%);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -99,10 +127,10 @@ html.lenis, html.lenis body {
   background: linear-gradient(
     115deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.03) 25%,
-    rgba(0, 255, 89, 0.12) 45%,
-    rgba(0, 245, 212, 0.16) 55%,
-    rgba(255, 255, 255, 0.03) 75%,
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(0, 255, 89, 0.16) 45%,
+    rgba(0, 245, 212, 0.20) 55%,
+    rgba(255, 255, 255, 0.06) 75%,
     transparent 100%
   );
   background-size: 250% 250%;
@@ -119,4 +147,3 @@ html.lenis, html.lenis body {
     scroll-behavior: auto !important;
   }
 }
-

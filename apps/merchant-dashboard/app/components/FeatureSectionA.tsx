@@ -26,36 +26,46 @@ const steps = [
 
 function PhoneMockup({ activeStep }: { activeStep: number }) {
   return (
-    <div className="relative w-[300px] lg:w-[340px] select-none">
-      {/* Phone outer shell */}
-      <div className="relative rounded-[44px] bg-gradient-to-b from-[#1A2730] to-[#0E1920] p-[2.5px] shadow-[0_60px_120px_-20px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.08)]">
-        <div className="rounded-[42px] bg-[#060A0D] overflow-hidden">
+    <div className="relative w-[310px] lg:w-[350px] select-none">
+      {/* Phone outer shell with high-contrast shadow */}
+      <div className="relative rounded-[46px] bg-gradient-to-b from-[#1C262C] to-[#0A1115] p-[3px] shadow-[0_40px_100px_-15px_rgba(20,30,35,0.4),0_0_0_1px_rgba(0,0,0,0.1)]">
+        <div className="rounded-[43px] bg-[#081014] overflow-hidden">
           {/* Dynamic Island */}
           <div className="flex justify-center pt-3 pb-1">
-            <div className="w-[100px] h-[30px] bg-black rounded-full" />
+            <div className="w-[105px] h-[28px] bg-black rounded-full" />
           </div>
 
           {/* Screen content */}
-          <div className="px-4 pb-8 pt-2 min-h-[460px] font-mono">
+          <div className="px-5 pb-8 pt-2 min-h-[470px] font-mono text-white">
             {activeStep === 0 && (
               <motion.div
                 key="request"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-3"
+                transition={{ duration: 0.35 }}
+                className="space-y-3.5"
               >
-                <p className="text-[10px] text-[#586974] uppercase tracking-widest">x402 Request</p>
-                <div className="bg-[#0E1920] rounded-xl p-3 border border-white/8 text-[11px] space-y-1">
-                  <p><span className="text-[#9AEA62]">GET</span> <span className="text-white/60">/api/research/paid</span></p>
-                  <p className="text-white/40">Host: researchpro.eth</p>
-                  <p className="text-white/40">Agent: claude-agent/2.0</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-[#00FF59] font-mono uppercase tracking-widest">Incoming 402</span>
+                  <span className="text-[10px] text-white/40">hedera:296</span>
                 </div>
-                <div className="bg-[#0E1920] rounded-xl p-3 border border-white/8 text-[11px] space-y-1 mt-2">
-                  <p className="text-[#586974]">402 Payment Required</p>
-                  <p className="text-white/40">payTo: <span className="text-[#00F5D4]">0x71C...8f4B</span></p>
-                  <p className="text-white/40">amount: <span className="text-white">5 USDC</span></p>
-                  <p className="text-white/40">network: <span className="text-white">hedera:296</span></p>
+                <div className="bg-[#0E1920] rounded-2xl p-3.5 border border-white/10 text-[11px] space-y-1.5 shadow-sm">
+                  <p><span className="text-[#9AEA62] font-semibold">GET</span> <span className="text-white">/api/research/paid</span></p>
+                  <p className="text-white/50">Host: <span className="text-white font-medium">researchpro.eth</span></p>
+                  <p className="text-white/50">Agent: <span className="text-[#00F5D4]">claude-agent/2.0</span></p>
+                </div>
+                <div className="bg-[#0E1920] rounded-2xl p-3.5 border border-white/10 text-[11px] space-y-2">
+                  <div className="flex items-center justify-between text-[#FF9F0A]">
+                    <span className="font-semibold">HTTP 402 Required</span>
+                    <span>$5.00</span>
+                  </div>
+                  <div className="pt-2 border-t border-white/5 space-y-1 text-white/50">
+                    <p>payTo: <span className="text-[#00F5D4] break-all">0x71Cf3D14...8f4B</span></p>
+                    <p>asset: <span className="text-white">USDC (0.0.456858)</span></p>
+                  </div>
+                </div>
+                <div className="p-2.5 rounded-xl bg-white/5 border border-white/5 text-center text-[10px] text-white/40">
+                  Passing to QuoteSeal Guard...
                 </div>
               </motion.div>
             )}
@@ -65,26 +75,27 @@ function PhoneMockup({ activeStep }: { activeStep: number }) {
                 key="resolve"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-3"
+                transition={{ duration: 0.35 }}
+                className="space-y-3.5"
               >
-                <p className="text-[10px] text-[#586974] uppercase tracking-widest">ENSv2 Resolution</p>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-[11px] text-white/50">
-                    <span className="text-[#00FF59]">✓</span> researchpro.eth found
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-[#00FF59] font-mono uppercase tracking-widest">ENSv2 Resolution</span>
+                  <span className="text-[10px] text-emerald-400 font-semibold">Sepolia 11155111</span>
+                </div>
+                <div className="bg-[#0E1920] rounded-2xl p-4 border border-[#00FF59]/25 text-[11px] space-y-2 shadow-[0_0_20px_rgba(0,255,89,0.1)]">
+                  <div className="flex items-center gap-2 text-white font-medium pb-2 border-b border-white/5">
+                    <span className="text-[#00FF59]">✓</span>
+                    <span>researchpro.eth</span>
                   </div>
-                  <div className="bg-[#0E1920] rounded-xl p-3 border border-[#00FF59]/20 text-[11px] space-y-1.5">
-                    <p className="text-[#9AEA62]">Text Records</p>
-                    <p className="text-white/40">x402.payTo: <span className="text-[#00F5D4]">0x71C...8f4B</span></p>
-                    <p className="text-white/40">x402.network: <span className="text-white">hedera:296</span></p>
-                    <p className="text-white/40">x402.maxAmount: <span className="text-white">50 USDC</span></p>
-                    <p className="text-white/40">x402.version: <span className="text-white">v2.4</span></p>
+                  <div className="space-y-1 text-white/50 text-[10.5px]">
+                    <p>x402.payTo: <span className="text-[#00F5D4] font-medium">0x71Cf3D...8f4B</span></p>
+                    <p>x402.network: <span className="text-white">hedera:296</span></p>
+                    <p>x402.maxAmount: <span className="text-[#9AEA62]">$50.00 USDC</span></p>
+                    <p>x402.version: <span className="text-white">v2.4</span></p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-[#00FF59]/30 to-transparent" />
-                    <span className="font-mono text-[9px] text-[#00FF59]/60">Sepolia ENS Verified</span>
-                    <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent via-[#00FF59]/30 to-transparent" />
-                  </div>
+                </div>
+                <div className="flex items-center gap-2 p-2 rounded-xl bg-[#00FF59]/10 border border-[#00FF59]/20 text-[10px] text-[#00FF59]">
+                  <span>🔒</span> Cryptographically Bound via RFC /.well-known
                 </div>
               </motion.div>
             )}
@@ -94,39 +105,45 @@ function PhoneMockup({ activeStep }: { activeStep: number }) {
                 key="verdict"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="space-y-3"
+                transition={{ duration: 0.35 }}
+                className="space-y-3.5"
               >
-                <p className="text-[10px] text-[#586974] uppercase tracking-widest">Verdict</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-[#00FF59] font-mono uppercase tracking-widest">Payee Verification</span>
+                  <span className="text-[10px] text-[#00FF59] font-semibold">&lt;9ms latency</span>
+                </div>
+
                 <div className="space-y-2 text-[11px]">
-                  <div className="flex items-center justify-between bg-[#0E1920] p-2.5 rounded-lg border border-white/8">
-                    <span className="text-white/50">402 payTo</span>
-                    <span className="text-[#00F5D4]">0x71C...8f4B</span>
+                  <div className="flex items-center justify-between bg-[#0E1920] p-3 rounded-xl border border-white/10">
+                    <span className="text-white/40">402 payTo</span>
+                    <span className="text-[#00F5D4] font-medium">0x71Cf...8f4B</span>
                   </div>
-                  <div className="flex items-center justify-center">
-                    <span className="text-[#00FF59]/60 text-xs">≡ matches</span>
+                  <div className="flex items-center justify-center py-0.5">
+                    <span className="px-2 py-0.5 rounded-full bg-[#00FF59]/20 text-[#00FF59] text-[10px] font-semibold">
+                      ≡ EXACT MATCH
+                    </span>
                   </div>
-                  <div className="flex items-center justify-between bg-[#0E1920] p-2.5 rounded-lg border border-[#00FF59]/20">
-                    <span className="text-white/50">ENS payTo</span>
-                    <span className="text-[#00F5D4]">0x71C...8f4B</span>
+                  <div className="flex items-center justify-between bg-[#0E1920] p-3 rounded-xl border border-[#00FF59]/25">
+                    <span className="text-white/40">ENS Record</span>
+                    <span className="text-[#00F5D4] font-medium">0x71Cf...8f4B</span>
                   </div>
                 </div>
 
                 <motion.div
-                  initial={{ scale: 0.9, opacity: 0 }}
+                  initial={{ scale: 0.92, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.3, type: 'spring', stiffness: 260, damping: 20 }}
-                  className="mt-4 py-4 rounded-2xl bg-[#00FF59]/10 border border-[#00FF59]/30 text-center shadow-[0_0_30px_rgba(0,255,89,0.2)]"
+                  transition={{ delay: 0.15, type: 'spring', stiffness: 280, damping: 20 }}
+                  className="py-4 rounded-2xl bg-gradient-to-br from-[#00FF59]/20 to-[#00C94C]/10 border border-[#00FF59]/40 text-center shadow-[0_0_35px_rgba(0,255,89,0.25)]"
                 >
-                  <p className="text-[#00FF59] font-mono text-2xl font-semibold mb-1">✓ PASS</p>
-                  <p className="text-[#9AEA62] text-[10px] uppercase tracking-wider">Payment authorized</p>
+                  <p className="text-[#00FF59] font-mono text-2xl font-bold mb-0.5">✓ PASS</p>
+                  <p className="text-white text-xs font-medium">Signer Invoked · Settle on Hedera</p>
                 </motion.div>
               </motion.div>
             )}
           </div>
 
-          {/* Home bar */}
-          <div className="flex justify-center pb-4">
+          {/* Home indicator */}
+          <div className="flex justify-center pb-3">
             <div className="w-28 h-1 bg-white/20 rounded-full" />
           </div>
         </div>
@@ -138,7 +155,6 @@ function PhoneMockup({ activeStep }: { activeStep: number }) {
 export default function FeatureSectionA() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = React.useState(0);
-  const inView = useInView(containerRef, { amount: 0.2 });
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -158,58 +174,75 @@ export default function FeatureSectionA() {
     <section
       id="features"
       ref={containerRef}
-      className="relative"
+      className="relative bg-[#FAF9F6] text-[#141414] transition-colors duration-500"
       style={{ height: `${steps.length * 100}vh` }}
     >
       {/* Sticky container */}
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        {/* Soft background glow circles */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-emerald-100/40 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-amber-50/50 blur-3xl pointer-events-none" />
 
-          {/* Left — steps text */}
-          <div className="space-y-10 lg:space-y-16">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+
+          {/* Left — Editorial Steps Text in Tuyo Light Canvas Style */}
+          <div className="space-y-8 lg:space-y-12">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
             >
-              <span className="font-mono text-[11px] text-[#00FF59] uppercase tracking-widest mb-4 block">
-                How it works
+              <span className="font-mono text-xs font-semibold text-[#00C94C] uppercase tracking-widest mb-3 block">
+                Verification Protocol
               </span>
-              <h2 className="font-display text-[clamp(36px,5vw,60px)] leading-[1.1] tracking-tight text-white mb-4">
+              <h2 className="font-title-sans text-[clamp(38px,5vw,62px)] text-[#141414] mb-3">
                 Every payment checked against the merchant's{' '}
-                <em className="not-italic text-[#00FF59]">ENS identity.</em>
+                <em className="font-serif-accent not-italic text-[#00A33B]">ENS identity.</em>
               </h2>
+              <p className="text-[#586974] text-lg leading-relaxed">
+                Autonomous agents shouldn't blind-sign. QuoteSeal sits directly between the HTTP 402 response and the wallet signer.
+              </p>
             </motion.div>
 
-            <div className="space-y-6">
+            {/* Steps Container */}
+            <div className="space-y-4">
               {steps.map((step, i) => (
                 <motion.div
                   key={step.num}
                   animate={{
-                    opacity: activeStep === i ? 1 : 0.35,
-                    x: activeStep === i ? 0 : -8,
+                    opacity: activeStep === i ? 1 : 0.45,
+                    scale: activeStep === i ? 1 : 0.98,
+                    x: activeStep === i ? 0 : -6,
                   }}
-                  transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
-                  className="flex gap-5 cursor-pointer"
+                  transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+                  className={`p-5 rounded-2xl border transition-all duration-300 cursor-pointer ${
+                    activeStep === i
+                      ? 'bg-white border-[#00FF59]/60 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.08)]'
+                      : 'bg-white/40 border-[#E5E4DA] hover:bg-white/80'
+                  }`}
                   onClick={() => setActiveStep(i)}
                 >
-                  <div className={`shrink-0 w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-300 ${
-                    activeStep === i
-                      ? 'border-[#00FF59] bg-[#00FF59]/15 shadow-[0_0_15px_rgba(0,255,89,0.3)]'
-                      : 'border-white/20 bg-white/5'
-                  }`}>
-                    <span className={`font-mono text-[11px] font-semibold ${activeStep === i ? 'text-[#00FF59]' : 'text-white/40'}`}>
+                  <div className="flex gap-4 items-start">
+                    <div className={`shrink-0 w-9 h-9 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all ${
+                      activeStep === i
+                        ? 'bg-[#00FF59] text-[#081014] shadow-[0_0_15px_rgba(0,255,89,0.4)]'
+                        : 'bg-[#E5E4DA] text-[#586974]'
+                    }`}>
                       {step.num}
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className={`font-semibold text-base mb-1 transition-colors ${activeStep === i ? 'text-white' : 'text-white/50'}`}>
-                      {step.title}
-                    </h3>
-                    <p className={`text-sm leading-relaxed transition-colors ${activeStep === i ? 'text-[#9BA9B2]' : 'text-white/25'}`}>
-                      {step.body}
-                    </p>
+                    </div>
+                    <div>
+                      <h3 className={`font-title-sans text-base mb-1 transition-colors ${
+                        activeStep === i ? 'text-[#141414]' : 'text-[#586974]'
+                      }`}>
+                        {step.title}
+                      </h3>
+                      <p className={`text-sm leading-relaxed transition-colors ${
+                        activeStep === i ? 'text-[#33321F]' : 'text-[#77766F]'
+                      }`}>
+                        {step.body}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -225,4 +258,3 @@ export default function FeatureSectionA() {
     </section>
   );
 }
-

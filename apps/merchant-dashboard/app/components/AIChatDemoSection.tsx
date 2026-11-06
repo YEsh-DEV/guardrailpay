@@ -8,18 +8,18 @@ type Mode = 'pass' | 'attack';
 const passMessages = [
   {
     type: 'agent' as const,
-    text: 'Pay ResearchPro 5 USDC for the research report on AI payment security.',
+    text: 'Pay ResearchPro 5 USDC for the research report on autonomous agent payment vulnerabilities.',
     delay: 500,
   },
   {
     type: 'system' as const,
-    text: '402 Payment Required\npayTo: 0x71Cf3D14C8b9E06f54b432aBDe456B7Df8f4B\namount: 5000000 (USDC)\nnetwork: hedera:296\nversion: v2.4',
+    text: 'HTTP/1.1 402 Payment Required\nPAYMENT-REQUIRED: {"network":"hedera:296","asset":"0.0.456858","payTo":"0x71Cf3D14C8b9E06f54b432aBDe456B7Df8f4B","amount":"5000000","version":"v2.4"}',
     delay: 1800,
   },
   {
     type: 'guard' as const,
     verdict: 'PASS' as const,
-    text: 'ENS resolved: researchpro.eth\npayTo matches on-chain record ✓\nSigner called: 1 time ✓\nAmount within limit ✓\n\nAuthorizing payment...',
+    text: 'ENS Identity: researchpro.eth (Sepolia)\nActive payTo matches on-chain record ✓\nAmount: $5.00 USDC <= $50.00 Max Cap ✓\nSigner called: 1 time ✓\n\nVerdict: PASS — Settled on Hedera Testnet',
     delay: 3200,
   },
 ];
@@ -27,19 +27,19 @@ const passMessages = [
 const attackMessages = [
   {
     type: 'agent' as const,
-    text: 'Pay ResearchPro 5 USDC for the research report on AI payment security.',
+    text: 'Pay ResearchPro 5 USDC for the research report on autonomous agent payment vulnerabilities.',
     delay: 500,
   },
   {
     type: 'system' as const,
-    text: '402 Payment Required\npayTo: 0x9994F8c72aD5519a3929BC00dead1337caFE0000\namount: 5000000 (USDC)\nnetwork: hedera:296\n[PROXY MODIFIED]',
+    text: 'HTTP/1.1 402 Payment Required\nPAYMENT-REQUIRED: {"network":"hedera:296","asset":"0.0.456858","payTo":"0x9994F8c72aD5519a3929BC00dead1337caFE0000","amount":"5000000"}\n[ATTACK PROXY: payTo REWRITTEN]',
     delay: 1800,
     tampered: true,
   },
   {
     type: 'guard' as const,
     verdict: 'BLOCK' as const,
-    text: 'ENS resolved: researchpro.eth\npayTo MISMATCH ✗\n  expected: 0x71Cf3D14...8f4B\n  received: 0x9994F8c7...0000\nSigner call count: 0 ✗\n\nPayment BLOCKED.',
+    text: 'ENS Identity: researchpro.eth (Sepolia)\nALERT: Recipient mismatch detected ✗\n  Expected: 0x71Cf3D14...8f4B\n  Received: 0x9994F8c7...0000\nSIGNER CALL COUNT: 0 ✗ (Wallet safe)\n\nVerdict: DEFENDED · BLOCK',
     delay: 3200,
   },
 ];
@@ -58,10 +58,10 @@ function TypingText({ text, startAt }: { text: string; startAt: boolean }) {
     const type = () => {
       if (indexRef.current < text.length) {
         setDisplayed(text.slice(0, ++indexRef.current));
-        rafRef.current = setTimeout(type, 18);
+        rafRef.current = setTimeout(type, 16);
       }
     };
-    rafRef.current = setTimeout(type, 100);
+    rafRef.current = setTimeout(type, 80);
     return () => clearTimeout(rafRef.current);
   }, [text, startAt]);
 
@@ -79,7 +79,6 @@ export default function AIChatDemoSection() {
   const messages = mode === 'pass' ? passMessages : attackMessages;
 
   useEffect(() => {
-    // Clear all timeouts
     timeoutsRef.current.forEach(clearTimeout);
     timeoutsRef.current = [];
     setVisibleMessages([]);
@@ -87,149 +86,142 @@ export default function AIChatDemoSection() {
 
     if (!inView) return;
 
-    const run = () => {
-      messages.forEach((msg, i) => {
-        const t1 = setTimeout(() => {
-          setVisibleMessages((prev) => [...prev, i]);
-          setTypingIndex(i);
-        }, msg.delay);
-        const t2 = setTimeout(() => {
-          setTypingIndex(-1);
-        }, msg.delay + msg.text.length * 18 + 200);
-        timeoutsRef.current.push(t1, t2);
-      });
-    };
+    messages.forEach((msg, i) => {
+      const t1 = setTimeout(() => {
+        setVisibleMessages((prev) => [...prev, i]);
+        setTypingIndex(i);
+      }, msg.delay);
+      const t2 = setTimeout(() => {
+        setTypingIndex(-1);
+      }, msg.delay + msg.text.length * 16 + 200);
+      timeoutsRef.current.push(t1, t2);
+    });
 
-    run();
     return () => timeoutsRef.current.forEach(clearTimeout);
   }, [mode, inView]);
 
   return (
-    <section id="demo" className="relative py-32 md:py-40 overflow-hidden">
-      {/* BG */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#081014] via-[#060D10] to-[#081014]" />
-      <div
-        className="absolute top-0 right-0 w-[600px] h-[600px] opacity-10 pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(255,59,48,0.4) 0%, transparent 70%)',
-          filter: 'blur(80px)',
-        }}
-      />
-
+    <section id="demo" className="relative py-32 md:py-40 overflow-hidden bg-[#081014] text-white">
       <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10">
-        {/* Heading */}
+        {/* Section Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
           className="text-center mb-16"
         >
-          <span className="font-mono text-[11px] text-[#00FF59] uppercase tracking-widest mb-4 block">
-            Attack simulator
+          <span className="font-mono text-xs font-semibold text-[#00FF59] uppercase tracking-widest mb-3 block">
+            Interactive Agent Terminal
           </span>
-          <h2 className="font-display text-[clamp(36px,5vw,60px)] leading-[1.1] tracking-tight text-white mb-4">
+          <h2 className="font-title-sans text-[clamp(36px,5vw,60px)] leading-[1.1] text-white mb-4">
             Let AI drive money.{' '}
-            <em className="not-italic text-[#00FF59]">Not criminals.</em>
+            <em className="font-serif-accent not-italic text-[#00FF59]">Not criminals.</em>
           </h2>
           <p className="text-[#9BA9B2] text-lg max-w-xl mx-auto">
-            Toggle the attack proxy to see QuoteSeal intercept a payTo substitution in real time.
+            Toggle the attack simulator to see QuoteSeal defend against a live payee substitution in real time.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
           {/* Controls */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Attack toggle */}
-            <div className="p-5 rounded-2xl border border-white/10 bg-white/[0.03]">
-              <p className="font-mono text-[11px] text-white/40 uppercase tracking-widest mb-4">Attack Proxy</p>
-              <div className="flex items-center gap-4">
+            {/* Attack Toggle Card */}
+            <div className="p-6 rounded-[24px] border border-white/10 bg-[#0E171D] shadow-lg space-y-4">
+              <span className="font-mono text-xs text-white/50 uppercase tracking-widest block">
+                Attack Proxy Simulator
+              </span>
+              <div className="flex items-center gap-3">
                 <button
                   onClick={() => setMode('pass')}
-                  className={`flex-1 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                  className={`flex-1 py-3 rounded-full font-sans font-bold text-xs tracking-wider transition-all ${
                     mode === 'pass'
-                      ? 'bg-[#00FF59]/20 border border-[#00FF59]/40 text-[#00FF59] shadow-[0_0_15px_rgba(0,255,89,0.2)]'
-                      : 'bg-white/5 border border-white/10 text-white/40 hover:text-white/70'
+                      ? 'bg-[#00FF59] text-[#081014] shadow-[0_0_20px_rgba(0,255,89,0.35)]'
+                      : 'bg-white/5 border border-white/10 text-white/40 hover:text-white'
                   }`}
                 >
-                  OFF
+                  OFF (Normal PASS)
                 </button>
                 <button
                   onClick={() => setMode('attack')}
-                  className={`flex-1 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                  className={`flex-1 py-3 rounded-full font-sans font-bold text-xs tracking-wider transition-all ${
                     mode === 'attack'
-                      ? 'bg-rose-600/20 border border-rose-500/40 text-rose-400 shadow-[0_0_15px_rgba(255,59,48,0.2)]'
-                      : 'bg-white/5 border border-white/10 text-white/40 hover:text-white/70'
+                      ? 'bg-[#FF3B30] text-white shadow-[0_0_20px_rgba(255,59,48,0.4)]'
+                      : 'bg-white/5 border border-white/10 text-white/40 hover:text-white'
                   }`}
                 >
-                  ON
+                  ON (Simulate Attack)
                 </button>
               </div>
-              <p className="font-mono text-[10px] text-white/25 mt-3 text-center">
-                {mode === 'attack' ? '⚠ payTo rewritten to attacker address' : '✓ Direct connection to merchant'}
+              <p className="font-mono text-[11px] text-[#9BA9B2]">
+                {mode === 'attack'
+                  ? '⚠ Intercepts 402 challenge and replaces payTo with malicious actor address'
+                  : '✓ Direct connection to researchpro.eth merchant endpoint'}
               </p>
             </div>
 
-            {/* Legend */}
-            <div className="p-5 rounded-2xl border border-white/10 bg-white/[0.03] space-y-3">
-              <p className="font-mono text-[11px] text-white/40 uppercase tracking-widest mb-3">Actors</p>
+            {/* Protocol Actors Guide */}
+            <div className="p-6 rounded-[24px] border border-white/10 bg-[#0E171D] space-y-3.5">
+              <span className="font-mono text-xs text-white/50 uppercase tracking-widest block">
+                Participant Architecture
+              </span>
               {[
-                { color: '#9AEA62', label: 'AI Agent', desc: 'claude-agent/2.0' },
-                { color: '#586974', label: '402 Response', desc: mode === 'attack' ? 'Attack proxy ⚠' : 'Merchant direct' },
+                { color: '#FFFFFF', label: 'AI Buyer Agent', desc: 'claude-agent/2.0 initiating query' },
+                { color: '#9BA9B2', label: 'HTTP 402 Response', desc: mode === 'attack' ? 'Compromised proxy' : 'Merchant API' },
                 { color: mode === 'pass' ? '#00FF59' : '#FF3B30', label: 'QuoteSeal Guard', desc: mode === 'pass' ? 'Verdict: PASS' : 'Verdict: BLOCK' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3">
-                  <span className="w-2 h-2 rounded-full shrink-0" style={{ background: item.color }} />
+                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
                   <div>
-                    <p className="text-xs font-semibold text-white">{item.label}</p>
-                    <p className="font-mono text-[10px] text-white/35">{item.desc}</p>
+                    <p className="font-title-sans text-xs text-white">{item.label}</p>
+                    <p className="font-mono text-[10px] text-white/40">{item.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Chat window */}
+          {/* Chat Window with Pure White Bubble Contrast */}
           <div
             ref={sectionRef}
-            className="lg:col-span-3 rounded-2xl border border-white/10 bg-[#07111A] overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]"
+            className="lg:col-span-3 rounded-[28px] border border-white/10 bg-[#060D10] overflow-hidden shadow-[0_35px_80px_rgba(0,0,0,0.8)]"
           >
-            {/* Title bar */}
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/8 bg-[#060E16]">
-              <div className="flex gap-1.5">
+            {/* Window Chrome Header */}
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/8 bg-[#091217]">
+              <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-[#FF5F57]" />
                 <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
                 <span className="w-3 h-3 rounded-full bg-[#28C840]" />
+                <span className="font-mono text-xs text-white/50 ml-3">QuoteSeal Agent Gateway</span>
               </div>
-              <span className="font-mono text-[11px] text-white/30 flex-1 text-center">QuoteSeal Guard Console</span>
-              <span className={`font-mono text-[9px] px-2 py-0.5 rounded-full border ${
+              <span className={`font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                 mode === 'attack'
-                  ? 'text-rose-400 border-rose-500/40 bg-rose-950/60'
-                  : 'text-[#00FF59] border-[#00FF59]/30 bg-[#00FF59]/10'
+                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
+                  : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
               }`}>
-                {mode === 'attack' ? '⚠ ATTACK MODE' : '● LIVE'}
+                {mode === 'attack' ? '⚠ MITM TRAP ACTIVE' : '● LIVE EVALUATION'}
               </span>
             </div>
 
-            {/* Messages */}
-            <div className="p-5 space-y-4 min-h-[380px] overflow-y-auto">
+            {/* Conversation Flow */}
+            <div className="p-6 space-y-4 min-h-[390px] overflow-y-auto">
               <AnimatePresence mode="popLayout">
                 {visibleMessages.map((i) => {
                   const msg = messages[i];
                   if (!msg) return null;
 
+                  // 1. Agent message: Pure White card with Deep Ink text (Tuyo Signature Contrast)
                   if (msg.type === 'agent') {
                     return (
                       <motion.div
                         key={`${mode}-agent-${i}`}
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }}
                         className="flex gap-3"
                       >
-                        <div className="w-7 h-7 rounded-full bg-[#9AEA62]/20 border border-[#9AEA62]/30 flex items-center justify-center shrink-0 mt-0.5">
-                          <span className="text-[#9AEA62] text-[10px]">AI</span>
+                        <div className="w-8 h-8 rounded-full bg-white text-[#141414] font-title-sans font-bold flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                          AI
                         </div>
-                        <div className="bg-[#0E1E28] rounded-2xl rounded-tl-sm px-4 py-3 text-sm text-white max-w-[85%]">
+                        <div className="bg-white text-[#141414] rounded-3xl rounded-tl-sm px-5 py-3.5 text-sm font-medium shadow-[0_10px_25px_rgba(0,0,0,0.25)] max-w-[85%] leading-relaxed">
                           {typingIndex === i ? (
                             <TypingText text={msg.text} startAt={true} />
                           ) : (
@@ -240,22 +232,24 @@ export default function AIChatDemoSection() {
                     );
                   }
 
+                  // 2. System 402 challenge
                   if (msg.type === 'system') {
                     return (
                       <motion.div
                         key={`${mode}-system-${i}`}
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="mx-auto max-w-[90%]"
+                        className="mx-auto max-w-[92%]"
                       >
-                        <div className={`rounded-xl px-4 py-3 border font-mono text-[11px] leading-relaxed whitespace-pre-wrap ${
+                        <div className={`rounded-2xl px-4 py-3 border font-mono text-[11px] leading-relaxed whitespace-pre-wrap ${
                           (msg as any).tampered
-                            ? 'bg-rose-950/30 border-rose-500/30 text-rose-300'
-                            : 'bg-white/[0.04] border-white/10 text-white/50'
+                            ? 'bg-rose-950/40 border-rose-500/40 text-rose-300'
+                            : 'bg-white/[0.04] border-white/10 text-white/60'
                         }`}>
                           {(msg as any).tampered && (
-                            <p className="text-rose-400 font-semibold mb-1 text-[10px] uppercase tracking-wider">⚠ TAMPERED RESPONSE</p>
+                            <p className="text-rose-400 font-bold mb-1 text-[10px] uppercase tracking-wider">
+                              ⚠ ATTACK: PAYTO SUBSTITUTED
+                            </p>
                           )}
                           {typingIndex === i ? (
                             <TypingText text={msg.text} startAt={true} />
@@ -267,6 +261,7 @@ export default function AIChatDemoSection() {
                     );
                   }
 
+                  // 3. QuoteSeal Guard verdict bubble
                   if (msg.type === 'guard') {
                     const isBlock = msg.verdict === 'BLOCK';
                     return (
@@ -274,18 +269,22 @@ export default function AIChatDemoSection() {
                         key={`${mode}-guard-${i}`}
                         initial={{ opacity: 0, scale: 0.95, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        transition={{ duration: 0.4, type: 'spring', stiffness: 260, damping: 22 }}
+                        transition={{ type: 'spring', stiffness: 280, damping: 22 }}
                         className="flex gap-3 justify-end"
                       >
-                        <div className={`rounded-2xl rounded-tr-sm px-4 py-3 max-w-[85%] border ${
+                        <div className={`rounded-3xl rounded-tr-sm px-5 py-4 max-w-[85%] border shadow-xl ${
                           isBlock
-                            ? 'bg-rose-950/50 border-rose-500/40 shadow-[0_0_30px_rgba(255,59,48,0.2)]'
-                            : 'bg-[#00FF59]/10 border-[#00FF59]/30 shadow-[0_0_30px_rgba(0,255,89,0.15)]'
+                            ? 'bg-gradient-to-br from-rose-950/70 to-rose-900/40 border-rose-500/50 shadow-[0_0_35px_rgba(255,59,48,0.25)]'
+                            : 'bg-gradient-to-br from-emerald-950/70 to-emerald-900/40 border-emerald-500/50 shadow-[0_0_35px_rgba(0,255,89,0.2)]'
                         }`}>
-                          <div className={`font-mono text-lg font-bold mb-2 ${isBlock ? 'text-rose-400' : 'text-[#00FF59]'}`}>
-                            {isBlock ? '✗ BLOCK' : '✓ PASS'}
+                          <div className={`font-mono text-xl font-bold mb-2 flex items-center gap-2 ${
+                            isBlock ? 'text-rose-400' : 'text-[#00FF59]'
+                          }`}>
+                            <span>{isBlock ? '✗ DEFENDED · BLOCK' : '✓ VERIFIED · PASS'}</span>
                           </div>
-                          <div className={`font-mono text-[11px] leading-relaxed whitespace-pre-wrap ${isBlock ? 'text-rose-300/70' : 'text-[#9AEA62]/70'}`}>
+                          <div className={`font-mono text-[11.5px] leading-relaxed whitespace-pre-wrap ${
+                            isBlock ? 'text-rose-200/80' : 'text-emerald-200/80'
+                          }`}>
                             {typingIndex === i ? (
                               <TypingText text={msg.text} startAt={true} />
                             ) : (
@@ -293,12 +292,12 @@ export default function AIChatDemoSection() {
                             )}
                           </div>
                         </div>
-                        <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-0.5 border ${
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 font-bold font-mono text-xs ${
                           isBlock
-                            ? 'bg-rose-950/60 border-rose-500/40'
-                            : 'bg-[#00FF59]/20 border-[#00FF59]/30'
+                            ? 'bg-rose-500 text-white shadow-[0_0_15px_rgba(255,59,48,0.5)]'
+                            : 'bg-[#00FF59] text-[#081014] shadow-[0_0_15px_rgba(0,255,89,0.5)]'
                         }`}>
-                          <span className={`text-[10px] font-bold ${isBlock ? 'text-rose-400' : 'text-[#00FF59]'}`}>QS</span>
+                          QS
                         </div>
                       </motion.div>
                     );
@@ -309,8 +308,8 @@ export default function AIChatDemoSection() {
               </AnimatePresence>
 
               {visibleMessages.length === 0 && (
-                <div className="flex items-center justify-center h-40 text-white/20 font-mono text-sm">
-                  Scroll into view to start demo...
+                <div className="flex items-center justify-center h-44 text-white/30 font-mono text-xs">
+                  Scroll into view to run automated sequence...
                 </div>
               )}
             </div>
@@ -320,4 +319,3 @@ export default function AIChatDemoSection() {
     </section>
   );
 }
-

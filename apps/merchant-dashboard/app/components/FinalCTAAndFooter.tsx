@@ -85,9 +85,9 @@ export default function FinalCTAAndFooter() {
               <p className="font-mono text-[11px] text-[#00FF59] uppercase tracking-widest mb-6">
                 Start building with QuoteSeal
               </p>
-              <h2 className="font-display text-[clamp(40px,6vw,80px)] leading-[1.0] tracking-tight text-white mb-6">
+              <h2 className="font-title-sans text-[clamp(40px,6vw,76px)] leading-[1.0] text-white mb-6">
                 Your agents deserve{' '}
-                <em className="not-italic text-[#00FF59]">better guards.</em>
+                <em className="font-serif-accent not-italic text-[#00FF59]">better guards.</em>
               </h2>
               <p className="text-[#9BA9B2] text-xl max-w-xl mx-auto mb-12 leading-relaxed">
                 Drop QuoteSeal into any x402 agent workflow. Zero infrastructure changes. Full ENS verification in one import.

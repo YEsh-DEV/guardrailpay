@@ -25,13 +25,20 @@ Our audit of `https://tuyo.com` at desktop (1440px) and mobile (390px) reveals a
 | `--color-bg-darker` | `#05090C` | `rgb(5, 9, 12)` | Darkest recesses, modals, canvas base |
 | `--color-bg-surface` | `#0E171D` | `rgb(14, 23, 29)` | Primary card & section surface |
 | `--color-bg-surface-elevated`| `#14222B` | `rgb(20, 34, 43)` | Hovered cards, dropdowns, sticky bar |
+| `--color-tuyo-canvas` | `#FAF9F6` | `rgb(250, 249, 246)` | Warm Alabaster Canvas (Feature A, light sections) |
+| `--color-tuyo-canvas-muted` | `#F9F6EC` | `rgb(249, 246, 236)` | Alternate cream section backing |
+| `--color-tuyo-mint` | `#D6E3CB` | `rgb(214, 227, 203)` | Pastel Mint container (Text: #293B26) |
+| `--color-tuyo-peach` | `#F2D9CD` | `rgb(242, 217, 205)` | Pastel Peach container (Text: #493128) |
+| `--color-tuyo-sky` | `#CBDDEB` | `rgb(203, 221, 235)` | Pastel Sky container (Text: #263948) |
+| `--color-tuyo-butter` | `#F2E890` | `rgb(242, 232, 144)` | Pastel Butter container (Text: #33321F) |
+| `--color-tuyo-ink` | `#141414` | `rgb(20, 20, 20)` | Deep ink high-contrast text on light surfaces |
 | `--color-accent-primary` | `#00FF59` | `rgb(0, 255, 89)` | Electric Neon Emerald (QuoteSeal primary action/verdict PASS) |
 | `--color-accent-lime` | `#9AEA62` | `rgb(154, 234, 98)` | Secondary neon highlight, badges, charts |
 | `--color-accent-cyan` | `#00F5D4` | `rgb(0, 245, 212)` | Gradient terminal for 3D reflections & holographic sheen |
 | `--color-accent-danger` | `#FF3B30` | `rgb(255, 59, 48)` | Verdict BLOCK, attack detection, alert banners |
 | `--color-accent-warning` | `#FF9F0A` | `rgb(255, 159, 10)` | Verdict HOLD / Time-lock delay warning |
-| `--color-text-primary` | `#FFFFFF` | `rgb(255, 255, 255)` | Main headings and high-contrast labels |
-| `--color-text-secondary` | `#9BA9B2` | `rgb(155, 169, 178)` | Descriptive paragraphs, subtitles |
+| `--color-text-primary` | `#FFFFFF` | `rgb(255, 255, 255)` | Main headings and high-contrast labels on dark |
+| `--color-text-secondary` | `#9BA9B2` | `rgb(155, 169, 178)` | Descriptive paragraphs, subtitles on dark |
 | `--color-text-muted` | `#586974` | `rgb(88, 105, 116)` | Metadata, disclaimers, timestamps |
 | `--color-border-subtle` | `rgba(255, 255, 255, 0.08)` | `rgba(255,255,255,0.08)` | Default card borders |
 | `--color-border-highlight` | `rgba(0, 255, 89, 0.25)` | `rgba(0,255,89,0.25)` | Active states, hover glow borders |

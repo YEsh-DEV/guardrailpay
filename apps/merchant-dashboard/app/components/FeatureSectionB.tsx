@@ -225,9 +225,9 @@ export default function FeatureSectionB() {
             <span className="font-mono text-[11px] text-[#00FF59] uppercase tracking-widest mb-4 block">
               The payment profile
             </span>
-            <h2 className="font-display text-[clamp(36px,5vw,56px)] leading-[1.1] tracking-tight text-white mb-6">
+            <h2 className="font-title-sans text-[clamp(36px,5vw,56px)] leading-[1.1] text-white mb-6">
               The almighty{' '}
-              <em className="not-italic text-[#00FF59]">merchant card.</em>
+              <em className="font-serif-accent not-italic text-[#00FF59]">merchant card.</em>
             </h2>
             <p className="text-[#9BA9B2] text-lg leading-relaxed mb-8">
               Every merchant's ENSv2 name contains a cryptographically signed payment profile. QuoteSeal
