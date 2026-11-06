@@ -26,17 +26,17 @@ const steps = [
 
 function PhoneMockup({ activeStep }: { activeStep: number }) {
   return (
-    <div className="relative w-[310px] lg:w-[350px] select-none">
+    <div className="relative w-[280px] lg:w-[320px] select-none">
       {/* Phone outer shell with high-contrast shadow */}
-      <div className="relative rounded-[46px] bg-gradient-to-b from-[#1C262C] to-[#0A1115] p-[3px] shadow-[0_40px_100px_-15px_rgba(20,30,35,0.4),0_0_0_1px_rgba(0,0,0,0.1)]">
-        <div className="rounded-[43px] bg-[#081014] overflow-hidden">
+      <div className="relative rounded-[42px] bg-gradient-to-b from-[#1C262C] to-[#0A1115] p-[2.5px] shadow-[0_30px_70px_-15px_rgba(20,30,35,0.4),0_0_0_1px_rgba(0,0,0,0.1)]">
+        <div className="rounded-[40px] bg-[#081014] overflow-hidden">
           {/* Dynamic Island */}
-          <div className="flex justify-center pt-3 pb-1">
-            <div className="w-[105px] h-[28px] bg-black rounded-full" />
+          <div className="flex justify-center pt-2.5 pb-1">
+            <div className="w-[90px] h-[22px] bg-black rounded-full" />
           </div>
 
           {/* Screen content */}
-          <div className="px-5 pb-8 pt-2 min-h-[470px] font-mono text-white">
+          <div className="px-4 pb-6 pt-1 min-h-[390px] font-mono text-white">
             {activeStep === 0 && (
               <motion.div
                 key="request"
@@ -190,27 +190,27 @@ export default function FeatureSectionA() {
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
 
           {/* Left — Editorial Steps Text with Glass Focus Cards */}
-          <div className="space-y-8 lg:space-y-12">
+          <div className="space-y-6 lg:space-y-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
             >
-              <span className="font-mono text-xs font-semibold text-[#00C94C] uppercase tracking-widest mb-3 block">
+              <span className="font-mono text-xs font-semibold text-[#00C94C] uppercase tracking-widest mb-2 block">
                 Verification Protocol
               </span>
-              <h2 className="font-title-sans text-[clamp(38px,5vw,62px)] text-[#141414] mb-3">
+              <h2 className="font-title-sans text-[clamp(28px,3.8vw,46px)] leading-[1.1] text-[#141414] mb-2.5">
                 Every payment checked against the merchant's{' '}
                 <em className="font-serif-accent not-italic text-[#00A33B]">ENS identity.</em>
               </h2>
-              <p className="text-[#586974] text-lg leading-relaxed">
+              <p className="text-[#586974] text-base leading-relaxed max-w-lg">
                 Autonomous agents shouldn't blind-sign. QuoteSeal sits directly between the HTTP 402 response and the wallet signer.
               </p>
             </motion.div>
 
             {/* Steps Container in Glassmorphism style */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               {steps.map((step, i) => (
                 <motion.div
                   key={step.num}
@@ -220,28 +220,28 @@ export default function FeatureSectionA() {
                     x: activeStep === i ? 0 : -6,
                   }}
                   transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
-                  className={`p-5 rounded-2xl transition-all duration-300 cursor-pointer ${
+                  className={`p-4 rounded-xl transition-all duration-300 cursor-pointer ${
                     activeStep === i
-                      ? 'glass-panel-light border-[#00FF59]/60 shadow-[0_20px_45px_-10px_rgba(0,255,89,0.15)]'
+                      ? 'glass-panel-light border-[#00FF59]/60 shadow-[0_15px_35px_-10px_rgba(0,255,89,0.15)]'
                       : 'bg-white/40 backdrop-blur-md border-white/60 hover:bg-white/70'
                   }`}
                   onClick={() => setActiveStep(i)}
                 >
-                  <div className="flex gap-4 items-start">
-                    <div className={`shrink-0 w-9 h-9 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all ${
+                  <div className="flex gap-3.5 items-start">
+                    <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all ${
                       activeStep === i
-                        ? 'bg-[#00FF59] text-[#081014] shadow-[0_0_20px_rgba(0,255,89,0.5)]'
+                        ? 'bg-[#00FF59] text-[#081014] shadow-[0_0_15px_rgba(0,255,89,0.5)]'
                         : 'bg-[#E5E4DA] text-[#586974]'
                     }`}>
                       {step.num}
                     </div>
                     <div>
-                      <h3 className={`font-title-sans text-base mb-1 transition-colors ${
+                      <h3 className={`font-title-sans text-sm font-semibold mb-0.5 transition-colors ${
                         activeStep === i ? 'text-[#141414]' : 'text-[#586974]'
                       }`}>
                         {step.title}
                       </h3>
-                      <p className={`text-sm leading-relaxed transition-colors ${
+                      <p className={`text-xs leading-relaxed transition-colors ${
                         activeStep === i ? 'text-[#33321F]' : 'text-[#77766F]'
                       }`}>
                         {step.body}

@@ -26,7 +26,7 @@ function RotatingHeadline() {
 
   if (prefersReduced) {
     return (
-      <h1 className="font-title-sans text-[clamp(48px,7.5vw,98px)] leading-[1.0] text-white mb-6">
+      <h1 className="font-title-sans text-[clamp(32px,5.5vw,68px)] leading-[1.08] text-white mb-4">
         {headlines[0].text}{' '}
         <em className="font-serif-accent not-italic text-[#00FF59]">{headlines[0].italic}</em>
       </h1>
@@ -34,7 +34,7 @@ function RotatingHeadline() {
   }
 
   return (
-    <div className="relative overflow-hidden h-[clamp(130px,18vw,240px)] mb-6">
+    <div className="relative overflow-hidden h-[clamp(90px,12vw,160px)] mb-4">
       <AnimatePresence mode="wait">
         <motion.h1
           key={index}
@@ -45,7 +45,7 @@ function RotatingHeadline() {
             duration: 0.65,
             ease: [0.65, 0, 0.35, 1],
           }}
-          className="absolute inset-0 font-title-sans text-[clamp(48px,7.5vw,98px)] leading-[1.0] text-white"
+          className="absolute inset-0 font-title-sans text-[clamp(32px,5.5vw,68px)] leading-[1.08] text-white"
         >
           <span className="block">{headline.text}</span>
           <em
@@ -138,41 +138,41 @@ function FloatingCard3D() {
   }, []);
 
   return (
-    <div className="relative flex items-center justify-center w-full h-full min-h-[460px]">
+    <div className="relative flex items-center justify-center w-full h-full min-h-[360px] lg:min-h-[420px]">
       {/* Interactive circular zone surrounding the card */}
       <div
         ref={containerRef}
         data-cursor-card="true"
-        className="relative flex items-center justify-center w-[480px] h-[480px] rounded-full cursor-pointer select-none group"
+        className="relative flex items-center justify-center w-[360px] sm:w-[420px] h-[360px] sm:h-[420px] rounded-full cursor-pointer select-none group"
       >
         {/* Ambient background glow rings surrounding the card */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           {/* Small inner circle directly surrounding the card */}
-          <div className="w-[340px] h-[340px] rounded-full border border-[#00FF59]/20 group-hover:border-[#00FF59]/50 group-hover:shadow-[0_0_35px_rgba(0,255,89,0.22)] transition-all duration-500 animate-pulse-slow" />
+          <div className="w-[280px] sm:w-[320px] h-[280px] sm:h-[320px] rounded-full border border-[#00FF59]/20 group-hover:border-[#00FF59]/50 group-hover:shadow-[0_0_35px_rgba(0,255,89,0.22)] transition-all duration-500 animate-pulse-slow" />
           {/* Middle ring */}
-          <div className="absolute w-[480px] h-[480px] rounded-full border border-[#00FF59]/10 group-hover:border-[#00FF59]/30 transition-all duration-500 animate-pulse-slow" style={{ animationDelay: '1s' }} />
+          <div className="absolute w-[360px] sm:w-[420px] h-[360px] sm:h-[420px] rounded-full border border-[#00FF59]/10 group-hover:border-[#00FF59]/30 transition-all duration-500 animate-pulse-slow" style={{ animationDelay: '1s' }} />
           {/* Outer ring */}
-          <div className="absolute w-[620px] h-[620px] rounded-full border border-white/[0.04] group-hover:border-white/[0.08] transition-all duration-500" />
+          <div className="absolute w-[440px] sm:w-[500px] h-[440px] sm:h-[500px] rounded-full border border-white/[0.04] group-hover:border-white/[0.08] transition-all duration-500" />
         </div>
 
         {/* The 3D Card with pure white & holographic sheen */}
         <div
           ref={cardRef}
-          className="relative z-10 w-[340px] h-[215px] select-none"
+          className="relative z-10 w-[300px] sm:w-[330px] h-[195px] sm:h-[210px] select-none"
           style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
         >
-        <div className="absolute inset-0 rounded-[28px] overflow-hidden shadow-[0_45px_90px_-15px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.15)] bg-gradient-to-br from-[#0E2A1A] via-[#091F14] to-[#081014]">
+        <div className="absolute inset-0 rounded-[24px] overflow-hidden shadow-[0_35px_70px_-15px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,255,255,0.15)] bg-gradient-to-br from-[#0E2A1A] via-[#091F14] to-[#081014]">
           {/* Holographic sheen overlay */}
           <div className="holo-sheen absolute inset-0 opacity-70" />
 
           {/* Card Content */}
-          <div className="relative z-10 p-7 h-full flex flex-col justify-between">
+          <div className="relative z-10 p-5 sm:p-6 h-full flex flex-col justify-between">
             {/* Top row */}
             <div className="flex items-start justify-between">
               <div>
-                <p className="font-mono text-[10px] text-[#00FF59] uppercase tracking-widest mb-1 font-semibold">QuoteSeal Protected</p>
-                <p className="font-title-sans text-xl text-white">researchpro.eth</p>
-                <p className="font-mono text-[11px] text-white/50">Sepolia ENSv2</p>
+                <p className="font-mono text-[9.5px] text-[#00FF59] uppercase tracking-widest mb-0.5 font-semibold">QuoteSeal Protected</p>
+                <p className="font-title-sans text-lg sm:text-xl text-white">researchpro.eth</p>
+                <p className="font-mono text-[10px] text-white/50">Sepolia ENSv2</p>
               </div>
               <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center shadow-inner">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -258,9 +258,9 @@ export default function HeroSection() {
       {/* Main Content with Scroll Transform */}
       <motion.div
         style={{ y: prefersReduced ? 0 : heroY, opacity: prefersReduced ? 1 : heroOpacity }}
-        className="relative z-10 flex-1 flex items-center pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto w-full"
+        className="relative z-10 flex-1 flex items-center pt-28 pb-16 px-6 md:px-12 max-w-7xl mx-auto w-full"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
           {/* Left: Text */}
           <motion.div
             initial={prefersReduced ? false : { opacity: 0, y: 40 }}

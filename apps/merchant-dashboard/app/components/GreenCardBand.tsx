@@ -37,19 +37,19 @@ export default function GreenCardBand() {
   };
 
   return (
-    <section className="relative w-full bg-[#00FF59] py-28 px-6 lg:px-24 overflow-hidden flex flex-col items-center justify-center select-none text-black">
+    <section className="relative w-full bg-[#00FF59] py-20 px-6 lg:px-20 overflow-hidden flex flex-col items-center justify-center select-none text-black">
       {/* Background radial gradient glow for subtle depth */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.22)_0%,_transparent_75%)] pointer-events-none" />
 
       {/* Heading */}
-      <div className="relative z-10 text-center max-w-2xl mx-auto mb-16">
-        <span className="inline-block px-4 py-1.5 rounded-full bg-black/10 text-black text-[12px] font-mono uppercase tracking-[0.08em] font-semibold mb-4">
+      <div className="relative z-10 text-center max-w-2xl mx-auto mb-12">
+        <span className="inline-block px-3.5 py-1 rounded-full bg-black/10 text-black text-[11px] font-mono uppercase tracking-[0.08em] font-semibold mb-3">
           The Merchant Identity Card
         </span>
-        <h2 className="font-title-sans text-[clamp(38px,4.5vw,56px)] leading-[1.05] tracking-[-0.03em] font-bold text-black mb-4">
+        <h2 className="font-title-sans text-[clamp(30px,3.8vw,48px)] leading-[1.05] tracking-[-0.03em] font-bold text-black mb-3">
           The almighty ENS profile.
         </h2>
-        <p className="text-[18px] lg:text-[20px] text-black/75 max-w-xl mx-auto leading-relaxed">
+        <p className="text-[16px] lg:text-[18px] text-black/75 max-w-xl mx-auto leading-relaxed">
           Every autonomous agent verifies the cryptographic seal before sending a single penny. Tap to inspect the on-chain records.
         </p>
       </div>
@@ -75,7 +75,7 @@ export default function GreenCardBand() {
             duration: 0.75,
             ease: [0.2, 0.8, 0.2, 1],
           }}
-          className="relative w-[340px] sm:w-[420px] h-[240px] sm:h-[265px] rounded-[28px] p-6 bg-gradient-to-br from-[#121417] via-[#080A0C] to-[#040608] border border-white/15 shadow-[0_45px_90px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.08)] flex flex-col justify-between text-white overflow-hidden"
+          className="relative w-[320px] sm:w-[380px] h-[215px] sm:h-[240px] rounded-[24px] p-5 sm:p-6 bg-gradient-to-br from-[#121417] via-[#080A0C] to-[#040608] border border-white/15 shadow-[0_35px_80px_rgba(0,0,0,0.35),0_0_0_1px_rgba(255,255,255,0.08)] flex flex-col justify-between text-white overflow-hidden"
         >
           {/* Card Holographic Sheen */}
           <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.08] to-white/0 pointer-events-none" />
@@ -171,3 +171,4 @@ export default function GreenCardBand() {
     </section>
   );
 }
+
