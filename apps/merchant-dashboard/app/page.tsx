@@ -3,6 +3,7 @@ import LenisSmoothScroll from './components/LenisSmoothScroll';
 import CustomCursor from './components/CustomCursor';
 import Nav from './components/Nav';
 import HeroSection from './components/HeroSection';
+import ShowcaseBand from './components/ShowcaseBand';
 import FeatureSectionA from './components/FeatureSectionA';
 import FeatureSectionB from './components/FeatureSectionB';
 import AIChatDemoSection from './components/AIChatDemoSection';
@@ -17,9 +18,12 @@ export default function HomePage() {
     <LenisSmoothScroll>
       <CustomCursor />
       <Nav />
-      <main className="relative bg-[#FFFFFF] text-[#0F172A] selection:bg-[#1A6CFF] selection:text-white">
+      <main className="relative bg-[#050505] text-[#E2E8F0] selection:bg-[#D152F5] selection:text-[#050505]">
         {/* Hero Section */}
         <HeroSection />
+
+        {/* F2: Lavender Showcase Poster Band with cropped watermark & monitor mockup */}
+        <ShowcaseBand />
 
         {/* Feature A: Pinned Policy Guard Screen */}
         <FeatureSectionA />
@@ -39,7 +43,7 @@ export default function HomePage() {
         {/* Edge-Blurred Logo / Verdict Marquee */}
         <VerdictMarquee />
 
-        {/* Live Ticking Counter on Green Band */}
+        {/* Live Ticking Counter on Silver/Violet Accent Band */}
         <LiveCounterSection />
 
         {/* Final CTA & Footer */}

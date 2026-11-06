@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const attackReviews = [
   {
@@ -11,10 +11,8 @@ const attackReviews = [
     verdict: 'BLOCKED',
     quote: 'RPC MITM tried swapping payment address to an attacker wallet. QuoteSeal compared against ENS records and rejected it with 0 gas spent.',
     highlight: 'rejected it with 0 gas spent',
-    bg: '#00B4D8', // Electric Cyan
-    textColor: '#03045E',
-    badgeBg: '#03045E',
-    badgeText: '#CAF0F8',
+    badgeBg: '#F43F5E',
+    badgeText: '#FFFFFF',
   },
   {
     id: 2,
@@ -23,9 +21,7 @@ const attackReviews = [
     verdict: 'BLOCKED',
     quote: 'Attacker hosted researchpr0.eth with Unicode homoglyphs. Guard flagged origin mismatch before signature prompt.',
     highlight: 'flagged origin mismatch',
-    bg: '#CAF0F8', // Frosted Foam
-    textColor: '#03045E',
-    badgeBg: '#0077B6',
+    badgeBg: '#F43F5E',
     badgeText: '#FFFFFF',
   },
   {
@@ -35,10 +31,8 @@ const attackReviews = [
     verdict: 'HELD 48H',
     quote: 'A compromised key attempted immediate payout reroute. Time-lock delay triggered emergency alert while agent payments stayed safe.',
     highlight: 'Time-lock delay triggered',
-    bg: '#90E0EF', // Glacial Aqua
-    textColor: '#03045E',
-    badgeBg: '#0077B6',
-    badgeText: '#CAF0F8',
+    badgeBg: '#FBBF24',
+    badgeText: '#050505',
   },
   {
     id: 4,
@@ -47,10 +41,8 @@ const attackReviews = [
     verdict: 'BLOCKED',
     quote: 'Agent asked for 5 USDC, but 402 server billed 500 USDC. Guard caught the policy ceiling violation and halted execution.',
     highlight: 'halted execution',
-    bg: '#0077B6', // Oceanic Cerulean
-    textColor: '#CAF0F8',
-    badgeBg: '#00B4D8',
-    badgeText: '#03045E',
+    badgeBg: '#F43F5E',
+    badgeText: '#FFFFFF',
   },
 ];
 
@@ -65,17 +57,19 @@ export default function FanReviewCarousel() {
   }, []);
 
   return (
-    <section className="relative w-full bg-[#FFFFFF] py-14 md:py-20 px-4 sm:px-6 lg:px-20 overflow-hidden text-[#0F172A] border-t border-slate-200/80">
+    <section className="relative w-full bg-[#0E0E0E] py-14 md:py-24 px-4 sm:px-6 lg:px-20 overflow-hidden text-[#E2E8F0] border-t border-[#262626]">
       {/* Header */}
       <div className="max-w-3xl mx-auto text-center mb-10 sm:mb-14">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] border border-[#1A6CFF]/20 text-[#1A6CFF] text-[11px] sm:text-[12px] font-mono uppercase tracking-[0.08em] font-bold mb-3">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D152F5]/10 border border-[#D152F5]/25 text-[#DD60F7] text-[11px] sm:text-[12px] font-mono uppercase tracking-[0.08em] font-bold mb-3">
           Battle Tested Security
         </span>
-        <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] leading-[1.05] tracking-[-0.03em] font-bold text-[#0F172A] mb-3">
+        <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] leading-[1.05] tracking-[-0.03em] font-bold text-[#FFFFFF] mb-3">
           Real attacks.{' '}
-          <span className="font-medium text-[#1A6CFF]">Zero loss.</span>
+          <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#D152F5] to-[#EA9DFD]">
+            Zero loss.
+          </span>
         </h2>
-        <p className="text-sm sm:text-base lg:text-lg text-[#64748B] max-w-xl mx-auto">
+        <p className="text-sm sm:text-base lg:text-lg text-[#94A3B8] max-w-xl mx-auto">
           How QuoteSeal defends autonomous agents against hostile 402 endpoints and payment manipulation in the wild.
         </p>
       </div>
@@ -91,7 +85,7 @@ export default function FanReviewCarousel() {
           let translateX = offset * 140;
           let scale = isCenter ? 1 : 0.88;
           let zIndex = 10 - Math.abs(offset);
-          let opacity = Math.abs(offset) > 2 ? 0 : isCenter ? 1 : 0.55;
+          let opacity = Math.abs(offset) > 2 ? 0 : isCenter ? 1 : 0.45;
           let blur = isCenter ? 0 : 3;
 
           return (
@@ -110,15 +104,15 @@ export default function FanReviewCarousel() {
                 duration: 0.65,
                 ease: [0.2, 0.8, 0.2, 1],
               }}
-              style={{
-                backgroundColor: item.bg,
-                color: item.textColor,
-              }}
-              className="absolute w-[320px] sm:w-[380px] h-[340px] rounded-[32px] p-8 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] cursor-pointer flex flex-col justify-between select-none border border-black/5"
+              className={`absolute w-[320px] sm:w-[380px] h-[340px] rounded-[32px] p-8 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] cursor-pointer flex flex-col justify-between select-none ${
+                isCenter
+                  ? 'bg-[#141414] border-2 border-[#D152F5]'
+                  : 'bg-[#0E0E0E] border border-[#262626]'
+              }`}
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[12px] font-mono uppercase tracking-wider font-semibold opacity-60">
+                  <span className="text-[12px] font-mono uppercase tracking-wider font-semibold text-[#94A3B8]">
                     {item.target}
                   </span>
                   <span
@@ -128,21 +122,21 @@ export default function FanReviewCarousel() {
                     {item.verdict}
                   </span>
                 </div>
-                <h3 className="font-title-sans text-[22px] font-bold tracking-tight mb-4">
+                <h3 className="font-title-sans text-[22px] font-bold tracking-tight mb-4 text-[#FFFFFF]">
                   {item.title}
                 </h3>
-                <p className="text-[15px] leading-relaxed opacity-80">
+                <p className="text-[15px] leading-relaxed text-[#94A3B8]">
                   {item.quote.split(item.highlight)[0]}
-                  <mark className="bg-black/10 px-1 py-0.5 rounded font-semibold text-black">
+                  <mark className="bg-[#D152F5]/20 text-[#DD60F7] px-1 py-0.5 rounded font-semibold">
                     {item.highlight}
                   </mark>
                   {item.quote.split(item.highlight)[1]}
                 </p>
               </div>
 
-              <div className="flex items-center justify-between pt-4 border-t border-black/10 text-[12px] font-mono opacity-60">
+              <div className="flex items-center justify-between pt-4 border-t border-[#262626] text-[12px] font-mono text-[#64748B]">
                 <span>Scenario #{idx + 1}</span>
-                <span>QuoteSeal Guard Engine</span>
+                <span className="text-[#E2E8F0]">QuoteSeal Guard Engine</span>
               </div>
             </motion.div>
           );
@@ -156,7 +150,7 @@ export default function FanReviewCarousel() {
             key={idx}
             onClick={() => setActiveIndex(idx)}
             className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-              activeIndex === idx ? 'bg-black w-8' : 'bg-black/20 hover:bg-black/40'
+              activeIndex === idx ? 'bg-[#D152F5] w-8' : 'bg-[#262626] hover:bg-[#64748B]'
             }`}
           />
         ))}

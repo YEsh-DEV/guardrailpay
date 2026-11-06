@@ -6,7 +6,7 @@ import { motion, useInView } from 'framer-motion';
 function OdometerDigit({ digit }: { digit: string }) {
   const isNumeric = /\d/.test(digit);
   if (!isNumeric) {
-    return <span className="font-mono text-[#90E0EF]">{digit}</span>;
+    return <span className="font-mono text-[#D152F5]">{digit}</span>;
   }
   return (
     <span className="inline-block overflow-hidden h-[1.1em] leading-[1.1em] align-bottom">
@@ -60,13 +60,13 @@ export default function LiveCounterSection() {
   const digits = formatted.split('');
 
   return (
-    <section className="relative py-10 md:py-14 overflow-hidden bg-[#FFFFFF] text-[#0F172A] border-t border-slate-200/80">
+    <section className="relative py-12 md:py-20 overflow-hidden bg-[#0E0E0E] text-[#E2E8F0] border-t border-[#262626]">
       {/* Background radial glow */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] opacity-10"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] opacity-15"
           style={{
-            background: 'radial-gradient(ellipse, rgba(26,108,255,0.2) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse, rgba(209,82,245,0.25) 0%, transparent 70%)',
             filter: 'blur(70px)',
           }}
         />
@@ -79,20 +79,20 @@ export default function LiveCounterSection() {
           viewport={{ once: true, amount: 0.4 }}
           className="mb-4"
         >
-          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-[11px] font-bold uppercase tracking-wider mb-2 border border-[#1A6CFF]/20">
+          <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#D152F5]/10 text-[#DD60F7] font-mono text-[11px] font-bold uppercase tracking-wider mb-2 border border-[#D152F5]/25">
             Live — since you opened this page
           </span>
-          <p className="text-[#64748B] text-xs sm:text-sm mb-4">Payments verified by QuoteSeal Guard</p>
+          <p className="text-[#94A3B8] text-xs sm:text-sm mb-4">Payments verified by QuoteSeal Guard</p>
         </motion.div>
 
-        {/* Big counter - Made smaller and sleeker */}
+        {/* Big counter */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
-          className="inline-flex flex-wrap items-center justify-center font-mono font-semibold text-[clamp(28px,4.5vw,52px)] text-[#1A6CFF] leading-none mb-2 tracking-tight"
-          style={{ textShadow: '0 8px 24px rgba(26,108,255,0.2)' }}
+          className="inline-flex flex-wrap items-center justify-center font-mono font-semibold text-[clamp(28px,4.5vw,52px)] text-transparent bg-clip-text bg-gradient-to-r from-[#FFFFFF] via-[#E2E8F0] to-[#DD60F7] leading-none mb-2 tracking-tight"
+          style={{ textShadow: '0 8px 30px rgba(209,82,245,0.25)' }}
         >
           {digits.map((d, i) => (
             <OdometerDigit key={`${i}`} digit={d} />
@@ -104,12 +104,12 @@ export default function LiveCounterSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="font-mono text-[9px] sm:text-[10px] text-[#94A3B8] uppercase tracking-widest mt-2"
+          className="font-mono text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-widest mt-2"
         >
           USDC value · Hedera Testnet · Mock data
         </motion.p>
 
-        {/* Sub stats - Made compact */}
+        {/* Sub stats */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -118,13 +118,13 @@ export default function LiveCounterSection() {
           className="grid grid-cols-3 gap-3 sm:gap-4 mt-6 sm:mt-8 max-w-2xl mx-auto"
         >
           {[
-            { value: '0', label: 'Missed attacks', color: '#1A6CFF' },
-            { value: '100%', label: 'Guard coverage', color: '#1A6CFF' },
-            { value: '<12ms', label: 'Avg verdict time', color: '#0052E0' },
+            { value: '0', label: 'Missed attacks', color: '#34D399' },
+            { value: '100%', label: 'Guard coverage', color: '#D152F5' },
+            { value: '<12ms', label: 'Avg verdict time', color: '#E2E8F0' },
           ].map((s) => (
-            <div key={s.label} className="p-3 sm:p-4 rounded-xl border border-slate-200/80 bg-white shadow-sm">
+            <div key={s.label} className="p-3 sm:p-4 rounded-xl border border-[#262626] bg-[#141414] shadow-sm">
               <p className="font-mono text-lg sm:text-xl font-bold mb-0.5" style={{ color: s.color }}>{s.value}</p>
-              <p className="font-mono text-[9px] sm:text-[10px] text-[#64748B] uppercase tracking-wider">{s.label}</p>
+              <p className="font-mono text-[9px] sm:text-[10px] text-[#94A3B8] uppercase tracking-wider">{s.label}</p>
             </div>
           ))}
         </motion.div>
@@ -132,4 +132,3 @@ export default function LiveCounterSection() {
     </section>
   );
 }
-

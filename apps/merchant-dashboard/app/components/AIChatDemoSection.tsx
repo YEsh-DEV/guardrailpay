@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -103,11 +102,11 @@ export default function AIChatDemoSection() {
   }, [mode, inView]);
 
   return (
-    <section id="demo" className="relative pt-6 pb-12 md:pt-10 md:pb-16 overflow-hidden bg-[#FFFFFF] text-[#0F172A]">
+    <section id="demo" className="relative pt-12 pb-20 md:pt-16 md:pb-28 overflow-hidden bg-[#0E0E0E] text-[#E2E8F0] border-t border-[#262626]">
       {/* Background Lighting */}
       <div className="absolute inset-0 pointer-events-none opacity-20">
         <div
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#1A6CFF] to-cyan-300 blur-[130px]"
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#7F359B] to-[#D152F5] blur-[130px]"
         />
       </div>
 
@@ -119,14 +118,16 @@ export default function AIChatDemoSection() {
           viewport={{ once: true, amount: 0.4 }}
           className="text-center mb-10 sm:mb-12"
         >
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-3 border border-[#1A6CFF]/20">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D152F5]/10 text-[#DD60F7] font-mono text-xs font-bold uppercase tracking-wider mb-3 border border-[#D152F5]/25">
             Interactive Agent Terminal
           </span>
-          <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-3">
+          <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.1] text-[#FFFFFF] mb-3">
             Rewards That are Endlessly{' '}
-            <span className="font-medium text-[#1A6CFF]">Rewarding.</span>
+            <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#D152F5] to-[#EA9DFD]">
+              Rewarding.
+            </span>
           </h2>
-          <p className="text-[#64748B] text-sm sm:text-base max-w-xl mx-auto">
+          <p className="text-[#94A3B8] text-sm sm:text-base max-w-xl mx-auto">
             Test the interceptor in real time. Watch how QuoteSeal protects an autonomous AI agent when encountering hostile 402 responses.
           </p>
         </motion.div>
@@ -135,8 +136,8 @@ export default function AIChatDemoSection() {
           {/* Controls */}
           <div className="lg:col-span-2 space-y-6">
             {/* Attack Toggle Card Glassmorphism */}
-            <div className="p-6 rounded-[24px] bg-white border border-slate-200 shadow-xl space-y-4">
-              <span className="font-mono text-xs text-[#64748B] uppercase tracking-widest block font-bold">
+            <div className="p-6 rounded-[24px] bg-[#141414] border border-[#262626] shadow-xl space-y-4">
+              <span className="font-mono text-xs text-[#94A3B8] uppercase tracking-widest block font-bold">
                 Attack Proxy Simulator
               </span>
               <div className="flex items-center gap-3">
@@ -144,8 +145,8 @@ export default function AIChatDemoSection() {
                   onClick={() => setMode('pass')}
                   className={`flex-1 py-3 rounded-full font-sans font-bold text-xs tracking-wider transition-all ${
                     mode === 'pass'
-                      ? 'bg-[#1A6CFF] text-white shadow-[0_4px_16px_rgba(26,108,255,0.4)]'
-                      : 'bg-slate-100 border border-slate-200 text-[#64748B] hover:text-[#0F172A]'
+                      ? 'bg-[#D152F5] text-[#050505] shadow-[0_4px_16px_rgba(209,82,245,0.4)]'
+                      : 'bg-[#1F1F1F] border border-[#262626] text-[#94A3B8] hover:text-[#FFFFFF]'
                   }`}
                 >
                   OFF (Normal PASS)
@@ -154,14 +155,14 @@ export default function AIChatDemoSection() {
                   onClick={() => setMode('attack')}
                   className={`flex-1 py-3 rounded-full font-sans font-bold text-xs tracking-wider transition-all ${
                     mode === 'attack'
-                      ? 'bg-rose-500 text-white shadow-[0_4px_16px_rgba(244,63,94,0.4)]'
-                      : 'bg-slate-100 border border-slate-200 text-[#64748B] hover:text-[#0F172A]'
+                      ? 'bg-[#F43F5E] text-white shadow-[0_4px_16px_rgba(244,63,94,0.4)]'
+                      : 'bg-[#1F1F1F] border border-[#262626] text-[#94A3B8] hover:text-[#FFFFFF]'
                   }`}
                 >
                   ON (Simulate Attack)
                 </button>
               </div>
-              <p className="font-mono text-[11px] text-[#64748B]">
+              <p className="font-mono text-[11px] text-[#94A3B8]">
                 {mode === 'attack'
                   ? '⚠ Intercepts 402 challenge and replaces payTo with malicious actor address'
                   : '✓ Direct connection to researchpro.eth merchant endpoint'}
@@ -169,20 +170,20 @@ export default function AIChatDemoSection() {
             </div>
 
             {/* Protocol Actors Guide */}
-            <div className="p-6 rounded-[24px] bg-white border border-slate-200 shadow-xl space-y-3.5">
-              <span className="font-mono text-xs text-[#64748B] uppercase tracking-widest block font-bold">
+            <div className="p-6 rounded-[24px] bg-[#141414] border border-[#262626] shadow-xl space-y-3.5">
+              <span className="font-mono text-xs text-[#94A3B8] uppercase tracking-widest block font-bold">
                 Participant Architecture
               </span>
               {[
-                { color: '#1A6CFF', label: 'AI Buyer Agent', desc: 'claude-agent/2.0 initiating query' },
-                { color: '#64748B', label: 'HTTP 402 Response', desc: mode === 'attack' ? 'Compromised proxy' : 'Merchant API' },
-                { color: mode === 'pass' ? '#10B981' : '#F43F5E', label: 'QuoteSeal Guard', desc: mode === 'pass' ? 'Verdict: PASS' : 'Verdict: BLOCK' },
+                { color: '#D152F5', label: 'AI Buyer Agent', desc: 'claude-agent/2.0 initiating query' },
+                { color: '#94A3B8', label: 'HTTP 402 Response', desc: mode === 'attack' ? 'Compromised proxy' : 'Merchant API' },
+                { color: mode === 'pass' ? '#34D399' : '#F43F5E', label: 'QuoteSeal Guard', desc: mode === 'pass' ? 'Verdict: PASS' : 'Verdict: BLOCK' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
                   <div>
-                    <p className="font-title-sans text-xs text-[#0F172A] font-bold">{item.label}</p>
-                    <p className="font-mono text-[10px] text-[#64748B]">{item.desc}</p>
+                    <p className="font-title-sans text-xs text-[#FFFFFF] font-bold">{item.label}</p>
+                    <p className="font-mono text-[10px] text-[#94A3B8]">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -192,27 +193,27 @@ export default function AIChatDemoSection() {
           {/* Chat Window with Glassmorphism Contrast */}
           <div
             ref={sectionRef}
-            className="lg:col-span-3 rounded-[28px] bg-white border border-slate-200 shadow-2xl overflow-hidden"
+            className="lg:col-span-3 rounded-[28px] bg-[#141414] border border-[#262626] shadow-2xl overflow-hidden"
           >
             {/* Window Chrome Header */}
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-[#F8FAFC]">
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#262626] bg-[#0E0E0E]">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-[#FF5F57]" />
                 <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
                 <span className="w-3 h-3 rounded-full bg-[#28C840]" />
-                <span className="font-mono text-xs text-[#0F172A] font-bold ml-3">QuoteSeal Agent Gateway</span>
+                <span className="font-mono text-xs text-[#E2E8F0] font-bold ml-3">QuoteSeal Agent Gateway</span>
               </div>
-              <span className={`font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+              <span className={`font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 ${
                 mode === 'attack'
-                  ? 'bg-rose-50 text-rose-600 border border-rose-200'
-                  : 'bg-emerald-50 text-emerald-600 border border-emerald-200'
+                  ? 'bg-rose-950/40 text-rose-400 border border-rose-800/60'
+                  : 'bg-emerald-950/40 text-emerald-400 border border-emerald-800/60'
               }`}>
                 {mode === 'attack' ? '⚠ MITM TRAP ACTIVE' : '● LIVE EVALUATION'}
               </span>
             </div>
 
             {/* Conversation Flow */}
-            <div className="p-6 space-y-4 min-h-[390px] overflow-y-auto bg-slate-50/60">
+            <div className="p-6 space-y-4 min-h-[390px] overflow-y-auto bg-[#0A0A0A]">
               <AnimatePresence mode="popLayout">
                 {visibleMessages.map((i) => {
                   const msg = messages[i];
@@ -227,12 +228,12 @@ export default function AIChatDemoSection() {
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-3"
                       >
-                        <Avatar className="h-8 w-8 shrink-0 mt-0.5 shadow-sm border border-[#1A6CFF]/20">
-                          <AvatarFallback className="bg-[#1A6CFF] text-white text-xs font-semibold">
+                        <Avatar className="h-8 w-8 shrink-0 mt-0.5 shadow-sm border border-[#D152F5]/30">
+                          <AvatarFallback className="bg-gradient-to-br from-[#7F359B] to-[#D152F5] text-white text-xs font-semibold">
                             AI
                           </AvatarFallback>
                         </Avatar>
-                        <div className="bg-white text-[#0F172A] border border-slate-200 rounded-3xl rounded-tl-sm px-5 py-3.5 text-sm font-medium shadow-sm max-w-[85%] leading-relaxed">
+                        <div className="bg-[#141414] text-[#E2E8F0] border border-[#262626] rounded-3xl rounded-tl-sm px-5 py-3.5 text-sm font-medium shadow-sm max-w-[85%] leading-relaxed">
                           {typingIndex === i ? (
                             <TypingText text={msg.text} startAt={true} />
                           ) : (
@@ -254,12 +255,12 @@ export default function AIChatDemoSection() {
                       >
                         <div className={`rounded-2xl px-4 py-3 border font-mono text-[11px] leading-relaxed whitespace-pre-wrap ${
                           (msg as any).tampered
-                            ? 'bg-rose-50 border-rose-200 text-rose-700'
-                            : 'bg-white border-slate-200 text-[#0F172A]'
+                            ? 'bg-rose-950/20 border-rose-800/50 text-rose-300'
+                            : 'bg-[#141414] border-[#262626] text-[#E2E8F0]'
                         }`}>
                           {(msg as any).tampered && (
-                            <p className="text-rose-600 font-bold mb-1 text-[10px] uppercase tracking-wider">
-                              ⚠ ATTACK: PAYTO SUBSTITUTED
+                            <p className="text-rose-400 font-bold mb-1 text-[10px] uppercase tracking-wider flex items-center gap-1.5">
+                              <span>⚠</span> ATTACK: PAYTO SUBSTITUTED
                             </p>
                           )}
                           {typingIndex === i ? (
@@ -285,12 +286,12 @@ export default function AIChatDemoSection() {
                       >
                         <div className={`rounded-3xl rounded-tr-sm px-5 py-4 max-w-[85%] border shadow-md ${
                           isBlock
-                            ? 'bg-rose-50/90 border-rose-300 text-rose-900'
-                            : 'bg-white border-blue-200 shadow-[0_10px_30px_rgba(26,108,255,0.08)] text-[#0F172A]'
+                            ? 'bg-rose-950/30 border-rose-800/60 text-rose-200'
+                            : 'bg-[#141414] border-[#D152F5]/30 shadow-[0_10px_30px_rgba(209,82,245,0.15)] text-[#E2E8F0]'
                         }`}>
-                          <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-100">
-                            <span className={`w-2 h-2 rounded-full ${isBlock ? 'bg-rose-500' : 'bg-[#1A6CFF]'}`} />
-                            <span className="font-title-sans text-xs font-bold text-[#0F172A]">QuoteSeal Guard</span>
+                          <div className="flex items-center gap-2 mb-2 pb-2 border-b border-[#262626]">
+                            <span className={`w-2 h-2 rounded-full ${isBlock ? 'bg-rose-500' : 'bg-[#34D399]'}`} />
+                            <span className="font-title-sans text-xs font-bold text-[#FFFFFF]">QuoteSeal Guard</span>
                           </div>
                           <div className="font-mono text-xs leading-relaxed whitespace-pre-wrap">
                             {typingIndex === i ? (
@@ -300,8 +301,8 @@ export default function AIChatDemoSection() {
                             )}
                           </div>
                         </div>
-                        <Avatar className="h-8 w-8 shrink-0 mt-0.5 shadow-sm border border-slate-200">
-                          <AvatarFallback className={isBlock ? 'bg-rose-500 text-white text-xs font-semibold' : 'bg-[#1A6CFF] text-white text-xs font-semibold'}>
+                        <Avatar className="h-8 w-8 shrink-0 mt-0.5 shadow-sm border border-[#262626]">
+                          <AvatarFallback className={isBlock ? 'bg-rose-600 text-white text-xs font-semibold' : 'bg-gradient-to-br from-[#7F359B] to-[#D152F5] text-white text-xs font-semibold'}>
                             QS
                           </AvatarFallback>
                         </Avatar>

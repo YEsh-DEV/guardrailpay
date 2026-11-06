@@ -1,16 +1,16 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const ensRecords = [
-  { key: 'x402.payTo', value: '0x71Cf3D14...8f4B', color: '#00B4D8' },
-  { key: 'x402.network', value: 'hedera:296', color: '#90E0EF' },
-  { key: 'x402.maxAmount', value: '50000000 (USDC)', color: '#00B4D8' },
-  { key: 'x402.asset', value: '0.0.456858 (HBAR)', color: '#90E0EF' },
-  { key: 'x402.version', value: 'v2.4', color: '#00B4D8' },
-  { key: 'x402.signerCall', value: 'confirmPayTo(bytes32)', color: '#90E0EF' },
-  { key: 'email', value: 'admin@researchpro.eth', color: 'rgba(202,240,248,0.55)' },
+  { key: 'x402.payTo', value: '0x71Cf3D14...8f4B', color: '#D152F5' },
+  { key: 'x402.network', value: 'hedera:296', color: '#E2E8F0' },
+  { key: 'x402.maxAmount', value: '50000000 (USDC)', color: '#D152F5' },
+  { key: 'x402.asset', value: '0.0.456858 (HBAR)', color: '#94A3B8' },
+  { key: 'x402.version', value: 'v2.4', color: '#DD60F7' },
+  { key: 'x402.signerCall', value: 'confirmPayTo(bytes32)', color: '#E2E8F0' },
+  { key: 'email', value: 'admin@researchpro.eth', color: '#64748B' },
 ];
 
 function MerchantCard() {
@@ -60,7 +60,7 @@ function MerchantCard() {
           cardRef.current.style.transform = `perspective(1000px) rotateX(${rotX.current}deg) rotateY(${rotY.current}deg)`;
         }
         if (sheenRef.current) {
-          sheenRef.current.style.background = `radial-gradient(circle at ${sheenX.current}% ${sheenY.current}%, rgba(0,245,212,0.18), rgba(0,255,89,0.1) 40%, transparent 70%)`;
+          sheenRef.current.style.background = `radial-gradient(circle at ${sheenX.current}% ${sheenY.current}%, rgba(209,82,245,0.25), rgba(127,53,155,0.12) 40%, transparent 70%)`;
         }
       }
       rafRef.current = requestAnimationFrame(animate);
@@ -95,63 +95,63 @@ function MerchantCard() {
           className="absolute inset-0 rounded-[28px] overflow-hidden"
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-[#03045E] via-[#0077B6] to-[#02033B]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#141414] via-[#0E0E0E] to-[#050505]" />
           <div
             className="absolute inset-0 opacity-20"
             style={{
-              backgroundImage: `radial-gradient(circle at 50% 50%, rgba(0,180,216,0.5) 0%, transparent 70%),
-                linear-gradient(rgba(0,180,216,0.15) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,180,216,0.15) 1px, transparent 1px)`,
+              backgroundImage: `radial-gradient(circle at 50% 50%, rgba(209,82,245,0.4) 0%, transparent 70%),
+                linear-gradient(rgba(226,232,240,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(226,232,240,0.1) 1px, transparent 1px)`,
               backgroundSize: 'auto, 28px 28px, 28px 28px',
             }}
           />
           <div
             ref={sheenRef}
-            className="absolute inset-0 mix-blend-overlay pointer-events-none"
+            className="absolute inset-0 mix-blend-screen pointer-events-none"
             style={{ transition: 'background 0.1s' }}
           />
-          {/* Border */}
-          <div className="absolute inset-0 rounded-[28px] border border-[#00B4D8]/30 shadow-[0_0_0_1px_rgba(0,180,216,0.35),0_42px_80px_rgba(2,3,59,0.9)]" />
+          {/* Silver Bezel Border */}
+          <div className="absolute inset-0 rounded-[28px] border border-[#E2E8F0]/20 shadow-[0_0_0_1px_rgba(226,232,240,0.15),0_30px_70px_rgba(0,0,0,0.85)]" />
 
           {/* Content */}
           <div className="relative z-10 p-7 h-full flex flex-col justify-between">
             <div className="flex items-start justify-between">
               <div>
-                <p className="font-mono text-[10px] text-[#00B4D8] uppercase tracking-[0.2em] mb-1 font-semibold">Payment Profile</p>
-                <p className="font-display text-2xl text-white leading-tight">researchpro.eth</p>
-                <p className="font-mono text-xs text-[#90E0EF]/60 mt-0.5">ENSv2 · Sepolia</p>
+                <p className="font-mono text-[10px] text-[#DD60F7] uppercase tracking-[0.2em] mb-1 font-semibold">Payment Profile</p>
+                <p className="font-display text-2xl text-[#FFFFFF] leading-tight">researchpro.eth</p>
+                <p className="font-mono text-xs text-[#94A3B8] mt-0.5">ENSv2 · Sepolia</p>
               </div>
-              <div className="p-2.5 rounded-xl bg-[#00B4D8]/20 border border-[#00B4D8]/40 shadow-[0_0_20px_rgba(0,180,216,0.4)]">
+              <div className="p-2.5 rounded-xl bg-[#D152F5]/15 border border-[#D152F5]/35 shadow-[0_0_20px_rgba(209,82,245,0.3)]">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" stroke="#00B4D8" strokeWidth="1.5" fill="none"/>
-                  <path d="M9 12L11 14L15 10" stroke="#CAF0F8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" stroke="#D152F5" strokeWidth="1.5" fill="none"/>
+                  <path d="M9 12L11 14L15 10" stroke="#FFFFFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
             </div>
 
             <div className="space-y-1">
               <div className="flex items-center gap-3 text-xs font-mono">
-                <span className="text-[#90E0EF]/50">payTo</span>
-                <span className="text-[#00B4D8]">0x71Cf3D14...8f4B</span>
+                <span className="text-[#64748B]">payTo</span>
+                <span className="text-[#E2E8F0]">0x71Cf3D14...8f4B</span>
               </div>
               <div className="flex items-center gap-3 text-xs font-mono">
-                <span className="text-[#90E0EF]/50">network</span>
-                <span className="text-white">Hedera 296</span>
+                <span className="text-[#64748B]">network</span>
+                <span className="text-[#FFFFFF]">Hedera 296</span>
               </div>
             </div>
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-mono text-[10px] text-[#90E0EF]/50 mb-0.5">Max Amount</p>
-                <p className="font-mono text-sm text-[#00B4D8] font-semibold">$50.00 USDC</p>
+                <p className="font-mono text-[10px] text-[#64748B] mb-0.5">Max Amount</p>
+                <p className="font-mono text-sm text-[#DD60F7] font-semibold">$50.00 USDC</p>
               </div>
               <div>
-                <p className="font-mono text-[10px] text-[#90E0EF]/50 mb-0.5">Version</p>
-                <p className="font-mono text-sm text-white">v2.4</p>
+                <p className="font-mono text-[10px] text-[#64748B] mb-0.5">Version</p>
+                <p className="font-mono text-sm text-[#E2E8F0]">v2.4</p>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#00B4D8]/20 border border-[#00B4D8]/45">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00B4D8] animate-pulse" />
-                <span className="font-mono text-[10px] text-[#CAF0F8] font-semibold">ACTIVE</span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#34D399]/15 border border-[#34D399]/35">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#34D399] animate-pulse" />
+                <span className="font-mono text-[10px] text-[#34D399] font-semibold">ACTIVE</span>
               </div>
             </div>
           </div>
@@ -159,23 +159,23 @@ function MerchantCard() {
 
         {/* Back — ENS Records */}
         <div
-          className="absolute inset-0 rounded-[28px] overflow-hidden bg-[#02033B] border border-[#00B4D8]/40"
+          className="absolute inset-0 rounded-[28px] overflow-hidden bg-[#0E0E0E] border border-[#E2E8F0]/25"
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
           <div className="relative z-10 p-6 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
-              <p className="font-mono text-[10px] text-[#00B4D8] uppercase tracking-[0.2em]">ENS Text Records</p>
-              <span className="font-mono text-[9px] text-[#90E0EF]/60">researchpro.eth</span>
+              <p className="font-mono text-[10px] text-[#DD60F7] uppercase tracking-[0.2em]">ENS Text Records</p>
+              <span className="font-mono text-[9px] text-[#94A3B8]">researchpro.eth</span>
             </div>
             <div className="space-y-2 overflow-y-auto flex-1">
               {ensRecords.map((r) => (
                 <div key={r.key} className="flex items-center justify-between gap-3 font-mono text-[11px]">
-                  <span className="text-[#90E0EF]/50 shrink-0">{r.key}</span>
+                  <span className="text-[#64748B] shrink-0">{r.key}</span>
                   <span className="truncate" style={{ color: r.color }}>{r.value}</span>
                 </div>
               ))}
             </div>
-            <p className="font-mono text-[9px] text-[#90E0EF]/40 mt-4 text-center">Click to flip back</p>
+            <p className="font-mono text-[9px] text-[#94A3B8] mt-4 text-center">Click to flip back</p>
           </div>
         </div>
       </motion.div>
@@ -183,7 +183,7 @@ function MerchantCard() {
       {/* Flip hint */}
       {!flipped && (
         <div className="absolute -bottom-8 left-0 right-0 flex justify-center">
-          <p className="font-mono text-[10px] text-[#90E0EF]/40 text-center">Click to reveal ENS records</p>
+          <p className="font-mono text-[10px] text-[#94A3B8] text-center">Click to reveal ENS records</p>
         </div>
       )}
     </div>
@@ -192,12 +192,12 @@ function MerchantCard() {
 
 export default function FeatureSectionB() {
   return (
-    <section id="card" className="relative py-10 md:py-16 overflow-hidden bg-[#FFFFFF]">
-      {/* Background glow */}
+    <section id="card" className="relative py-12 md:py-24 overflow-hidden bg-[#050505] text-[#E2E8F0] border-t border-[#262626]">
+      {/* Background violet glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(26,108,255,0.2) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(209,82,245,0.2) 0%, transparent 70%)',
           filter: 'blur(90px)',
         }}
       />
@@ -222,14 +222,16 @@ export default function FeatureSectionB() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 0.1 }}
           >
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-3 border border-[#1A6CFF]/20">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#D152F5]/10 text-[#DD60F7] font-mono text-xs font-bold uppercase tracking-wider mb-3 border border-[#D152F5]/25">
               The payment profile
             </span>
-            <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-4">
+            <h2 className="font-title-sans text-[clamp(28px,4.5vw,52px)] font-bold tracking-tight leading-[1.1] text-[#FFFFFF] mb-4">
               Keep Your Money Secure{' '}
-              <span className="font-medium text-[#1A6CFF]">Always.</span>
+              <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#D152F5] to-[#EA9DFD]">
+                Always.
+              </span>
             </h2>
-            <p className="text-[#64748B] text-base sm:text-lg leading-relaxed mb-6">
+            <p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed mb-6">
               Every merchant's ENSv2 name contains a cryptographically signed payment profile. QuoteSeal
               resolves it on every transaction — network, address, asset, limit, version. Flip the card
               to see the full on-chain record set.
@@ -241,11 +243,11 @@ export default function FeatureSectionB() {
                 { icon: '⚡', title: 'Sub-second resolution', desc: 'Cached with TTL-aware invalidation. No latency penalty on the happy path.' },
                 { icon: '🔄', title: 'Protected rotation', desc: '48-hour timelock + World ID Agent Pass before any address change activates.' },
               ].map((item) => (
-                <div key={item.title} className="flex gap-3.5 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/80 bg-[#F8FAFC] hover:border-[#1A6CFF]/40 hover:bg-white transition-all duration-300 group shadow-sm">
+                <div key={item.title} className="flex gap-3.5 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-[#262626] bg-[#0E0E0E] hover:border-[#D152F5]/40 hover:bg-[#141414] transition-all duration-300 group shadow-sm">
                   <span className="text-xl mt-0.5">{item.icon}</span>
                   <div>
-                    <p className="font-semibold text-sm text-[#0F172A] mb-0.5 group-hover:text-[#1A6CFF] transition-colors">{item.title}</p>
-                    <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">{item.desc}</p>
+                    <p className="font-semibold text-sm text-[#FFFFFF] mb-0.5 group-hover:text-[#DD60F7] transition-colors">{item.title}</p>
+                    <p className="text-xs sm:text-sm text-[#94A3B8] leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -256,4 +258,3 @@ export default function FeatureSectionB() {
     </section>
   );
 }
-
