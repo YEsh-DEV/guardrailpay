@@ -53,20 +53,20 @@ export default function Nav() {
           relative flex items-center justify-between gap-8 w-full max-w-6xl px-6 py-3 rounded-full
           transition-all duration-500
           ${scrolled
-            ? 'bg-[rgba(8,16,20,0.80)] backdrop-blur-[20px] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.6)]'
+            ? 'bg-[rgba(11,25,44,0.78)] backdrop-blur-[24px] border border-[#90CAF9]/20 shadow-[0_12px_40px_rgba(2,6,23,0.7)]'
             : 'bg-transparent border border-white/0'
           }
         `}
       >
         {/* Logo */}
         <a href="/" className="flex items-center gap-2.5 group shrink-0">
-          <span className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-[#00FF59] to-[#00C94C] flex items-center justify-center shadow-[0_0_20px_rgba(0,255,89,0.5)]">
+          <span className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-[#0D47A1] to-[#2196F3] flex items-center justify-center shadow-[0_0_20px_rgba(33,150,243,0.5)]">
             <svg viewBox="0 0 24 24" fill="none" className="w-4.5 h-4.5">
-              <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#081014"/>
-              <path d="M9 12L11 14L15 10" stroke="#00FF59" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#060E1A"/>
+              <path d="M9 12L11 14L15 10" stroke="#90CAF9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </span>
-          <span className="font-display text-lg font-normal tracking-tight text-white group-hover:text-[#00FF59] transition-colors">
+          <span className="font-display text-lg font-normal tracking-tight text-white group-hover:text-[#90CAF9] transition-colors">
             QuoteSeal
           </span>
         </a>
@@ -77,7 +77,7 @@ export default function Nav() {
             <a
               key={link.label}
               href={link.href}
-              className="text-sm text-[#9BA9B2] hover:text-white transition-colors duration-200 font-medium"
+              className="text-sm text-[#90CAF9]/80 hover:text-white transition-colors duration-200 font-medium"
             >
               {link.label}
             </a>
@@ -88,7 +88,7 @@ export default function Nav() {
         <div className="flex items-center gap-3">
           <a
             href="/merchant"
-            className="hidden md:block text-sm text-[#9BA9B2] hover:text-white transition-colors font-medium"
+            className="hidden md:block text-sm text-[#90CAF9]/80 hover:text-white transition-colors font-medium"
           >
             Dashboard
           </a>
@@ -96,9 +96,9 @@ export default function Nav() {
             href="#demo"
             className="
               inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold
-              bg-[#00FF59] text-[#081014] hover:bg-[#9AEA62]
-              shadow-[0_0_20px_rgba(0,255,89,0.35)]
-              hover:shadow-[0_0_30px_rgba(0,255,89,0.6)]
+              bg-[#2196F3] text-white hover:bg-[#1E88E5]
+              shadow-[0_0_20px_rgba(33,150,243,0.45)]
+              hover:shadow-[0_0_30px_rgba(33,150,243,0.7)]
               transition-all duration-300 ease-out
               active:scale-[0.97]
             "

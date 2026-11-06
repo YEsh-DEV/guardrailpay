@@ -8,43 +8,45 @@
   --font-instrument: 'Instrument Serif', Georgia, serif;
   --font-manrope: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
-  --color-bg-base: #081014;
-  --color-bg-darker: #05090C;
-  --color-neon-green: #00FF59;
-  --color-neon-lime: #9AEA62;
-  --color-neon-cyan: #00F5D4;
+  --color-bg-base: #060E1A;
+  --color-bg-darker: #030810;
+  --color-sapphire-deep: #0D47A1;
+  --color-azure-electric: #2196F3;
+  --color-sky-mist: #90CAF9;
+  --color-frost-canvas: #E3F2FD;
+  --color-neon-green: #2196F3;
 }
 
-/* Glassmorphism Classes */
+/* Specular Glassmorphism Classes */
 .glass-panel-dark {
-  background: rgba(10, 16, 22, 0.65);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  background: rgba(11, 25, 44, 0.68);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(144, 202, 249, 0.16);
+  box-shadow: 0 30px 60px -15px rgba(2, 6, 23, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.15);
 }
 
 .glass-panel-light {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(227, 242, 253, 0.78);
   backdrop-filter: blur(24px) saturate(160%);
   -webkit-backdrop-filter: blur(24px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 45px -12px rgba(13, 71, 161, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.95);
 }
 
 .glass-pill-dark {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(144, 202, 249, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(144, 202, 249, 0.2);
 }
 
 .glass-pill-accent {
-  background: rgba(0, 255, 89, 0.15);
+  background: rgba(33, 150, 243, 0.16);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 255, 89, 0.35);
-  box-shadow: 0 0 25px rgba(0, 255, 89, 0.2);
+  border: 1px solid rgba(33, 150, 243, 0.4);
+  box-shadow: 0 0 25px rgba(33, 150, 243, 0.25);
 }
 
 * {
