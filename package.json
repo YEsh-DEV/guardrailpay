@@ -10,9 +10,10 @@
     "tests"
   ],
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "npm run dev --workspace=@quoteseal/merchant-dashboard",
     "dev:dashboard": "npm run dev --workspace=@quoteseal/merchant-dashboard",
+    "dev:all": "turbo run dev",
+    "build": "turbo run build",
     "build:dashboard": "npm run build --workspace=@quoteseal/merchant-dashboard",
     "test": "turbo run test",
     "lint": "turbo run lint",
