@@ -22,6 +22,7 @@ import {
 import {
   EIP712_DOMAIN_NAME,
   EIP712_DOMAIN_VERSION,
+  validateEnv,
   type TrustAnchors
 } from '@quoteseal/shared';
 
@@ -180,6 +181,7 @@ describe('QuoteSeal Backend Integration Suite (12 Core Verification Scenarios)',
       operatorEnrollmentService: enrollmentService,
       attestorService,
       env: {
+        ...validateEnv({ NODE_ENV: 'test' }),
         NODE_ENV: 'test',
         APPLICATION_CHAIN_ID: 11155111,
         ROTATION_TIMELOCK_SECONDS: 60,

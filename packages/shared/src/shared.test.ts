@@ -21,7 +21,33 @@ import {
   ROTATION_CONTROLLER_ABI
 } from './index.js';
 import { validateEnv, EnvSchema } from './config/index.js';
+import { checkDatabaseReadiness, createDatabaseClient, requireDatabaseConnection } from './db/index.js';
 import { createLogger, SENSITIVE_PATHS } from './logging/index.js';
+
+const liveTestConfig = () => ({
+  NODE_ENV: 'production',
+  APP_PROFILE: 'testnet-demo',
+  DATABASE_URL: 'postgresql://app:pw@db.quoteseal.org:5432/quoteseal',
+  ATTESTOR_PRIVATE_KEY: '0x1234567890123456789012345678901234567890123456789012345678901234',
+  OPERATOR_SUBJECT_HMAC_SECRET: 'production_hmac_secret_longer_than_32_bytes_safe',
+  ENCRYPTION_KEY_HEX: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+  ROTATION_CONTROLLER_ADDRESS: '0x1234567890123456789012345678901234567890',
+  ROTATION_CONTROLLER_CODE_HASH: '0x' + 'ab'.repeat(32),
+  ENS_MERCHANT_NAME: 'quotesealmerchant.eth',
+  ENS_NAMEHASH: '0x' + 'cd'.repeat(32),
+  ENS_RESOLVER_ADDRESS: '0x2222222222222222222222222222222222222222',
+  ENS_EXPECTED_OWNER: '0x1111111111111111111111111111111111111111',
+  WORLD_ID_CLIENT_ID: 'app_live_quoteseal_2026',
+  WORLD_ID_ACTION: 'rotation-approval',
+  WORLD_ID_REDIRECT_URI: 'https://api.quoteseal.org/v1/world/callback',
+  HEDERA_NETWORK: 'testnet',
+  HEDERA_ACCOUNT_ID: '0.0.123456',
+  X402_FACILITATOR_URL: 'https://facilitator.quoteseal.org',
+  X402_NETWORK: 'hedera:testnet',
+  X402_SCHEME: 'exact',
+  X402_ASSET: '0.0.0',
+  X402_AMOUNT: '1000000'
+});
 
 describe('Shared Error Hierarchy', () => {
   it('instantiates ValidationError with 400 status code', () => {
@@ -86,7 +112,7 @@ describe('Configuration & Environment Validation', () => {
       validateEnv({
         NODE_ENV: 'production'
       })
-    ).toThrow(/Production deployment requires real non-default/);
+    ).toThrow(/DATABASE_URL|ATTESTOR_PRIVATE_KEY/);
 
     // Attempt starting with Foundry Key 0 in production
     expect(() =>
@@ -96,22 +122,99 @@ describe('Configuration & Environment Validation', () => {
         OPERATOR_SUBJECT_HMAC_SECRET: 'production_hmac_secret_longer_than_32_bytes_safe',
         ENCRYPTION_KEY_HEX: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
         ROTATION_CONTROLLER_ADDRESS: '0x1234567890123456789012345678901234567890',
-        WORLD_ID_CLIENT_ID: 'app_production_world_id'
+        ROTATION_CONTROLLER_CODE_HASH: '0x' + 'ab'.repeat(32),
+        DATABASE_URL: 'postgresql://app:pw@example.test:5432/quoteseal',
+        ENS_MERCHANT_NAME: 'merchant.eth',
+        ENS_NAMEHASH: '0x' + 'cd'.repeat(32),
+        ENS_RESOLVER_ADDRESS: '0x2222222222222222222222222222222222222222',
+        ENS_EXPECTED_OWNER: '0x1111111111111111111111111111111111111111',
+        WORLD_ID_CLIENT_ID: 'app_production_world_id',
+        WORLD_ID_ACTION: 'rotation-approval',
+        WORLD_ID_REDIRECT_URI: 'https://quoteseal.example/v1/world/callback',
+        HEDERA_NETWORK: 'testnet',
+        HEDERA_ACCOUNT_ID: '0.0.123456',
+        X402_FACILITATOR_URL: 'https://facilitator.example',
+        X402_NETWORK: 'hedera:testnet',
+        X402_SCHEME: 'exact',
+        X402_ASSET: '0.0.0',
+        X402_AMOUNT: '1000000'
       })
-    ).toThrow(/Production deployment requires real non-default/);
+    ).toThrow(/ATTESTOR_PRIVATE_KEY/);
   });
 
   it('accepts valid production configuration with real non-default secrets', () => {
     const prodEnv = validateEnv({
-      NODE_ENV: 'production',
-      ATTESTOR_PRIVATE_KEY: '0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d',
-      OPERATOR_SUBJECT_HMAC_SECRET: 'production_hmac_secret_longer_than_32_bytes_safe',
-      ENCRYPTION_KEY_HEX: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
-      ROTATION_CONTROLLER_ADDRESS: '0x1234567890123456789012345678901234567890',
+      ...liveTestConfig(),
+      APP_PROFILE: 'production',
       WORLD_ID_CLIENT_ID: 'app_production_world_id'
     });
     expect(prodEnv.NODE_ENV).toBe('production');
     expect(prodEnv.ROTATION_CONTROLLER_ADDRESS).toBe('0x1234567890123456789012345678901234567890');
+  });
+
+  it('rejects testnet profile when database, controller, or external configuration is absent', () => {
+    const missingDatabase = liveTestConfig();
+    delete (missingDatabase as Partial<typeof missingDatabase>).DATABASE_URL;
+    expect(() => validateEnv(missingDatabase)).toThrow(/DATABASE_URL/);
+    expect(() => validateEnv({ ...liveTestConfig(), WORLD_ID_CLIENT_ID: '' })).toThrow(/WORLD_ID_CLIENT_ID/);
+    expect(() => validateEnv({ ...liveTestConfig(), HEDERA_ACCOUNT_ID: '' })).toThrow(/HEDERA_ACCOUNT_ID/);
+  });
+
+  it('rejects zero controller address in live profiles', () => {
+    expect(() => validateEnv({ ...liveTestConfig(), ROTATION_CONTROLLER_ADDRESS: '0x0000000000000000000000000000000000000000' }))
+      .toThrow(/ROTATION_CONTROLLER_ADDRESS/);
+    expect(() => validateEnv({ ...liveTestConfig(), ROTATION_CONTROLLER_ADDRESS: undefined })).toThrow(/ROTATION_CONTROLLER_ADDRESS/);
+  });
+
+  it('does not allow production NODE_ENV to downgrade to a local profile', () => {
+    expect(() => validateEnv({ NODE_ENV: 'production', APP_PROFILE: 'local-development' })).toThrow(/live configuration profile/);
+  });
+
+  it('rejects placeholder hosts and World ID values in a live profile', () => {
+    expect(() => validateEnv({ ...liveTestConfig(), X402_FACILITATOR_URL: 'https://facilitator.example' })).toThrow(/placeholder host/);
+    expect(() => validateEnv({ ...liveTestConfig(), WORLD_ID_CLIENT_ID: 'app_live_test' })).toThrow(/placeholder values/);
+  });
+
+  it('does not put secret values in configuration diagnostics', () => {
+    const sentinel = 'not-a-real-secret-value';
+    try {
+      validateEnv({ NODE_ENV: 'production', DATABASE_URL: `postgresql://user:${sentinel}@db.invalid/app` });
+      throw new Error('expected configuration rejection');
+    } catch (error) {
+      expect(String(error)).not.toContain(sentinel);
+      expect(String(error)).toContain('ROTATION_CONTROLLER_ADDRESS');
+    }
+  });
+});
+
+describe('Database initialization and readiness', () => {
+  it('requires an explicit database URL', () => {
+    expect(() => createDatabaseClient({ connectionString: '' })).toThrow(/DATABASE_URL is required/);
+  });
+
+  it('returns disconnected without leaking the database error', async () => {
+    const pool = { query: async () => { throw new Error('credential-bearing URL'); } } as any;
+    await expect(checkDatabaseReadiness(pool)).resolves.toEqual({ connected: false, migrationsApplied: false });
+    await expect(requireDatabaseConnection(pool)).rejects.toThrow(/PostgreSQL connection failed/);
+  });
+
+  it('keeps the database unready when migrations have not been applied', async () => {
+    const pool = { query: async (sql: string) => {
+      if (sql === 'SELECT 1') return { rows: [{ '?column?': 1 }] };
+      if (sql.includes('to_regclass')) return { rows: [{ name: null }] };
+      throw new Error('unexpected query');
+    } } as any;
+    await expect(checkDatabaseReadiness(pool)).resolves.toEqual({ connected: true, migrationsApplied: false });
+  });
+
+  it('requires every journal migration before reporting migration readiness', async () => {
+    const timestamps = ['1793965945372', '1793968201627'];
+    const pool = { query: async (sql: string) => {
+      if (sql === 'SELECT 1') return { rows: [{ '?column?': 1 }] };
+      if (sql.includes('to_regclass')) return { rows: [{ name: 'drizzle.__drizzle_migrations' }] };
+      return { rows: timestamps.map((created_at) => ({ created_at })) };
+    } } as any;
+    await expect(checkDatabaseReadiness(pool)).resolves.toEqual({ connected: true, migrationsApplied: true });
   });
 });
 

@@ -1,11 +1,50 @@
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
+import { readFileSync } from 'node:fs';
 import * as schema from './schema.js';
-import { DatabaseError } from '../errors/index.js';
+import { ConfigurationError } from '../errors/index.js';
 
 export * from './schema.js';
 
 export type QuoteSealDatabase = NodePgDatabase<typeof schema>;
+
+export interface DatabaseReadiness {
+  connected: boolean;
+  migrationsApplied: boolean;
+}
+
+function requiredMigrationTimestamps(): string[] {
+  const journal = JSON.parse(readFileSync(new URL('../../drizzle/meta/_journal.json', import.meta.url), 'utf8'));
+  return journal.entries.map((entry: { when: number }) => String(entry.when));
+}
+
+export async function checkDatabaseReadiness(pool: Pick<pg.Pool, 'query'>): Promise<DatabaseReadiness> {
+  try {
+    await pool.query('SELECT 1');
+  } catch {
+    return { connected: false, migrationsApplied: false };
+  }
+
+  try {
+    const table = await pool.query("SELECT to_regclass('drizzle.__drizzle_migrations') AS name");
+    if (!table.rows[0]?.name) return { connected: true, migrationsApplied: false };
+    const result = await pool.query('SELECT created_at::text FROM drizzle.__drizzle_migrations ORDER BY created_at');
+    const applied = result.rows.map((row: { created_at: string }) => row.created_at);
+    const required = requiredMigrationTimestamps();
+    return {
+      connected: true,
+      migrationsApplied: applied.length >= required.length && required.every((timestamp, index) => applied[index] === timestamp)
+    };
+  } catch {
+    return { connected: true, migrationsApplied: false };
+  }
+}
+
+export async function requireDatabaseConnection(pool: Pick<pg.Pool, 'query'>): Promise<DatabaseReadiness> {
+  const readiness = await checkDatabaseReadiness(pool);
+  if (!readiness.connected) throw new ConfigurationError('PostgreSQL connection failed; API startup aborted');
+  return readiness;
+}
 
 export interface DatabaseConnectionOptions {
   connectionString?: string;
@@ -18,8 +57,8 @@ export function createDatabaseClient(options: DatabaseConnectionOptions = {}): {
   close: () => Promise<void>;
 } {
   const connectionString = options.connectionString ?? process.env.DATABASE_URL;
-  if (!connectionString) {
-    throw new DatabaseError('DATABASE_URL is required to initialize PostgreSQL connection');
+  if (!connectionString?.trim()) {
+    throw new ConfigurationError('DATABASE_URL is required to initialize PostgreSQL');
   }
 
   const pool = new pg.Pool({

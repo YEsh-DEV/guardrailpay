@@ -1,67 +1,76 @@
 import type { FastifyPluginAsync } from 'fastify';
 
+export type DependencyState = 'READY' | 'NOT_READY' | 'NOT_CONFIGURED';
+export interface DatabaseHealth {
+  connected: boolean;
+  migrationsApplied: boolean;
+}
+type Check = () => Promise<boolean>;
+
 export interface HealthRouteOptions {
-  checkDatabase?: () => Promise<boolean>;
-  checkRpcPrimary?: () => Promise<boolean>;
-  checkRpcSecondary?: () => Promise<boolean>;
+  checkDatabase?: () => Promise<DatabaseHealth>;
+  checkRpcPrimary?: Check;
+  checkRpcSecondary?: Check;
+  checkController?: Check;
+  checkEns?: Check;
+  checkWorldId?: Check;
+  checkHedera?: Check;
+  checkFacilitator?: Check;
+  requiredDependencies: string[];
 }
 
 export const healthRoutes: FastifyPluginAsync<HealthRouteOptions> = async (app, opts) => {
-  // Liveness check
-  app.get('/health', async (_req, reply) => {
-    return reply.status(200).send({
-      status: 'ok',
-      service: 'quoteseal-api',
-      timestamp: new Date().toISOString()
-    });
-  });
+  app.get('/health', async (_req, reply) => reply.status(200).send({
+    status: 'ok',
+    service: 'quoteseal-api',
+    timestamp: new Date().toISOString()
+  }));
 
-  // Readiness check
   app.get('/ready', async (_req, reply) => {
-    const checks: Record<string, 'ok' | 'degraded' | 'unavailable'> = {
-      database: 'ok',
-      rpcPrimary: 'ok',
-      rpcSecondary: 'ok'
+    const checks: Record<string, DependencyState> = {
+      database: 'NOT_CONFIGURED',
+      migrations: 'NOT_CONFIGURED',
+      rpcPrimary: 'NOT_CONFIGURED',
+      rpcSecondary: 'NOT_CONFIGURED',
+      controller: 'NOT_CONFIGURED',
+      ens: 'NOT_CONFIGURED',
+      worldId: 'NOT_CONFIGURED',
+      hedera: 'NOT_CONFIGURED',
+      facilitator: 'NOT_CONFIGURED'
     };
-
-    let isReady = true;
 
     if (opts.checkDatabase) {
       try {
-        const ok = await opts.checkDatabase();
-        checks.database = ok ? 'ok' : 'unavailable';
-        if (!ok) isReady = false;
+        const state = await opts.checkDatabase();
+        checks.database = state.connected ? 'READY' : 'NOT_READY';
+        checks.migrations = state.migrationsApplied ? 'READY' : 'NOT_READY';
       } catch {
-        checks.database = 'unavailable';
-        isReady = false;
+        checks.database = 'NOT_READY';
+        checks.migrations = 'NOT_READY';
       }
     }
 
-    if (opts.checkRpcPrimary) {
+    const run = async (name: string, check?: Check) => {
+      if (!check) return;
       try {
-        const ok = await opts.checkRpcPrimary();
-        checks.rpcPrimary = ok ? 'ok' : 'unavailable';
-        if (!ok) isReady = false;
+        checks[name] = (await check()) ? 'READY' : 'NOT_READY';
       } catch {
-        checks.rpcPrimary = 'unavailable';
-        isReady = false;
+        checks[name] = 'NOT_READY';
       }
-    }
+    };
+    await Promise.all([
+      run('rpcPrimary', opts.checkRpcPrimary),
+      run('rpcSecondary', opts.checkRpcSecondary),
+      run('controller', opts.checkController),
+      run('ens', opts.checkEns),
+      run('worldId', opts.checkWorldId),
+      run('hedera', opts.checkHedera),
+      run('facilitator', opts.checkFacilitator)
+    ]);
 
-    if (opts.checkRpcSecondary) {
-      try {
-        const ok = await opts.checkRpcSecondary();
-        checks.rpcSecondary = ok ? 'ok' : 'unavailable';
-        if (!ok) isReady = false;
-      } catch {
-        checks.rpcSecondary = 'unavailable';
-        isReady = false;
-      }
-    }
-
-    const statusCode = isReady ? 200 : 503;
-    return reply.status(statusCode).send({
-      status: isReady ? 'ready' : 'unready',
+    const ready = opts.requiredDependencies.every((name) => checks[name] === 'READY');
+    return reply.status(ready ? 200 : 503).send({
+      status: ready ? 'ready' : 'unready',
       checks,
       timestamp: new Date().toISOString()
     });

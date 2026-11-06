@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16.6
+    environment:
+      POSTGRES_DB: quoteseal
+      POSTGRES_USER: quoteseal
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the ignored local .env file}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - quoteseal-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quoteseal -d quoteseal"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  quoteseal-postgres:

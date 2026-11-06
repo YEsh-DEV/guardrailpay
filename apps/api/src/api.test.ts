@@ -88,7 +88,7 @@ describe('QuoteSeal Fastify API Endpoints', () => {
   const app = createApp({
     ensResolver: mockEnsResolver,
     db: mockDb,
-    checkDatabase: vi.fn().mockResolvedValue(true),
+    checkDatabase: vi.fn().mockResolvedValue({ connected: true, migrationsApplied: true }),
     checkRpcPrimary: vi.fn().mockResolvedValue(true),
     checkRpcSecondary: vi.fn().mockResolvedValue(true)
   });
@@ -119,16 +119,17 @@ describe('QuoteSeal Fastify API Endpoints', () => {
     expect(res.statusCode).toBe(200);
     const json = res.json();
     expect(json.status).toBe('ready');
-    expect(json.checks.database).toBe('ok');
-    expect(json.checks.rpcPrimary).toBe('ok');
-    expect(json.checks.rpcSecondary).toBe('ok');
+    expect(json.checks.database).toBe('READY');
+    expect(json.checks.migrations).toBe('READY');
+    expect(json.checks.rpcPrimary).toBe('READY');
+    expect(json.checks.rpcSecondary).toBe('READY');
   });
 
   it('GET /ready returns 503 Service Unavailable when RPC check fails', async () => {
     const unhealthyApp = createApp({
       ensResolver: mockEnsResolver,
       db: mockDb,
-      checkDatabase: vi.fn().mockResolvedValue(true),
+      checkDatabase: vi.fn().mockResolvedValue({ connected: true, migrationsApplied: true }),
       checkRpcPrimary: vi.fn().mockResolvedValue(false),
       checkRpcSecondary: vi.fn().mockResolvedValue(true)
     });
@@ -143,15 +144,85 @@ describe('QuoteSeal Fastify API Endpoints', () => {
     expect(json.status).toBe('unready');
   });
 
+  it('keeps liveness healthy while readiness reports unavailable dependencies', async () => {
+    const appWithUnavailableDatabase = createApp({
+      ensResolver: mockEnsResolver,
+      db: mockDb,
+      checkDatabase: vi.fn().mockResolvedValue({ connected: false, migrationsApplied: false }),
+      checkRpcPrimary: vi.fn().mockResolvedValue(true),
+      checkRpcSecondary: vi.fn().mockResolvedValue(true)
+    });
+    const live = await appWithUnavailableDatabase.inject({ method: 'GET', url: '/health' });
+    const ready = await appWithUnavailableDatabase.inject({ method: 'GET', url: '/ready' });
+    expect(live.statusCode).toBe(200);
+    expect(ready.statusCode).toBe(503);
+    expect(ready.json().checks.database).toBe('NOT_READY');
+    expect(ready.json().checks.migrations).toBe('NOT_READY');
+  });
+
+  it('reports unconfigured required dependencies without exposing errors or configuration', async () => {
+    const unconfigured = createApp({
+      ensResolver: mockEnsResolver,
+      dbStore: {} as any,
+      rotationControllerClient: {} as any,
+      env: { ...validateEnv({ NODE_ENV: 'test' }), APP_PROFILE: 'testnet-demo' },
+      checkDatabase: vi.fn().mockResolvedValue({ connected: true, migrationsApplied: true }),
+      checkRpcPrimary: vi.fn().mockResolvedValue(true),
+      checkRpcSecondary: vi.fn().mockResolvedValue(true),
+      requiredDependencies: ['database', 'migrations', 'rpcPrimary', 'rpcSecondary', 'controller', 'ens', 'worldId', 'hedera', 'facilitator'],
+      checkWorldId: vi.fn().mockRejectedValue(new Error('credential-bearing diagnostic'))
+    });
+    const response = await unconfigured.inject({ method: 'GET', url: '/ready' });
+    expect(response.statusCode).toBe(503);
+    expect(response.json().checks.controller).toBe('NOT_CONFIGURED');
+    expect(response.json().checks.worldId).toBe('NOT_READY');
+    expect(response.body).not.toContain('ATTESTOR_PRIVATE_KEY');
+    expect(response.body).not.toContain('credential-bearing diagnostic');
+  });
+
+  it('requires explicit database injection outside unit-test mode', () => {
+    expect(() => createApp({
+      ensResolver: mockEnsResolver,
+      rotationControllerClient: {} as any,
+      env: { ...validateEnv({ NODE_ENV: 'test' }), NODE_ENV: 'development', APP_PROFILE: 'local-development' }
+    })).toThrow(/explicit database store/);
+  });
+
+  it('does not create an implicit in-memory database even in local-e2e mode', () => {
+    expect(() => createApp({
+      ensResolver: mockEnsResolver,
+      rotationControllerClient: {} as any,
+      env: validateEnv({ NODE_ENV: 'test' })
+    })).toThrow(/explicit database store/);
+  });
+
+  it('never selects a mock controller client for the testnet profile', () => {
+    expect(() => createApp({
+      ensResolver: mockEnsResolver,
+      dbStore: {} as any,
+      env: { ...validateEnv({ NODE_ENV: 'test' }), APP_PROFILE: 'testnet-demo' }
+    })).toThrow(/must be explicitly provided outside local-e2e tests/);
+  });
+
+  it('rejects an explicitly supplied in-memory store outside local-e2e tests', () => {
+    expect(() => createApp({
+      ensResolver: mockEnsResolver,
+      db: mockDb,
+      rotationControllerClient: {} as any,
+      env: { ...validateEnv({ NODE_ENV: 'test' }), NODE_ENV: 'production', APP_PROFILE: 'testnet-demo' }
+    })).toThrow(/In-memory database stores are restricted/);
+  });
+
   it('M1 regression: throws ConfigurationError when rotationControllerClient is omitted in production', () => {
     expect(() => {
       createApp({
         ensResolver: mockEnsResolver,
-        db: mockDb,
+        dbStore: {} as any,
         env: {
-          ...validateEnv(),
-          NODE_ENV: 'production'
-        }
+          ...validateEnv({ NODE_ENV: 'test' }),
+          NODE_ENV: 'production',
+          APP_PROFILE: 'production'
+        },
       });
     }).toThrow(ConfigurationError);
   });

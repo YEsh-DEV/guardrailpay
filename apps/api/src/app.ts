@@ -6,14 +6,13 @@ import {
   QuoteSealError,
   ConfigurationError,
   createLogger,
-  createMockDatabase,
   validateEnv,
   type EnvConfig,
   type QuoteSealDatabase,
   type MockDatabaseStore
 } from '@quoteseal/shared';
 import { type EnsProfileResolver } from '@quoteseal/ens-profile';
-import { createDbStore, type IDbStore } from './services/db-store.js';
+import { createDbStore, MemoryDbStore, type IDbStore } from './services/db-store.js';
 import {
   LiveWorldOidcService,
   MockWorldOidcService,
@@ -26,6 +25,7 @@ import {
   type IRotationControllerClient
 } from './services/rotation-controller-client.js';
 import { healthRoutes } from './routes/health.js';
+import type { DatabaseHealth } from './routes/health.js';
 import { merchantRoutes } from './routes/merchants.js';
 import { rotationRoutes } from './routes/rotation.js';
 import { auditRoutes } from './routes/audit.js';
@@ -41,9 +41,15 @@ export interface AppDependencies {
   operatorEnrollmentService?: OperatorEnrollmentService;
   attestorService?: AttestorService;
   rotationControllerClient?: IRotationControllerClient;
-  checkDatabase?: () => Promise<boolean>;
+  checkDatabase?: () => Promise<DatabaseHealth>;
   checkRpcPrimary?: () => Promise<boolean>;
   checkRpcSecondary?: () => Promise<boolean>;
+  checkController?: () => Promise<boolean>;
+  checkEns?: () => Promise<boolean>;
+  checkWorldId?: () => Promise<boolean>;
+  checkHedera?: () => Promise<boolean>;
+  checkFacilitator?: () => Promise<boolean>;
+  requiredDependencies?: string[];
 }
 
 export function createApp(deps: AppDependencies): FastifyInstance {
@@ -55,11 +61,17 @@ export function createApp(deps: AppDependencies): FastifyInstance {
   });
 
   const env = deps.env ?? validateEnv(process.env);
-  const dbStore = deps.dbStore ?? createDbStore(deps.db ?? createMockDatabase());
+  const testProfile = env.NODE_ENV === 'test' && env.APP_PROFILE === 'local-e2e';
+  const suppliedMockDb = deps.db !== undefined && 'merchants' in deps.db && deps.db.merchants instanceof Map;
+  if (!deps.dbStore && !deps.db) throw new ConfigurationError('An explicit database store is required');
+  if ((suppliedMockDb || deps.dbStore instanceof MemoryDbStore) && !testProfile) {
+    throw new ConfigurationError('In-memory database stores are restricted to NODE_ENV=test and APP_PROFILE=local-e2e');
+  }
+  const dbStore = deps.dbStore ?? createDbStore(deps.db!);
 
   const worldOidcService: IWorldOidcService =
     deps.worldOidcService ??
-    (env.NODE_ENV === 'test'
+    (testProfile
       ? new MockWorldOidcService(
           {
             issuer: env.WORLD_ID_ISSUER,
@@ -116,10 +128,8 @@ export function createApp(deps: AppDependencies): FastifyInstance {
 
   let rotationControllerClient = deps.rotationControllerClient;
   if (!rotationControllerClient) {
-    if (env.NODE_ENV === 'production') {
-      throw new ConfigurationError(
-        'rotationControllerClient must be explicitly provided in production environment (fail closed)'
-      );
+    if (!testProfile) {
+      throw new ConfigurationError('rotationControllerClient must be explicitly provided outside local-e2e tests');
     }
     rotationControllerClient = new MockRotationControllerClient();
   }
@@ -177,7 +187,17 @@ export function createApp(deps: AppDependencies): FastifyInstance {
   app.register(healthRoutes, {
     checkDatabase: deps.checkDatabase,
     checkRpcPrimary: deps.checkRpcPrimary,
-    checkRpcSecondary: deps.checkRpcSecondary
+    checkRpcSecondary: deps.checkRpcSecondary,
+    checkController: deps.checkController,
+    checkEns: deps.checkEns,
+    checkWorldId: deps.checkWorldId,
+    checkHedera: deps.checkHedera,
+    checkFacilitator: deps.checkFacilitator,
+    requiredDependencies: deps.requiredDependencies ?? (
+      env.APP_PROFILE === 'testnet-demo' || env.APP_PROFILE === 'production'
+        ? ['database', 'migrations', 'rpcPrimary', 'rpcSecondary', 'controller', 'ens', 'worldId', 'hedera', 'facilitator']
+        : ['database', 'migrations', 'rpcPrimary', 'rpcSecondary']
+    )
   });
 
   app.register(merchantRoutes, {
