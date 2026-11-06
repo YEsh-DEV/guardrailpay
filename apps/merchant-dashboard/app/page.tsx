@@ -6,7 +6,6 @@ import HeroSection from './components/HeroSection';
 import FeatureSectionA from './components/FeatureSectionA';
 import GreenCardBand from './components/GreenCardBand';
 import FeatureSectionB from './components/FeatureSectionB';
-import FeatureSectionC from './components/FeatureSectionC';
 import AIChatDemoSection from './components/AIChatDemoSection';
 import SafeRotationSection from './components/SafeRotationSection';
 import FanReviewCarousel from './components/FanReviewCarousel';
@@ -31,9 +30,6 @@ export default function HomePage() {
 
         {/* Feature B: Move Money & Verdict Log */}
         <FeatureSectionB />
-
-        {/* Feature C: Invest / Glowing Heartbeat Pulse */}
-        <FeatureSectionC />
 
         {/* AI Section: Claude Chat Card & Pastel Mesh */}
         <AIChatDemoSection />
