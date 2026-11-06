@@ -196,7 +196,9 @@ async function startServer() {
       checkFacilitator: !liveProfile ? undefined : async () => {
         if (!env.X402_FACILITATOR_URL || !env.X402_NETWORK || !env.X402_SCHEME) return false;
         try {
-          const response = await fetch(new URL('/supported', env.X402_FACILITATOR_URL), { signal: AbortSignal.timeout(5000) });
+          const baseUrl = new URL(env.X402_FACILITATOR_URL);
+          baseUrl.pathname = `${baseUrl.pathname.replace(/\/$/, '')}/supported`;
+          const response = await fetch(baseUrl, { signal: AbortSignal.timeout(5000) });
           if (!response.ok) return false;
           const supported = await response.json() as { kinds?: Array<{ x402Version?: number; scheme?: string; network?: string }> };
           return supported.kinds?.some((kind) => kind.x402Version === 2 && kind.scheme === env.X402_SCHEME && kind.network === env.X402_NETWORK) ?? false;
