@@ -1,0 +1,57 @@
+
+> x402-pre-sign-guard@1.0.0 test
+> tsx --test proof.test.ts
+
+{"name":"T1 valid","verdict":"PASS","signerCalls":1,"payloadCreationCalls":1}
+{"name":"T2 payTo","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T3 asset","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T3 network","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T4 amount","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T5 unknown","verdict":"HOLD","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T6 second valid","verdict":"PASS","signerCalls":1,"payloadCreationCalls":1}
+{"name":"T6 second malicious","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T6 nonmember","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T7 injection","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T9 stale","verdict":"UNVERIFIABLE","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T9 disagreement","verdict":"UNVERIFIABLE","signerCalls":0,"payloadCreationCalls":0}
+{"name":"T9 outage","verdict":"UNVERIFIABLE","signerCalls":0,"payloadCreationCalls":0}
+{"name":"anchor changed","verdict":"HOLD","signerCalls":0,"payloadCreationCalls":0}
+{"name":"version changed","verdict":"HOLD","signerCalls":0,"payloadCreationCalls":0}
+{"name":"offer stale","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"malformed amount","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"timeout zero","verdict":"BLOCK","signerCalls":0,"payloadCreationCalls":0}
+{"name":"unknown scheme","verdict":"UNVERIFIABLE","signerCalls":0,"payloadCreationCalls":0}
+{"name":"hook exception","verdict":"UNVERIFIABLE","signerCalls":0,"payloadCreationCalls":0}
+(node:86231) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+✔ T1 valid (6.052245ms)
+✔ T2 payTo (0.792796ms)
+✔ T3 asset (0.481449ms)
+✔ T3 network (0.456063ms)
+✔ T4 amount (0.453583ms)
+✔ T5 unknown (0.353414ms)
+✔ T6 second valid (0.582118ms)
+✔ T6 second malicious (0.42663ms)
+✔ T6 nonmember (0.395641ms)
+✔ T7 injection (0.470873ms)
+✔ T9 stale (0.242924ms)
+✔ T9 disagreement (0.221134ms)
+✔ T9 outage (0.171331ms)
+✔ anchor changed (0.199391ms)
+✔ version changed (0.178818ms)
+✔ offer stale (0.207672ms)
+✔ malformed amount (0.227185ms)
+✔ timeout zero (0.243649ms)
+✔ unknown scheme (0.272296ms)
+✔ hook exception (0.2116ms)
+✔ T8 real HTTP redirect blocked before signer (22.603572ms)
+✔ recovery retry re-enters guard and cannot sign rejected retry (1.12586ms)
+✔ SDK limitation: later trusted hook can mutate selection after guard (0.199447ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 677.603795
