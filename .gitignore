@@ -20,9 +20,11 @@ cache/
 .idea/
 *.swp
 
-# OS
+# OS & Temporary
 .DS_Store
 Thumbs.db
+.~lock.*#
+*.tmp
 
 # Lock files for spike (keep pnpm-lock.yaml when added)
 # package-lock.json kept intentionally for existing deps
