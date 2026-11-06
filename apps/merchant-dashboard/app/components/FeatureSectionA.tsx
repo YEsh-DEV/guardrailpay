@@ -178,14 +178,14 @@ export default function FeatureSectionA() {
     <section
       id="features"
       ref={containerRef}
-      className="relative bg-[#02033B] text-[#CAF0F8] transition-colors duration-500"
+      className="relative bg-[#FFFFFF] text-[#0F172A] transition-colors duration-500"
       style={{ height: `${steps.length * 100}vh` }}
     >
       {/* Sticky container */}
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        {/* Soft background glow circles & glass mesh in deep sea tones */}
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-[#0077B6]/20 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-[#00B4D8]/15 blur-3xl pointer-events-none" />
+        {/* Soft background blue ambient mesh */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-[#1A6CFF]/5 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-[#E8F1FF] blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
 
@@ -197,52 +197,52 @@ export default function FeatureSectionA() {
               transition={{ duration: 0.7 }}
               viewport={{ once: true }}
             >
-              <span className="font-mono text-xs font-semibold text-[#00B4D8] uppercase tracking-widest mb-2 block">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-4 border border-[#1A6CFF]/20">
                 Verification Protocol
               </span>
-              <h2 className="font-title-sans text-[clamp(28px,3.8vw,46px)] leading-[1.1] text-[#CAF0F8] mb-2.5">
-                Every payment checked against the merchant's{' '}
-                <em className="font-serif-accent not-italic text-[#00B4D8]">ENS identity.</em>
+              <h2 className="font-title-sans text-[clamp(30px,4.2vw,52px)] font-bold tracking-tight leading-[1.08] text-[#0F172A] mb-3">
+                Get The Most Powerful and{' '}
+                <em className="font-serif-accent not-italic text-[#1A6CFF]">Secure Payment Rail.</em>
               </h2>
-              <p className="text-[#90E0EF] text-base leading-relaxed max-w-lg">
+              <p className="text-[#64748B] text-base sm:text-lg leading-relaxed max-w-lg">
                 Autonomous agents shouldn't blind-sign. QuoteSeal sits directly between the HTTP 402 response and the wallet signer.
               </p>
             </motion.div>
 
-            {/* Steps Container in Glassmorphism style */}
-            <div className="space-y-3">
+            {/* Steps Container in Gabrun Card style */}
+            <div className="space-y-3.5">
               {steps.map((step, i) => (
                 <motion.div
                   key={step.num}
                   animate={{
-                    opacity: activeStep === i ? 1 : 0.45,
+                    opacity: activeStep === i ? 1 : 0.6,
                     scale: activeStep === i ? 1 : 0.98,
                     x: activeStep === i ? 0 : -6,
                   }}
                   transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
-                  className={`p-4 rounded-xl transition-all duration-300 cursor-pointer ${
+                  className={`p-5 rounded-2xl transition-all duration-300 cursor-pointer ${
                     activeStep === i
-                      ? 'glass-panel-dark border-[#00B4D8]/60 shadow-[0_15px_35px_-10px_rgba(0,180,216,0.35)]'
-                      : 'bg-[#03045E]/40 backdrop-blur-md border-[#0077B6]/20 hover:bg-[#03045E]/70'
+                      ? 'bg-white border-2 border-[#1A6CFF] shadow-[0_15px_35px_-5px_rgba(26,108,255,0.18)]'
+                      : 'bg-[#F8FAFC] border border-slate-200/70 hover:bg-white hover:border-slate-300'
                   }`}
                   onClick={() => setActiveStep(i)}
                 >
-                  <div className="flex gap-3.5 items-start">
+                  <div className="flex gap-4 items-start">
                     <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all ${
                       activeStep === i
-                        ? 'bg-[#00B4D8] text-[#03045E] shadow-[0_0_15px_rgba(0,180,216,0.6)]'
-                        : 'bg-[#0077B6]/30 text-[#90E0EF]'
+                        ? 'bg-[#1A6CFF] text-white shadow-[0_0_15px_rgba(26,108,255,0.4)]'
+                        : 'bg-slate-200 text-[#64748B]'
                     }`}>
                       {step.num}
                     </div>
                     <div>
-                      <h3 className={`font-title-sans text-sm font-semibold mb-0.5 transition-colors ${
-                        activeStep === i ? 'text-[#CAF0F8]' : 'text-[#90E0EF]/70'
+                      <h3 className={`font-title-sans text-base font-bold mb-1 transition-colors ${
+                        activeStep === i ? 'text-[#0F172A]' : 'text-[#64748B]'
                       }`}>
                         {step.title}
                       </h3>
-                      <p className={`text-xs leading-relaxed transition-colors ${
-                        activeStep === i ? 'text-[#CAF0F8]/90' : 'text-[#90E0EF]/50'
+                      <p className={`text-xs sm:text-sm leading-relaxed transition-colors ${
+                        activeStep === i ? 'text-[#475569]' : 'text-[#94A3B8]'
                       }`}>
                         {step.body}
                       </p>

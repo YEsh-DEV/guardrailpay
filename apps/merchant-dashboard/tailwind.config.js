@@ -8,13 +8,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        deepsea: {
-          abyss: '#02033B',
-          navy: '#03045E',
-          cerulean: '#0077B6',
-          cyan: '#00B4D8',
-          aqua: '#90E0EF',
-          foam: '#CAF0F8',
+        gabrun: {
+          blue: '#1A6CFF',
+          blueDark: '#0052E0',
+          blueLight: '#E8F1FF',
+          blueMuted: '#D0E2FF',
+          ink: '#0F172A',
+          slate: '#64748B',
+          canvas: '#FFFFFF',
+          canvasSubtle: '#F8FAFC',
         },
         bg: {
           base: '#03045E',

@@ -102,24 +102,11 @@ export default function AIChatDemoSection() {
   }, [mode, inView]);
 
   return (
-    <section id="demo" className="relative py-32 md:py-40 overflow-hidden bg-[#05090C] text-white">
-      {/* Background Glass Glows */}
-      <div className="absolute inset-0 pointer-events-none opacity-40">
-        <motion.div
-          animate={{
-            scale: [1, 1.25, 1],
-            rotate: [0, 90, 0],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-cyan-400 via-[#00FF59] to-indigo-500 blur-[130px]"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.3, 1],
-            rotate: [0, -90, 0],
-          }}
-          transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] rounded-full bg-gradient-to-br from-pink-500 via-purple-600 to-amber-400 blur-[140px]"
+    <section id="demo" className="relative py-32 md:py-40 overflow-hidden bg-[#FFFFFF] text-[#0F172A]">
+      {/* Background Lighting */}
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#1A6CFF] to-cyan-300 blur-[130px]"
         />
       </div>
 
@@ -131,15 +118,15 @@ export default function AIChatDemoSection() {
           viewport={{ once: true, amount: 0.4 }}
           className="text-center mb-16"
         >
-          <span className="font-mono text-xs font-semibold text-[#00FF59] uppercase tracking-widest mb-3 block">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-4 border border-[#1A6CFF]/20">
             Interactive Agent Terminal
           </span>
-          <h2 className="font-title-sans text-[clamp(36px,5vw,60px)] leading-[1.1] text-white mb-4">
-            Let AI drive money.{' '}
-            <em className="font-serif-accent not-italic text-[#00FF59]">Not criminals.</em>
+          <h2 className="font-title-sans text-[clamp(36px,5vw,60px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-4">
+            Rewards That are Endlessly{' '}
+            <em className="font-serif-accent not-italic text-[#1A6CFF]">Rewarding.</em>
           </h2>
-          <p className="text-[#9BA9B2] text-lg max-w-xl mx-auto">
-            Toggle the attack simulator to see QuoteSeal defend against a live payee substitution in real time.
+          <p className="text-[#64748B] text-lg max-w-xl mx-auto">
+            Test the interceptor in real time. Watch how QuoteSeal protects an autonomous AI agent when encountering hostile 402 responses.
           </p>
         </motion.div>
 
@@ -147,8 +134,8 @@ export default function AIChatDemoSection() {
           {/* Controls */}
           <div className="lg:col-span-2 space-y-6">
             {/* Attack Toggle Card Glassmorphism */}
-            <div className="p-6 rounded-[24px] glass-panel-dark space-y-4">
-              <span className="font-mono text-xs text-white/50 uppercase tracking-widest block">
+            <div className="p-6 rounded-[24px] bg-white border border-slate-200 shadow-xl space-y-4">
+              <span className="font-mono text-xs text-[#64748B] uppercase tracking-widest block font-bold">
                 Attack Proxy Simulator
               </span>
               <div className="flex items-center gap-3">
@@ -156,8 +143,8 @@ export default function AIChatDemoSection() {
                   onClick={() => setMode('pass')}
                   className={`flex-1 py-3 rounded-full font-sans font-bold text-xs tracking-wider transition-all ${
                     mode === 'pass'
-                      ? 'bg-[#00FF59] text-[#081014] shadow-[0_0_20px_rgba(0,255,89,0.35)]'
-                      : 'bg-white/5 border border-white/10 text-white/40 hover:text-white'
+                      ? 'bg-[#1A6CFF] text-white shadow-[0_4px_16px_rgba(26,108,255,0.4)]'
+                      : 'bg-slate-100 border border-slate-200 text-[#64748B] hover:text-[#0F172A]'
                   }`}
                 >
                   OFF (Normal PASS)
@@ -166,14 +153,14 @@ export default function AIChatDemoSection() {
                   onClick={() => setMode('attack')}
                   className={`flex-1 py-3 rounded-full font-sans font-bold text-xs tracking-wider transition-all ${
                     mode === 'attack'
-                      ? 'bg-[#FF3B30] text-white shadow-[0_0_20px_rgba(255,59,48,0.4)]'
-                      : 'bg-white/5 border border-white/10 text-white/40 hover:text-white'
+                      ? 'bg-rose-500 text-white shadow-[0_4px_16px_rgba(244,63,94,0.4)]'
+                      : 'bg-slate-100 border border-slate-200 text-[#64748B] hover:text-[#0F172A]'
                   }`}
                 >
                   ON (Simulate Attack)
                 </button>
               </div>
-              <p className="font-mono text-[11px] text-[#9BA9B2]">
+              <p className="font-mono text-[11px] text-[#64748B]">
                 {mode === 'attack'
                   ? '⚠ Intercepts 402 challenge and replaces payTo with malicious actor address'
                   : '✓ Direct connection to researchpro.eth merchant endpoint'}
@@ -181,20 +168,20 @@ export default function AIChatDemoSection() {
             </div>
 
             {/* Protocol Actors Guide */}
-            <div className="p-6 rounded-[24px] glass-panel-dark space-y-3.5">
-              <span className="font-mono text-xs text-white/50 uppercase tracking-widest block">
+            <div className="p-6 rounded-[24px] bg-white border border-slate-200 shadow-xl space-y-3.5">
+              <span className="font-mono text-xs text-[#64748B] uppercase tracking-widest block font-bold">
                 Participant Architecture
               </span>
               {[
-                { color: '#FFFFFF', label: 'AI Buyer Agent', desc: 'claude-agent/2.0 initiating query' },
-                { color: '#9BA9B2', label: 'HTTP 402 Response', desc: mode === 'attack' ? 'Compromised proxy' : 'Merchant API' },
-                { color: mode === 'pass' ? '#00FF59' : '#FF3B30', label: 'QuoteSeal Guard', desc: mode === 'pass' ? 'Verdict: PASS' : 'Verdict: BLOCK' },
+                { color: '#1A6CFF', label: 'AI Buyer Agent', desc: 'claude-agent/2.0 initiating query' },
+                { color: '#64748B', label: 'HTTP 402 Response', desc: mode === 'attack' ? 'Compromised proxy' : 'Merchant API' },
+                { color: mode === 'pass' ? '#10B981' : '#F43F5E', label: 'QuoteSeal Guard', desc: mode === 'pass' ? 'Verdict: PASS' : 'Verdict: BLOCK' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-3">
                   <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
                   <div>
-                    <p className="font-title-sans text-xs text-white">{item.label}</p>
-                    <p className="font-mono text-[10px] text-white/40">{item.desc}</p>
+                    <p className="font-title-sans text-xs text-[#0F172A] font-bold">{item.label}</p>
+                    <p className="font-mono text-[10px] text-[#64748B]">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -204,27 +191,27 @@ export default function AIChatDemoSection() {
           {/* Chat Window with Glassmorphism Contrast */}
           <div
             ref={sectionRef}
-            className="lg:col-span-3 rounded-[28px] glass-panel-dark overflow-hidden shadow-[0_35px_80px_rgba(2,3,59,0.9)] border border-[#0077B6]/30"
+            className="lg:col-span-3 rounded-[28px] bg-white border border-slate-200 shadow-2xl overflow-hidden"
           >
             {/* Window Chrome Header */}
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#0077B6]/30 bg-[#02033B]">
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 bg-[#F8FAFC]">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-[#FF5F57]" />
                 <span className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
-                <span className="w-3 h-3 rounded-full bg-[#00B4D8]" />
-                <span className="font-mono text-xs text-[#90E0EF]/60 ml-3">QuoteSeal Agent Gateway</span>
+                <span className="w-3 h-3 rounded-full bg-[#28C840]" />
+                <span className="font-mono text-xs text-[#0F172A] font-bold ml-3">QuoteSeal Agent Gateway</span>
               </div>
               <span className={`font-mono text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                 mode === 'attack'
-                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40'
-                  : 'bg-[#00B4D8]/20 text-[#00B4D8] border border-[#00B4D8]/45'
+                  ? 'bg-rose-50 text-rose-600 border border-rose-200'
+                  : 'bg-emerald-50 text-emerald-600 border border-emerald-200'
               }`}>
                 {mode === 'attack' ? '⚠ MITM TRAP ACTIVE' : '● LIVE EVALUATION'}
               </span>
             </div>
 
             {/* Conversation Flow */}
-            <div className="p-6 space-y-4 min-h-[390px] overflow-y-auto bg-[#03045E]/50">
+            <div className="p-6 space-y-4 min-h-[390px] overflow-y-auto bg-slate-50/60">
               <AnimatePresence mode="popLayout">
                 {visibleMessages.map((i) => {
                   const msg = messages[i];
@@ -239,10 +226,10 @@ export default function AIChatDemoSection() {
                         animate={{ opacity: 1, y: 0 }}
                         className="flex gap-3"
                       >
-                        <div className="w-8 h-8 rounded-full bg-[#CAF0F8] text-[#03045E] font-title-sans font-bold flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                        <div className="w-8 h-8 rounded-full bg-[#1A6CFF] text-white font-title-sans font-bold flex items-center justify-center shrink-0 mt-0.5 shadow-md text-xs">
                           AI
                         </div>
-                        <div className="bg-[#CAF0F8] text-[#03045E] rounded-3xl rounded-tl-sm px-5 py-3.5 text-sm font-semibold shadow-[0_10px_25px_rgba(2,3,59,0.3)] max-w-[85%] leading-relaxed">
+                        <div className="bg-white text-[#0F172A] border border-slate-200 rounded-3xl rounded-tl-sm px-5 py-3.5 text-sm font-medium shadow-sm max-w-[85%] leading-relaxed">
                           {typingIndex === i ? (
                             <TypingText text={msg.text} startAt={true} />
                           ) : (
@@ -264,11 +251,11 @@ export default function AIChatDemoSection() {
                       >
                         <div className={`rounded-2xl px-4 py-3 border font-mono text-[11px] leading-relaxed whitespace-pre-wrap ${
                           (msg as any).tampered
-                            ? 'bg-rose-950/40 border-rose-500/40 text-rose-300'
-                            : 'bg-[#02033B]/80 border-[#0077B6]/35 text-[#90E0EF]'
+                            ? 'bg-rose-50 border-rose-200 text-rose-700'
+                            : 'bg-white border-slate-200 text-[#0F172A]'
                         }`}>
                           {(msg as any).tampered && (
-                            <p className="text-rose-400 font-bold mb-1 text-[10px] uppercase tracking-wider">
+                            <p className="text-rose-600 font-bold mb-1 text-[10px] uppercase tracking-wider">
                               ⚠ ATTACK: PAYTO SUBSTITUTED
                             </p>
                           )}
@@ -293,16 +280,16 @@ export default function AIChatDemoSection() {
                         transition={{ type: 'spring', stiffness: 280, damping: 22 }}
                         className="flex gap-3 justify-end"
                       >
-                        <div className={`rounded-3xl rounded-tr-sm px-5 py-4 max-w-[85%] border shadow-xl ${
+                        <div className={`rounded-3xl rounded-tr-sm px-5 py-4 max-w-[85%] border shadow-md ${
                           isBlock
-                            ? 'bg-gradient-to-br from-rose-950/70 to-rose-900/40 border-rose-500/50 shadow-[0_0_35px_rgba(255,59,48,0.25)]'
-                            : 'bg-gradient-to-br from-[#02033B]/90 to-[#0077B6]/40 border-[#00B4D8]/50 shadow-[0_0_35px_rgba(0,180,216,0.25)]'
+                            ? 'bg-rose-50/90 border-rose-300 text-rose-900'
+                            : 'bg-white border-blue-200 shadow-[0_10px_30px_rgba(26,108,255,0.08)] text-[#0F172A]'
                         }`}>
-                          <div className="flex items-center gap-2 mb-2 pb-2 border-b border-white/10">
-                            <span className={`w-2 h-2 rounded-full ${isBlock ? 'bg-rose-400' : 'bg-[#00B4D8]'}`} />
-                            <span className="font-title-sans text-xs font-semibold text-[#CAF0F8]">QuoteSeal Guard</span>
+                          <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-100">
+                            <span className={`w-2 h-2 rounded-full ${isBlock ? 'bg-rose-500' : 'bg-[#1A6CFF]'}`} />
+                            <span className="font-title-sans text-xs font-bold text-[#0F172A]">QuoteSeal Guard</span>
                           </div>
-                          <div className="font-mono text-xs text-[#CAF0F8] leading-relaxed whitespace-pre-wrap">
+                          <div className="font-mono text-xs leading-relaxed whitespace-pre-wrap">
                             {typingIndex === i ? (
                               <TypingText text={msg.text} startAt={true} />
                             ) : (
@@ -312,8 +299,8 @@ export default function AIChatDemoSection() {
                         </div>
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 font-bold font-mono text-xs ${
                           isBlock
-                            ? 'bg-rose-500 text-white shadow-[0_0_15px_rgba(255,59,48,0.5)]'
-                            : 'bg-[#00B4D8] text-[#03045E] shadow-[0_0_15px_rgba(0,180,216,0.6)]'
+                            ? 'bg-rose-500 text-white shadow-md'
+                            : 'bg-[#1A6CFF] text-white shadow-[0_4px_12px_rgba(26,108,255,0.4)]'
                         }`}>
                           QS
                         </div>
@@ -325,7 +312,7 @@ export default function AIChatDemoSection() {
               </AnimatePresence>
 
               {visibleMessages.length === 0 && (
-                <div className="flex items-center justify-center h-44 text-[#90E0EF]/40 font-mono text-xs">
+                <div className="flex items-center justify-center h-44 text-[#64748B] font-mono text-xs">
                   Scroll into view to run automated sequence...
                 </div>
               )}

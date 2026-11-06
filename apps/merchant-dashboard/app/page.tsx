@@ -19,7 +19,7 @@ export default function HomePage() {
     <LenisSmoothScroll>
       <CustomCursor />
       <Nav />
-      <main className="relative bg-[#03045E] text-[#CAF0F8] selection:bg-[#00B4D8] selection:text-[#03045E]">
+      <main className="relative bg-[#FFFFFF] text-[#0F172A] selection:bg-[#1A6CFF] selection:text-white">
         {/* Hero Section */}
         <HeroSection />
 

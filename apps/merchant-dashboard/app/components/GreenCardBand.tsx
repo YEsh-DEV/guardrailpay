@@ -37,19 +37,19 @@ export default function GreenCardBand() {
   };
 
   return (
-    <section className="relative w-full bg-[#0077B6] py-20 px-6 lg:px-20 overflow-hidden flex flex-col items-center justify-center select-none text-[#CAF0F8]">
+    <section className="relative w-full bg-[#F8FAFC] py-24 px-6 lg:px-20 overflow-hidden flex flex-col items-center justify-center select-none text-[#0F172A] border-y border-slate-200/80">
       {/* Background radial gradient glow for subtle depth */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(0,180,216,0.35)_0%,_transparent_75%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(26,108,255,0.06)_0%,_transparent_75%)] pointer-events-none" />
 
       {/* Heading */}
-      <div className="relative z-10 text-center max-w-2xl mx-auto mb-12">
-        <span className="inline-block px-3.5 py-1 rounded-full bg-[#03045E]/30 text-[#CAF0F8] text-[11px] font-mono uppercase tracking-[0.08em] font-semibold mb-3 border border-[#00B4D8]/30">
+      <div className="relative z-10 text-center max-w-2xl mx-auto mb-14">
+        <span className="inline-block px-4 py-1.5 rounded-full bg-[#E8F1FF] text-[#1A6CFF] text-[11px] font-mono uppercase tracking-[0.08em] font-bold mb-3 border border-[#1A6CFF]/20">
           The Merchant Identity Card
         </span>
-        <h2 className="font-title-sans text-[clamp(30px,3.8vw,48px)] leading-[1.05] tracking-[-0.03em] font-bold text-white mb-3">
-          The almighty ENS profile.
+        <h2 className="font-title-sans text-[clamp(32px,4vw,50px)] leading-[1.05] tracking-[-0.03em] font-bold text-[#0F172A] mb-3">
+          The almighty <span className="text-[#1A6CFF]">ENS Profile.</span>
         </h2>
-        <p className="text-[16px] lg:text-[18px] text-[#CAF0F8]/85 max-w-xl mx-auto leading-relaxed">
+        <p className="text-[16px] lg:text-[18px] text-[#64748B] max-w-xl mx-auto leading-relaxed">
           Every autonomous agent verifies the cryptographic seal before sending a single penny. Tap to inspect the on-chain records.
         </p>
       </div>
@@ -162,10 +162,10 @@ export default function GreenCardBand() {
       <div className="relative z-10 mt-12 text-center">
         <a
           href="/merchant"
-          className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-[#03045E] text-[#CAF0F8] hover:bg-[#02033B] text-[15px] font-bold transition-all shadow-[0_12px_32px_rgba(2,3,59,0.5)] border border-[#00B4D8]/40 hover:scale-105 active:scale-95"
+          className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-[#1A6CFF] text-white hover:bg-[#0052E0] text-[15px] font-bold transition-all shadow-[0_10px_25px_rgba(26,108,255,0.35)] hover:scale-105 active:scale-95"
         >
           <span>Meet QuoteSeal Card</span>
-          <span className="text-[#00B4D8]">→</span>
+          <span>→</span>
         </a>
       </div>
     </section>

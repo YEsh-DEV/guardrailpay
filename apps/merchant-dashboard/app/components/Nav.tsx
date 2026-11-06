@@ -53,20 +53,20 @@ export default function Nav() {
           relative flex items-center justify-between gap-8 w-full max-w-6xl px-6 py-3 rounded-full
           transition-all duration-500
           ${scrolled
-            ? 'bg-[#02033B]/85 backdrop-blur-[20px] border border-[#0077B6]/30 shadow-[0_8px_32px_rgba(2,3,59,0.7)]'
-            : 'bg-transparent border border-white/0'
+            ? 'bg-white/85 backdrop-blur-[20px] border border-slate-200/80 shadow-[0_12px_32px_rgba(15,23,42,0.08)]'
+            : 'bg-white/95 backdrop-blur-[12px] border border-slate-100 shadow-[0_4px_20px_rgba(15,23,42,0.05)]'
           }
         `}
       >
         {/* Logo */}
         <a href="/" className="flex items-center gap-2.5 group shrink-0">
-          <span className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-[#00B4D8] to-[#0077B6] flex items-center justify-center shadow-[0_0_20px_rgba(0,180,216,0.5)]">
+          <span className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-[#1A6CFF] to-[#0052E0] flex items-center justify-center shadow-[0_0_18px_rgba(26,108,255,0.4)]">
             <svg viewBox="0 0 24 24" fill="none" className="w-4.5 h-4.5">
-              <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#03045E"/>
-              <path d="M9 12L11 14L15 10" stroke="#CAF0F8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#FFFFFF"/>
+              <path d="M9 12L11 14L15 10" stroke="#1A6CFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </span>
-          <span className="font-display text-lg font-normal tracking-tight text-[#CAF0F8] group-hover:text-[#00B4D8] transition-colors">
+          <span className="font-display text-lg font-bold tracking-tight text-[#0F172A] group-hover:text-[#1A6CFF] transition-colors">
             QuoteSeal
           </span>
         </a>
@@ -77,7 +77,7 @@ export default function Nav() {
             <a
               key={link.label}
               href={link.href}
-              className="text-sm text-[#90E0EF]/80 hover:text-[#CAF0F8] transition-colors duration-200 font-medium"
+              className="text-sm text-[#64748B] hover:text-[#0F172A] transition-colors duration-200 font-semibold"
             >
               {link.label}
             </a>
@@ -88,7 +88,7 @@ export default function Nav() {
         <div className="flex items-center gap-3">
           <a
             href="/merchant"
-            className="hidden md:block text-sm text-[#90E0EF]/80 hover:text-[#CAF0F8] transition-colors font-medium"
+            className="hidden md:block text-sm text-[#64748B] hover:text-[#0F172A] transition-colors font-semibold"
           >
             Dashboard
           </a>
@@ -96,9 +96,9 @@ export default function Nav() {
             href="#demo"
             className="
               inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold
-              bg-[#00B4D8] text-[#03045E] hover:bg-[#90E0EF]
-              shadow-[0_0_20px_rgba(0,180,216,0.45)]
-              hover:shadow-[0_0_30px_rgba(0,180,216,0.7)]
+              bg-[#1A6CFF] text-white hover:bg-[#0052E0]
+              shadow-[0_4px_18px_rgba(26,108,255,0.35)]
+              hover:shadow-[0_6px_25px_rgba(26,108,255,0.5)]
               transition-all duration-300 ease-out
               active:scale-[0.97]
             "
@@ -112,12 +112,12 @@ export default function Nav() {
           {/* Mobile burger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5 rounded-full border border-white/15 hover:border-white/30 transition-colors"
+            className="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-1.5 rounded-full border border-slate-200 hover:border-slate-400 transition-colors"
             aria-label="Toggle menu"
           >
-            <span className={`block w-4 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
-            <span className={`block w-4 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} />
-            <span className={`block w-4 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+            <span className={`block w-4 h-0.5 bg-[#0F172A] transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`} />
+            <span className={`block w-4 h-0.5 bg-[#0F172A] transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`} />
+            <span className={`block w-4 h-0.5 bg-[#0F172A] transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`} />
           </button>
         </div>
       </nav>
@@ -130,7 +130,7 @@ export default function Nav() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.97 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full left-4 right-4 mt-2 p-4 rounded-2xl bg-[#02033B]/95 backdrop-blur-xl border border-[#0077B6]/30 shadow-[0_20px_60px_rgba(2,3,59,0.9)]"
+            className="absolute top-full left-4 right-4 mt-2 p-4 rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200 shadow-[0_20px_50px_rgba(15,23,42,0.15)]"
           >
             {navLinks.map((link, i) => (
               <motion.a
@@ -140,7 +140,7 @@ export default function Nav() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="flex items-center py-3 px-2 text-base text-[#90E0EF] hover:text-[#CAF0F8] border-b border-white/5 last:border-0 transition-colors"
+                className="flex items-center py-3 px-2 text-base text-[#0F172A] hover:text-[#1A6CFF] border-b border-slate-100 last:border-0 transition-colors font-medium"
               >
                 {link.label}
               </motion.a>

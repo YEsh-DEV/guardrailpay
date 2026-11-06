@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 
 const headlines = [
   { text: "Your agent's", italic: 'payment guard.', accent: false },
@@ -26,15 +26,15 @@ function RotatingHeadline() {
 
   if (prefersReduced) {
     return (
-      <h1 className="font-title-sans text-[clamp(44px,7.5vw,96px)] font-bold tracking-tight leading-[1.04] text-[#CAF0F8] mb-6">
+      <h1 className="font-title-sans text-[clamp(40px,6.2vw,76px)] font-bold tracking-tight leading-[1.08] text-white mb-6">
         {headlines[0].text}{' '}
-        <em className="font-serif-accent not-italic text-[#00B4D8]">{headlines[0].italic}</em>
+        <em className="font-serif-accent not-italic text-white underline decoration-[#CAF0F8]/40">{headlines[0].italic}</em>
       </h1>
     );
   }
 
   return (
-    <div className="relative overflow-hidden h-[clamp(120px,16vw,220px)] mb-6 w-full flex items-center justify-center">
+    <div className="relative overflow-hidden h-[clamp(110px,14vw,190px)] mb-6 w-full flex items-center justify-center">
       <AnimatePresence mode="wait">
         <motion.h1
           key={index}
@@ -45,14 +45,10 @@ function RotatingHeadline() {
             duration: 0.65,
             ease: [0.65, 0, 0.35, 1],
           }}
-          className="absolute inset-0 font-title-sans text-[clamp(44px,7.5vw,96px)] font-bold tracking-tight leading-[1.04] text-[#CAF0F8] flex flex-col items-center justify-center text-center"
+          className="absolute inset-0 font-title-sans text-[clamp(40px,6.2vw,76px)] font-bold tracking-tight leading-[1.08] text-white flex flex-col items-center justify-center text-center"
         >
-          <span className="block drop-shadow-[0_4px_24px_rgba(2,3,59,0.8)]">{headline.text}</span>
-          <em
-            className={`font-serif-accent not-italic block drop-shadow-[0_4px_30px_rgba(0,180,216,0.45)] ${
-              headline.accent ? 'text-[#00B4D8]' : 'text-[#90E0EF]'
-            }`}
-          >
+          <span className="block drop-shadow-[0_2px_18px_rgba(0,30,100,0.4)]">{headline.text}</span>
+          <em className="font-serif-accent not-italic block text-white drop-shadow-[0_2px_24px_rgba(0,30,100,0.5)]">
             {headline.italic}
           </em>
         </motion.h1>
@@ -63,132 +59,147 @@ function RotatingHeadline() {
 
 export default function HeroSection() {
   const prefersReduced = useReducedMotion();
-  const heroRef = useRef<HTMLElement>(null);
-
-  // Scroll animations for subtle parallax on scroll
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  });
-
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.15]);
 
   return (
-    <section ref={heroRef} className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#03045E] text-[#CAF0F8]">
-      {/* Background Lighting with Deep Sea Gradient Blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          animate={{
-            scale: [1, 1.18, 1],
-            rotate: [0, 35, 0],
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-[-10%] left-[15%] w-[800px] h-[800px] rounded-full opacity-35"
-          style={{
-            background: 'radial-gradient(circle, rgba(0,119,182,0.6) 0%, rgba(0,180,216,0.3) 45%, transparent 70%)',
-            filter: 'blur(120px)',
-          }}
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.25, 1],
-            rotate: [0, -35, 0],
-          }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute bottom-[-15%] right-[10%] w-[750px] h-[750px] rounded-full opacity-30"
-          style={{
-            background: 'radial-gradient(circle, rgba(0,180,216,0.5) 0%, rgba(144,224,239,0.2) 55%, transparent 75%)',
-            filter: 'blur(130px)',
-          }}
-        />
-      </div>
+    <section className="relative px-4 sm:px-6 pt-24 pb-16 bg-[#FFFFFF]">
+      {/* Contained Curved Hero Canvas (Gabrun Blueprint) */}
+      <div className="relative w-full max-w-[1340px] mx-auto rounded-[36px] sm:rounded-[44px] overflow-hidden bg-gradient-to-b from-[#1A6CFF] via-[#0055E6] to-[#0041B8] text-white shadow-[0_30px_90px_rgba(0,65,184,0.3)]">
+        {/* Ambient Top Spotlight Rays & Mesh Glows */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[550px] opacity-40"
+            style={{
+              background: 'radial-gradient(ellipse at top, rgba(255,255,255,0.7) 0%, rgba(26,108,255,0.1) 60%, transparent 75%)',
+              filter: 'blur(70px)',
+            }}
+          />
+          <div
+            className="absolute bottom-0 right-1/4 w-[600px] h-[400px] opacity-30"
+            style={{
+              background: 'radial-gradient(circle, rgba(144,224,239,0.5) 0%, transparent 70%)',
+              filter: 'blur(90px)',
+            }}
+          />
+        </div>
 
-      {/* Main Content: Full-Width Spread & Centered */}
-      <motion.div
-        style={{ y: prefersReduced ? 0 : heroY, opacity: prefersReduced ? 1 : heroOpacity }}
-        className="relative z-10 flex-1 flex flex-col items-center justify-center pt-36 pb-28 px-6 sm:px-8 md:px-12 max-w-6xl mx-auto w-full text-center"
-      >
-        <motion.div
-          initial={prefersReduced ? false : { opacity: 0, y: 35 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.15 }}
-          className="flex flex-col items-center w-full"
-        >
-          {/* Rotating Headline */}
+        {/* Content Container */}
+        <div className="relative z-10 flex flex-col items-center justify-center pt-20 sm:pt-28 pb-20 sm:pb-24 px-6 sm:px-10 text-center max-w-4xl mx-auto">
+          {/* Top Badge */}
+          <motion.div
+            initial={prefersReduced ? false : { opacity: 0, y: -15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-white text-xs font-medium tracking-wide mb-8 shadow-sm"
+          >
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+            <span>Autonomous x402 Payment Security</span>
+          </motion.div>
+
+          {/* Dynamic Headline */}
           <RotatingHeadline />
 
-          {/* Subtitle Paragraph */}
+          {/* Subtitle */}
           <motion.p
-            initial={prefersReduced ? false : { opacity: 0, y: 20 }}
+            initial={prefersReduced ? false : { opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.35 }}
-            className="text-[#90E0EF] text-xl sm:text-2xl md:text-[26px] leading-relaxed max-w-3xl mx-auto mb-12 font-normal tracking-wide drop-shadow-[0_2px_12px_rgba(2,3,59,0.8)]"
+            transition={{ duration: 0.65, delay: 0.2 }}
+            className="text-white/90 text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl mx-auto mb-10 font-normal drop-shadow-[0_1px_8px_rgba(0,30,100,0.3)]"
           >
             QuoteSeal intercepts every x402 micropayment your agent builds — verifying the payee against
             the merchant&apos;s ENSv2 identity on Sepolia before the wallet ever signs.
           </motion.p>
 
-          {/* Action Buttons */}
+          {/* Input / Action Pill (Gabrun Style Input Container) */}
           <motion.div
-            initial={prefersReduced ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
-            className="flex flex-wrap items-center justify-center gap-5 sm:gap-6 mb-16"
+            initial={prefersReduced ? false : { opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.65, delay: 0.35 }}
+            className="w-full max-w-md p-1.5 rounded-full bg-white/20 backdrop-blur-xl border border-white/35 flex items-center justify-between shadow-[0_15px_40px_rgba(0,40,140,0.25)] mb-14"
           >
+            <span className="pl-5 text-sm font-mono text-white/85 truncate">
+              researchpro.eth
+            </span>
             <a
               href="#demo"
-              className="
-                inline-flex items-center gap-2.5 px-10 py-4.5 rounded-full text-base sm:text-lg font-bold
-                bg-[#00B4D8] text-[#03045E]
-                shadow-[0_0_35px_rgba(0,180,216,0.6)]
-                hover:bg-[#90E0EF] hover:shadow-[0_0_55px_rgba(0,180,216,0.85)]
-                hover:scale-[1.02] active:scale-[0.98]
-                transition-all duration-300
-              "
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#1A6CFF] hover:bg-[#F0F5FF] text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-95 shrink-0"
             >
-              Launch Live Demo
-              <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8H13M13 8L8.5 3.5M13 8L8.5 12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <span>Get Started</span>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8H13M13 8L8.5 3.5M13 8L8.5 12.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-            </a>
-            <a
-              href="#features"
-              className="
-                inline-flex items-center gap-2.5 px-10 py-4.5 rounded-full text-base sm:text-lg font-semibold
-                text-[#CAF0F8] glass-pill-dark
-                border border-[#00B4D8]/35 hover:border-[#90E0EF]/70 hover:bg-[#0077B6]/25
-                hover:scale-[1.02] active:scale-[0.98]
-                transition-all duration-300
-              "
-            >
-              Explore ENS Rail
             </a>
           </motion.div>
 
-          {/* Protocol Foundations Trust Badges */}
+          {/* 3 Frosted Floating Mockup Cards (Exactly Like Gabrun Hero Mockups) */}
           <motion.div
-            initial={prefersReduced ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.7, delay: 0.65 }}
-            className="flex flex-col items-center"
+            initial={prefersReduced ? false : { opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.45 }}
+            className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 text-left select-none"
           >
-            <p className="font-mono text-xs sm:text-[13px] text-[#90E0EF]/80 uppercase tracking-[0.2em] mb-4">
-              Protocol Foundations
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-3.5">
-              {partners.map((p) => (
-                <span
-                  key={p}
-                  className="inline-flex items-center px-5 py-2 rounded-full glass-pill-dark font-mono text-xs sm:text-sm text-[#CAF0F8] border border-[#0077B6]/35 hover:border-[#00B4D8]/70 hover:text-white transition-all duration-200"
-                >
-                  {p}
+            {/* Card 1: Agent Request */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-white/90 backdrop-blur-xl border border-white/80 shadow-[0_20px_45px_rgba(0,30,120,0.18)] text-[#0F172A] transform sm:-translate-y-2">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[10px] font-mono uppercase font-bold text-[#1A6CFF]">AI Agent Intercept</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              </div>
+              <p className="font-mono text-xs font-semibold truncate text-[#0F172A]">claude-agent/2.0</p>
+              <p className="font-mono text-[11px] text-[#64748B] mt-1">402 challenge verified</p>
+              <div className="mt-3 pt-2 border-t border-slate-100 flex justify-between items-center text-xs font-mono">
+                <span className="text-slate-400">TICKET</span>
+                <span className="font-bold text-[#1A6CFF]">$5.00 USDC</span>
+              </div>
+            </div>
+
+            {/* Card 2: Center Highlight (ENS Match) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-white text-[#0F172A] shadow-[0_25px_60px_rgba(0,30,120,0.3)] border-2 border-white transform sm:scale-105 z-20">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-mono uppercase font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                  ✓ Verified Match
                 </span>
-              ))}
+                <span className="font-mono text-[11px] text-slate-400">&lt;9ms</span>
+              </div>
+              <p className="font-title-sans text-base font-bold text-[#0F172A]">researchpro.eth</p>
+              <p className="font-mono text-[11px] text-[#1A6CFF] truncate font-medium">0x71Cf3D14...8f4B</p>
+              <div className="mt-3 pt-2 border-t border-slate-100 flex justify-between items-center text-xs font-mono">
+                <span className="text-slate-400">RESOLVER</span>
+                <span className="font-bold text-[#0F172A]">Sepolia ENSv2</span>
+              </div>
+            </div>
+
+            {/* Card 3: Hedera Settlement */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-white/90 backdrop-blur-xl border border-white/80 shadow-[0_20px_45px_rgba(0,30,120,0.18)] text-[#0F172A] transform sm:-translate-y-2">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[10px] font-mono uppercase font-bold text-[#1A6CFF]">Hedera Consensus</span>
+                <span className="text-[10px] font-mono text-slate-400">296</span>
+              </div>
+              <p className="font-mono text-xs font-semibold text-[#0F172A]">Settlement Confirmed</p>
+              <p className="font-mono text-[11px] text-emerald-600 font-semibold mt-1">Signer Invoked (1x)</p>
+              <div className="mt-3 pt-2 border-t border-slate-100 flex justify-between items-center text-xs font-mono">
+                <span className="text-slate-400">HASHSCAN</span>
+                <span className="font-bold text-[#1A6CFF]">tx_9841...82 ↗</span>
+              </div>
             </div>
           </motion.div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
+
+      {/* Trusted Logos Band Under Hero (Matching Gabrun) */}
+      <div className="max-w-5xl mx-auto mt-14 px-4 text-center">
+        <p className="font-title-sans text-sm font-semibold text-[#64748B] mb-6 tracking-wide">
+          Trusted By More Than <span className="text-[#1A6CFF] font-bold">+10,000 AI Agent Transactions</span>
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
+          {partners.map((partner) => (
+            <div
+              key={partner}
+              className="px-5 py-2 rounded-full bg-slate-50 border border-slate-200/80 font-mono text-xs font-bold text-[#0F172A] shadow-sm hover:border-[#1A6CFF]/50 transition-colors"
+            >
+              {partner}
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

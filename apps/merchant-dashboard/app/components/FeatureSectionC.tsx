@@ -84,12 +84,12 @@ export default function FeatureSectionC() {
   }, [nodeProgress]);
 
   return (
-    <section ref={sectionRef} className="relative py-32 md:py-40 overflow-hidden bg-[#03045E] text-[#CAF0F8]">
+    <section ref={sectionRef} className="relative py-32 md:py-40 overflow-hidden bg-[#F8FAFC] text-[#0F172A] border-t border-slate-200/80">
       {/* Background subtle grid */}
       <div
-        className="absolute inset-0 opacity-[0.06]"
+        className="absolute inset-0 opacity-[0.04]"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,180,216,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(0,180,216,0.5) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(#1A6CFF 1px, transparent 1px), linear-gradient(90deg, #1A6CFF 1px, transparent 1px)`,
           backgroundSize: '48px 48px',
         }}
       />
@@ -103,14 +103,14 @@ export default function FeatureSectionC() {
           transition={{ duration: 0.7 }}
           className="text-center mb-20"
         >
-          <span className="font-mono text-xs font-semibold text-[#00B4D8] uppercase tracking-widest mb-3 block">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-4 border border-[#1A6CFF]/20">
             Payment Flow Architecture
           </span>
-          <h2 className="font-title-sans text-[clamp(36px,5vw,60px)] leading-[1.1] text-[#CAF0F8] mb-4">
-            Move money,{' '}
-            <em className="font-serif-accent not-italic text-[#00B4D8]">not heaven and earth.</em>
+          <h2 className="font-title-sans text-[clamp(36px,5vw,60px)] font-bold tracking-tight leading-[1.08] text-[#0F172A] mb-4">
+            Collect All Payments Within{' '}
+            <em className="font-serif-accent not-italic text-[#1A6CFF]">Minutes.</em>
           </h2>
-          <p className="text-[#90E0EF] text-lg max-w-2xl mx-auto">
+          <p className="text-[#64748B] text-lg max-w-2xl mx-auto">
             The full autonomous payment pipeline — from HTTP 402 challenge to on-chain HashScan confirmation.
           </p>
         </motion.div>

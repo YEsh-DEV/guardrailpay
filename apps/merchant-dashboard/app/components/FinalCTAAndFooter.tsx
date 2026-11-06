@@ -48,21 +48,21 @@ const footerLinks = {
 
 export default function FinalCTAAndFooter() {
   return (
-    <footer className="relative border-t border-[#0077B6]/25 bg-[#02033B] text-[#CAF0F8]">
+    <footer className="relative border-t border-slate-200/80 bg-[#F8FAFC] text-[#0F172A]">
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-10 mb-14">
           {/* Brand */}
           <div className="col-span-2">
             <div className="flex items-center gap-2.5 mb-5">
-              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00B4D8] to-[#0077B6] flex items-center justify-center shadow-[0_0_15px_rgba(0,180,216,0.4)]">
+              <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1A6CFF] to-[#0052E0] flex items-center justify-center shadow-[0_0_15px_rgba(26,108,255,0.4)]">
                 <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4">
-                  <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#03045E"/>
-                  <path d="M9 12L11 14L15 10" stroke="#CAF0F8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 2L4 7V12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12V7L12 2Z" fill="#FFFFFF"/>
+                  <path d="M9 12L11 14L15 10" stroke="#1A6CFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </span>
-              <span className="font-display text-lg text-white">QuoteSeal</span>
+              <span className="font-display text-lg font-bold text-[#0F172A]">QuoteSeal</span>
             </div>
-            <p className="text-sm text-[#90E0EF]/70 leading-relaxed max-w-[260px]">
+            <p className="text-sm text-[#64748B] leading-relaxed max-w-[260px]">
               Payment identity guard for autonomous AI agents. Built on Hedera x402 and ENSv2.
             </p>
             <div className="flex gap-3 mt-6">
@@ -70,7 +70,7 @@ export default function FinalCTAAndFooter() {
                 <a
                   key={s}
                   href="#"
-                  className="font-mono text-[11px] text-[#90E0EF]/70 hover:text-white transition-colors px-3 py-1.5 rounded-full border border-[#0077B6]/30 hover:border-[#00B4D8]"
+                  className="font-mono text-[11px] text-[#64748B] hover:text-[#0F172A] transition-colors px-3 py-1.5 rounded-full border border-slate-200 bg-white hover:border-[#1A6CFF]"
                 >
                   {s}
                 </a>
@@ -81,11 +81,11 @@ export default function FinalCTAAndFooter() {
           {/* Links */}
           {Object.entries(footerLinks).map(([heading, links]) => (
             <div key={heading}>
-              <p className="font-mono text-[11px] text-[#00B4D8] uppercase tracking-widest mb-4">{heading}</p>
+              <p className="font-mono text-[11px] text-[#1A6CFF] uppercase tracking-widest mb-4 font-bold">{heading}</p>
               <ul className="space-y-2.5">
                 {links.map((link) => (
                   <li key={link}>
-                    <a href="#" className="text-sm text-[#90E0EF]/70 hover:text-white transition-colors">
+                    <a href="#" className="text-sm text-[#64748B] hover:text-[#0F172A] transition-colors font-medium">
                       {link}
                     </a>
                   </li>
@@ -96,16 +96,16 @@ export default function FinalCTAAndFooter() {
         </div>
 
         {/* Disclaimer */}
-        <p className="font-mono text-[11px] text-[#90E0EF]/60 pb-8 leading-relaxed max-w-3xl">
+        <p className="font-mono text-[11px] text-[#94A3B8] pb-8 leading-relaxed max-w-3xl">
           ⚠ Hackathon demo. All transaction data is synthetic test data. World ID proofs are mocked.
           Hedera payments run on testnet (chain ID 296). Do not use in production without an independent security audit.
         </p>
 
-        <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-[#0077B6]/20 gap-4">
-          <p className="font-mono text-[11px] text-[#90E0EF]/60">
+        <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-slate-200/60 gap-4">
+          <p className="font-mono text-[11px] text-[#94A3B8]">
             © 2026 QuoteSeal. MIT License. ETHGlobal Mumbai 2026.
           </p>
-          <p className="font-mono text-[11px] text-[#90E0EF]/60">
+          <p className="font-mono text-[11px] text-[#94A3B8]">
             Built with Hedera x402 · ENSv2 · World ID
           </p>
         </div>

@@ -192,12 +192,12 @@ function MerchantCard() {
 
 export default function FeatureSectionB() {
   return (
-    <section id="card" className="relative py-32 md:py-40 overflow-hidden bg-[#03045E]">
+    <section id="card" className="relative py-32 md:py-40 overflow-hidden bg-[#FFFFFF]">
       {/* Background glow */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-25 pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-10 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(0,180,216,0.3) 0%, rgba(0,119,182,0.15) 50%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(26,108,255,0.2) 0%, transparent 70%)',
           filter: 'blur(90px)',
         }}
       />
@@ -222,14 +222,14 @@ export default function FeatureSectionB() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1], delay: 0.1 }}
           >
-            <span className="font-mono text-[11px] text-[#00B4D8] uppercase tracking-widest mb-4 block">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8F1FF] text-[#1A6CFF] font-mono text-xs font-bold uppercase tracking-wider mb-4 border border-[#1A6CFF]/20">
               The payment profile
             </span>
-            <h2 className="font-title-sans text-[clamp(36px,5vw,56px)] leading-[1.1] text-[#CAF0F8] mb-6">
-              The almighty{' '}
-              <em className="font-serif-accent not-italic text-[#00B4D8]">merchant card.</em>
+            <h2 className="font-title-sans text-[clamp(36px,5vw,56px)] font-bold tracking-tight leading-[1.1] text-[#0F172A] mb-6">
+              Keep Your Money Secure{' '}
+              <em className="font-serif-accent not-italic text-[#1A6CFF]">Always.</em>
             </h2>
-            <p className="text-[#90E0EF] text-lg leading-relaxed mb-8">
+            <p className="text-[#64748B] text-lg leading-relaxed mb-8">
               Every merchant's ENSv2 name contains a cryptographically signed payment profile. QuoteSeal
               resolves it on every transaction — network, address, asset, limit, version. Flip the card
               to see the full on-chain record set.
@@ -241,11 +241,11 @@ export default function FeatureSectionB() {
                 { icon: '⚡', title: 'Sub-second resolution', desc: 'Cached with TTL-aware invalidation. No latency penalty on the happy path.' },
                 { icon: '🔄', title: 'Protected rotation', desc: '48-hour timelock + World ID Agent Pass before any address change activates.' },
               ].map((item) => (
-                <div key={item.title} className="flex gap-4 p-4 rounded-2xl border border-[#0077B6]/30 bg-[#02033B]/50 hover:border-[#00B4D8]/50 hover:bg-[#0077B6]/15 transition-all duration-300 group">
+                <div key={item.title} className="flex gap-4 p-4 rounded-2xl border border-slate-200/80 bg-[#F8FAFC] hover:border-[#1A6CFF]/40 hover:bg-white transition-all duration-300 group shadow-sm">
                   <span className="text-xl mt-0.5">{item.icon}</span>
                   <div>
-                    <p className="font-semibold text-sm text-[#CAF0F8] mb-1 group-hover:text-[#00B4D8] transition-colors">{item.title}</p>
-                    <p className="text-sm text-[#90E0EF]/70">{item.desc}</p>
+                    <p className="font-semibold text-sm text-[#0F172A] mb-1 group-hover:text-[#1A6CFF] transition-colors">{item.title}</p>
+                    <p className="text-sm text-[#64748B]">{item.desc}</p>
                   </div>
                 </div>
               ))}
