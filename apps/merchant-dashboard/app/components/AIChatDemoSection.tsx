@@ -102,7 +102,27 @@ export default function AIChatDemoSection() {
   }, [mode, inView]);
 
   return (
-    <section id="demo" className="relative py-32 md:py-40 overflow-hidden bg-[#081014] text-white">
+    <section id="demo" className="relative py-32 md:py-40 overflow-hidden bg-[#05090C] text-white">
+      {/* Background Glass Glows */}
+      <div className="absolute inset-0 pointer-events-none opacity-40">
+        <motion.div
+          animate={{
+            scale: [1, 1.25, 1],
+            rotate: [0, 90, 0],
+          }}
+          transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-cyan-400 via-[#00FF59] to-indigo-500 blur-[130px]"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.3, 1],
+            rotate: [0, -90, 0],
+          }}
+          transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] rounded-full bg-gradient-to-br from-pink-500 via-purple-600 to-amber-400 blur-[140px]"
+        />
+      </div>
+
       <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10">
         {/* Section Heading */}
         <motion.div
@@ -126,8 +146,8 @@ export default function AIChatDemoSection() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
           {/* Controls */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Attack Toggle Card */}
-            <div className="p-6 rounded-[24px] border border-white/10 bg-[#0E171D] shadow-lg space-y-4">
+            {/* Attack Toggle Card Glassmorphism */}
+            <div className="p-6 rounded-[24px] glass-panel-dark space-y-4">
               <span className="font-mono text-xs text-white/50 uppercase tracking-widest block">
                 Attack Proxy Simulator
               </span>
@@ -161,7 +181,7 @@ export default function AIChatDemoSection() {
             </div>
 
             {/* Protocol Actors Guide */}
-            <div className="p-6 rounded-[24px] border border-white/10 bg-[#0E171D] space-y-3.5">
+            <div className="p-6 rounded-[24px] glass-panel-dark space-y-3.5">
               <span className="font-mono text-xs text-white/50 uppercase tracking-widest block">
                 Participant Architecture
               </span>
@@ -181,10 +201,10 @@ export default function AIChatDemoSection() {
             </div>
           </div>
 
-          {/* Chat Window with Pure White Bubble Contrast */}
+          {/* Chat Window with Glassmorphism Contrast */}
           <div
             ref={sectionRef}
-            className="lg:col-span-3 rounded-[28px] border border-white/10 bg-[#060D10] overflow-hidden shadow-[0_35px_80px_rgba(0,0,0,0.8)]"
+            className="lg:col-span-3 rounded-[28px] glass-panel-dark overflow-hidden shadow-[0_35px_80px_rgba(0,0,0,0.8)]"
           >
             {/* Window Chrome Header */}
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/8 bg-[#091217]">

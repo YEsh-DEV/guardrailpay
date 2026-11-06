@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 
 const headlines = [
   { text: "Your agent's", italic: 'payment guard.', accent: false },
@@ -213,29 +213,53 @@ function FloatingCard3D() {
 
 export default function HeroSection() {
   const prefersReduced = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+
+  // Scroll animations for glassmorphism layer depth
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
+  const cardScale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
 
   return (
-    <section className="relative min-h-screen flex flex-col overflow-hidden bg-[#081014] text-white">
-      {/* Background Lighting */}
+    <section ref={heroRef} className="relative min-h-screen flex flex-col overflow-hidden bg-[#000000] text-white">
+      {/* Background Lighting with Glass Blobs */}
       <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-[-10%] left-[15%] w-[750px] h-[750px] rounded-full opacity-25"
+        <motion.div
+          animate={{
+            scale: [1, 1.15, 1],
+            rotate: [0, 45, 0],
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute top-[-10%] left-[15%] w-[750px] h-[750px] rounded-full opacity-30"
           style={{
-            background: 'radial-gradient(circle, rgba(0,255,89,0.28) 0%, rgba(0,245,212,0.1) 50%, transparent 70%)',
-            filter: 'blur(90px)',
+            background: 'radial-gradient(circle, rgba(0,255,89,0.35) 0%, rgba(0,245,212,0.15) 50%, transparent 70%)',
+            filter: 'blur(100px)',
           }}
         />
-        <div
-          className="absolute bottom-0 right-[5%] w-[550px] h-[550px] rounded-full opacity-15"
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, -40, 0],
+          }}
+          transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute bottom-[-15%] right-[5%] w-[650px] h-[650px] rounded-full opacity-25"
           style={{
-            background: 'radial-gradient(circle, rgba(0,245,212,0.3) 0%, transparent 70%)',
-            filter: 'blur(100px)',
+            background: 'radial-gradient(circle, rgba(0,245,212,0.3) 0%, rgba(0,255,89,0.1) 60%, transparent 70%)',
+            filter: 'blur(110px)',
           }}
         />
       </div>
 
-      {/* Main Content */}
-      <div className="relative z-10 flex-1 flex items-center pt-32 pb-20 px-6 md:px-12 max-w-7xl mx-auto w-full">
+      {/* Main Content with Scroll Transform */}
+      <motion.div
+        style={{ y: prefersReduced ? 0 : heroY, opacity: prefersReduced ? 1 : heroOpacity }}
+        className="relative z-10 flex-1 flex items-center pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto w-full"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
           {/* Left: Text */}
           <motion.div
@@ -280,8 +304,8 @@ export default function HeroSection() {
                 href="#features"
                 className="
                   inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-semibold
-                  text-white border border-white/20
-                  hover:border-white/50 hover:bg-white/5
+                  text-white glass-pill-dark
+                  hover:border-white/40 hover:bg-white/10
                   transition-all duration-300
                 "
               >
@@ -289,7 +313,7 @@ export default function HeroSection() {
               </a>
             </motion.div>
 
-            {/* Trust Badges */}
+            {/* Trust Badges in Glass Pills */}
             <motion.div
               initial={prefersReduced ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -302,7 +326,7 @@ export default function HeroSection() {
                 {partners.map((p) => (
                   <span
                     key={p}
-                    className="inline-flex items-center px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.04] font-mono text-xs text-white/70"
+                    className="inline-flex items-center px-4 py-1.5 rounded-full glass-pill-dark font-mono text-xs text-white/80 hover:border-[#00FF59]/40 transition-colors"
                   >
                     {p}
                   </span>
@@ -311,8 +335,9 @@ export default function HeroSection() {
             </motion.div>
           </motion.div>
 
-          {/* Right: 3D Sealed Quote */}
+          {/* Right: 3D Sealed Quote with Glassmorphism Scale */}
           <motion.div
+            style={{ scale: prefersReduced ? 1 : cardScale }}
             initial={prefersReduced ? false : { opacity: 0, scale: 0.92 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.3 }}
@@ -321,7 +346,7 @@ export default function HeroSection() {
             <FloatingCard3D />
           </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

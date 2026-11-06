@@ -163,6 +163,10 @@ export default function FeatureSectionA() {
 
   const stepProgress = useTransform(scrollYProgress, [0, 0.33, 0.66, 1], [0, 0, 1, 2]);
 
+  // Smooth scroll translation & blur transition for phone and text
+  const phoneY = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const phoneScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.96, 1.02, 0.98]);
+
   React.useEffect(() => {
     const unsubscribe = stepProgress.on('change', (v) => {
       setActiveStep(Math.round(v));
@@ -179,13 +183,13 @@ export default function FeatureSectionA() {
     >
       {/* Sticky container */}
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        {/* Soft background glow circles */}
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-emerald-100/40 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-amber-50/50 blur-3xl pointer-events-none" />
+        {/* Soft background glow circles & glass mesh */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-emerald-200/30 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-cyan-100/40 blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
 
-          {/* Left — Editorial Steps Text in Tuyo Light Canvas Style */}
+          {/* Left — Editorial Steps Text with Glass Focus Cards */}
           <div className="space-y-8 lg:space-y-12">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -205,7 +209,7 @@ export default function FeatureSectionA() {
               </p>
             </motion.div>
 
-            {/* Steps Container */}
+            {/* Steps Container in Glassmorphism style */}
             <div className="space-y-4">
               {steps.map((step, i) => (
                 <motion.div
@@ -216,17 +220,17 @@ export default function FeatureSectionA() {
                     x: activeStep === i ? 0 : -6,
                   }}
                   transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
-                  className={`p-5 rounded-2xl border transition-all duration-300 cursor-pointer ${
+                  className={`p-5 rounded-2xl transition-all duration-300 cursor-pointer ${
                     activeStep === i
-                      ? 'bg-white border-[#00FF59]/60 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.08)]'
-                      : 'bg-white/40 border-[#E5E4DA] hover:bg-white/80'
+                      ? 'glass-panel-light border-[#00FF59]/60 shadow-[0_20px_45px_-10px_rgba(0,255,89,0.15)]'
+                      : 'bg-white/40 backdrop-blur-md border-white/60 hover:bg-white/70'
                   }`}
                   onClick={() => setActiveStep(i)}
                 >
                   <div className="flex gap-4 items-start">
                     <div className={`shrink-0 w-9 h-9 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-all ${
                       activeStep === i
-                        ? 'bg-[#00FF59] text-[#081014] shadow-[0_0_15px_rgba(0,255,89,0.4)]'
+                        ? 'bg-[#00FF59] text-[#081014] shadow-[0_0_20px_rgba(0,255,89,0.5)]'
                         : 'bg-[#E5E4DA] text-[#586974]'
                     }`}>
                       {step.num}
@@ -249,10 +253,13 @@ export default function FeatureSectionA() {
             </div>
           </div>
 
-          {/* Right — sticky phone */}
-          <div className="hidden lg:flex items-center justify-center">
+          {/* Right — sticky phone with scroll translation */}
+          <motion.div
+            style={{ y: phoneY, scale: phoneScale }}
+            className="hidden lg:flex items-center justify-center"
+          >
             <PhoneMockup activeStep={activeStep} />
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
