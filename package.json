@@ -8,7 +8,8 @@
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "typecheck": "pnpm -r run typecheck",
-    "lint": "pnpm -r run lint"
+    "lint": "pnpm -r run lint",
+    "demo": "pnpm -C apps/buyer-cli demo"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",

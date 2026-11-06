@@ -3,7 +3,10 @@ import {
   copyData,
   freezeData,
   evaluate,
-  type BoundaryInput
+  type BoundaryInput,
+  validateQuoteSealDeclaration,
+  QUOTESEAL_PAYEE_KEY,
+  QUOTESEAL_PAYEE_ALT_KEY
 } from '@quoteseal/guard';
 import {
   decodePaymentRequiredHeader,
@@ -194,6 +197,28 @@ export class BuyerPaymentOrchestrator {
     const firstSeen = options.now ? options.now() : Date.now();
     const nowTime = options.now ? options.now() : Date.now();
 
+    // 6.5 Meigi dual-layer bypass protection: validate merchant QuoteSeal declaration
+    const requireDeclaration = options.requireDeclaration ?? true;
+    const ext = challenge.extensions;
+    const declaration = ext?.[QUOTESEAL_PAYEE_KEY] ?? ext?.[QUOTESEAL_PAYEE_ALT_KEY];
+
+    if (declaration === undefined) {
+      if (requireDeclaration) {
+        throw new QuoteSealSecurityRejectionError(
+          'BLOCK',
+          'merchant does not declare a QuoteSeal identity; refusing payment to unverified merchant'
+        );
+      }
+    } else {
+      const declCheck = validateQuoteSealDeclaration(declaration, trust.profile);
+      if (!declCheck.valid) {
+        throw new QuoteSealSecurityRejectionError(
+          'BLOCK',
+          `QuoteSeal identity declaration invalid: ${declCheck.reason}`
+        );
+      }
+    }
+
     // 7. QuoteSeal returns PASS / BLOCK / HOLD / UNVERIFIABLE
     const verdict = evaluate(
       selectedRequirement,
@@ -220,7 +245,8 @@ export class BuyerPaymentOrchestrator {
       selectedIndex,
       firstSeen,
       now: options.now ?? (() => Date.now()),
-      readTrust: options.readTrust
+      readTrust: options.readTrust,
+      requireDeclaration
     };
 
     const attempt = createPaymentAttempt(boundaryInput, options.signer);

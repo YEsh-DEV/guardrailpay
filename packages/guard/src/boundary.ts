@@ -5,6 +5,12 @@ import type { PaymentRequired, PaymentRequirements } from '@x402/core/types';
 import { ExactHederaScheme } from '@x402/hedera/exact/client';
 import type { ClientHederaSigner } from '@x402/hedera';
 import { evaluate, type EvaluatableProfile, type EvaluatableAnchors } from './evaluate.js';
+import {
+  registerQuoteSealGuard,
+  quoteSealPayeeExtension,
+  QUOTESEAL_PAYEE_KEY,
+  QUOTESEAL_PAYEE_ALT_KEY
+} from './extension.js';
 
 export interface TrustSnapshot {
   profile: EvaluatableProfile | undefined;
@@ -20,6 +26,7 @@ export interface BoundaryInput {
   firstSeen: number; // local observation time in milliseconds
   now: () => number;
   readTrust: () => TrustSnapshot; // synchronous read of trusted adapter's current snapshot
+  requireDeclaration?: boolean;
 }
 
 export function denied(): never {
@@ -176,6 +183,26 @@ export function createPaymentAttempt(
   }).setSpendControls(false);
 
   client.register('hedera:testnet', new ExactHederaScheme(boundary.signer));
+
+  if (input.requireDeclaration) {
+    registerQuoteSealGuard(client, input.readTrust, {
+      originalUrl: input.originalUrl,
+      firstSeen: input.firstSeen,
+      now: input.now
+    });
+  } else if (
+    challenge.extensions?.[QUOTESEAL_PAYEE_KEY] !== undefined ||
+    challenge.extensions?.[QUOTESEAL_PAYEE_ALT_KEY] !== undefined
+  ) {
+    client.registerExtension(
+      quoteSealPayeeExtension(input.readTrust, {
+        originalUrl: input.originalUrl,
+        firstSeen: input.firstSeen,
+        now: input.now
+      })
+    );
+  }
+
   client.onBeforePaymentCreation(boundary.guard);
 
   // Startup-only buyer-owned pre-hooks. No extension enrichers, custom schemes,

@@ -17,7 +17,7 @@ import {
   HederaMirrorNodeVerifier,
   HEDERA_TESTNET_MIRROR_NODE_URL
 } from '@quoteseal/buyer';
-import { defaultProfile, defaultAnchors } from '@quoteseal/guard';
+import { defaultProfile, defaultAnchors, quoteSealPayeeDeclaration } from '@quoteseal/guard';
 import type { ClientHederaSigner } from '@x402/hedera';
 import type { PaymentRequired } from '@x402/core/types';
 
@@ -60,7 +60,8 @@ async function runLocalDemo() {
             maxTimeoutSeconds: 60,
             extra: { feePayer: '0.0.98' }
           }
-        ]
+        ],
+        extensions: quoteSealPayeeDeclaration({ ens: 'merchant.eth' })
       };
       res.writeHead(402, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(challenge));

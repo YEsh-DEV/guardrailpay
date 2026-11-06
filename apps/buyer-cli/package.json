@@ -8,6 +8,7 @@
     "build": "tsc -b",
     "clean": "rm -rf dist",
     "typecheck": "tsc --noEmit",
+    "demo": "node ./dist/demo-runner.js",
     "demo:local": "node ./dist/cli.js --mode=local",
     "demo:live": "node ./dist/cli.js --mode=live",
     "demo:malicious": "node ./dist/malicious-demo.js"

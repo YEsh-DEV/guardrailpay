@@ -32,6 +32,7 @@ import { auditRoutes } from './routes/audit.js';
 import { worldRoutes } from './routes/world.js';
 import { buyerRoutes } from './routes/buyer.js';
 import { discoveryRoutes } from './routes/discovery.js';
+import { demoMerchantRoutes } from './routes/demo-merchant.js';
 import { ArkivDiscoveryService, MemoryArkivStorageClient, type IArkivStorageClient } from '@quoteseal/arkiv';
 import type { Hex } from 'viem';
 
@@ -241,6 +242,8 @@ export function createApp(deps: AppDependencies): FastifyInstance {
   app.register(discoveryRoutes, {
     arkivDiscoveryService
   });
+
+  app.register(demoMerchantRoutes);
 
   return app;
 }

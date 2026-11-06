@@ -42,6 +42,11 @@ describe('Buyer Hardening & Complete Adversarial Verification Suite', () => {
           extra: { feePayer: FEE_PAYER }
         }
       ],
+      extensions: {
+        quoteseal: {
+          ens: 'merchant.eth'
+        }
+      },
       ...overrides
     };
   }

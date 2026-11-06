@@ -103,7 +103,12 @@ describe('Buyer Integration: BuyerPaymentOrchestrator', () => {
         maxTimeoutSeconds: 60,
         extra: { feePayer: '0.0.98' }
       }
-    ]
+    ],
+    extensions: {
+      quoteseal: {
+        ens: 'merchant.eth'
+      }
+    }
   };
 
   it('legitimate flow: signer called exactly once, resource returned', async () => {

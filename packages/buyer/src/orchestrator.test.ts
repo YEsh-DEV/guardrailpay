@@ -25,7 +25,11 @@ const FEE_PAYER = '0.0.98';
 const VALID_AMOUNT = '10'; // <= defaultProfile.maxAmount ('100')
 const FIXED_NOW = 1000;
 
-function createTestChallenge(payTo: string = VALID_PAYTO, amount: string = VALID_AMOUNT): PaymentRequired {
+function createTestChallenge(
+  payTo: string = VALID_PAYTO,
+  amount: string = VALID_AMOUNT,
+  extensions: Record<string, unknown> = { quoteseal: { ens: 'merchant.eth' } }
+): PaymentRequired {
   return {
     x402Version: 2,
     resource: { url: RESOURCE_URL },
@@ -39,7 +43,8 @@ function createTestChallenge(payTo: string = VALID_PAYTO, amount: string = VALID
         maxTimeoutSeconds: 60,
         extra: { feePayer: FEE_PAYER }
       }
-    ]
+    ],
+    extensions
   };
 }
 

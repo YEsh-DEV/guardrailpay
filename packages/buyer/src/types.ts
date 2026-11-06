@@ -122,6 +122,12 @@ export interface PaymentOrchestrationOptions {
 
   /** Optional HTTP request options for the resource call */
   requestInit?: RequestInit;
+
+  /**
+   * Whether to require the merchant to declare a valid QuoteSeal identity extension.
+   * Enforces Meigi dual-layer bypass protection. Defaults to true.
+   */
+  requireDeclaration?: boolean;
 }
 
 /**
