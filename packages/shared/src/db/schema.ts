@@ -22,6 +22,7 @@ export const merchants = pgTable('merchants', {
   chainId: bigint('chain_id', { mode: 'number' }).notNull().default(11155111),
   registryAddress: varchar('registry_address', { length: 42 }).notNull(),
   resolverAddress: varchar('resolver_address', { length: 42 }).notNull(),
+  controllerAddress: varchar('controller_address', { length: 42 }),
   ownerAddress: varchar('owner_address', { length: 42 }).notNull(),
   nameExpiry: bigint('name_expiry', { mode: 'number' }).notNull(),
   profileVersion: integer('profile_version').notNull().default(1),
@@ -149,7 +150,9 @@ export const approvals = pgTable(
     acr: varchar('acr', { length: 64 }),
     amr: varchar('amr', { length: 64 }),
     attestor: varchar('attestor', { length: 42 }).notNull(),
+    signature: text('signature').notNull(),
     signatureHash: varchar('signature_hash', { length: 66 }).notNull(),
+    attestationExpiry: bigint('attestation_expiry', { mode: 'number' }),
     expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
     consumedAt: timestamp('consumed_at', { withTimezone: true })
   },

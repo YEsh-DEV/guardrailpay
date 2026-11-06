@@ -1,11 +1,10 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
-import { ValidationError } from '@quoteseal/shared';
-import { AuditEventSchema } from '@quoteseal/shared';
-import type { QuoteSealDatabase, MockDatabaseStore } from '@quoteseal/shared';
+import { ValidationError, NotFoundError } from '@quoteseal/shared';
+import type { IDbStore } from '../services/db-store.js';
 
 export interface AuditRouteOptions {
-  db?: QuoteSealDatabase | MockDatabaseStore;
+  dbStore: IDbStore;
 }
 
 const EnsNameParamSchema = z.object({
@@ -33,21 +32,22 @@ export const auditRoutes: FastifyPluginAsync<AuditRouteOptions> = async (app, op
     const { ensName } = paramsResult.data;
     const { limit, verdict } = queryResult.data;
 
-    let events: unknown[] = [];
-
-    if (opts.db && 'auditEvents' in opts.db) {
-      const mockDb = opts.db as MockDatabaseStore;
-      events = mockDb.auditEvents
-        .filter((e) => (verdict ? e.verdict === verdict : true))
-        .slice(-limit)
-        .reverse();
+    const merchant = await opts.dbStore.findMerchantByName(ensName);
+    if (!merchant) {
+      throw new NotFoundError(`Merchant '${ensName}' not found`);
     }
+
+    const rawEvents = await opts.dbStore.listAuditEvents(merchant.id);
+    const filtered = rawEvents
+      .filter((e) => (verdict ? e.verdict === verdict : true))
+      .slice(-limit)
+      .reverse();
 
     return reply.status(200).send({
       data: {
         ensName,
-        total: events.length,
-        events
+        total: filtered.length,
+        events: filtered
       }
     });
   });

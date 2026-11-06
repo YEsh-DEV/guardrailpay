@@ -2,19 +2,44 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import sensible from '@fastify/sensible';
-import { QuoteSealError } from '@quoteseal/shared';
+import {
+  QuoteSealError,
+  createLogger,
+  createMockDatabase,
+  validateEnv,
+  type EnvConfig,
+  type QuoteSealDatabase,
+  type MockDatabaseStore
+} from '@quoteseal/shared';
 import { type EnsProfileResolver } from '@quoteseal/ens-profile';
-import type { QuoteSealDatabase, MockDatabaseStore } from '@quoteseal/shared';
-import { createLogger, SENSITIVE_PATHS } from '@quoteseal/shared';
+import { createDbStore, type IDbStore } from './services/db-store.js';
+import {
+  LiveWorldOidcService,
+  MockWorldOidcService,
+  type IWorldOidcService
+} from './services/world-oidc.js';
+import { OperatorEnrollmentService } from './services/operator-enrollment.js';
+import { AttestorService } from './services/attestor.js';
+import {
+  MockRotationControllerClient,
+  type IRotationControllerClient
+} from './services/rotation-controller-client.js';
 import { healthRoutes } from './routes/health.js';
 import { merchantRoutes } from './routes/merchants.js';
 import { rotationRoutes } from './routes/rotation.js';
 import { auditRoutes } from './routes/audit.js';
 import { worldRoutes } from './routes/world.js';
+import type { Hex } from 'viem';
 
 export interface AppDependencies {
   ensResolver: EnsProfileResolver;
   db?: QuoteSealDatabase | MockDatabaseStore;
+  dbStore?: IDbStore;
+  env?: EnvConfig;
+  worldOidcService?: IWorldOidcService;
+  operatorEnrollmentService?: OperatorEnrollmentService;
+  attestorService?: AttestorService;
+  rotationControllerClient?: IRotationControllerClient;
   checkDatabase?: () => Promise<boolean>;
   checkRpcPrimary?: () => Promise<boolean>;
   checkRpcSecondary?: () => Promise<boolean>;
@@ -27,6 +52,69 @@ export function createApp(deps: AppDependencies): FastifyInstance {
     loggerInstance: log as any,
     disableRequestLogging: false
   });
+
+  const env = deps.env ?? validateEnv(process.env);
+  const dbStore = deps.dbStore ?? createDbStore(deps.db ?? createMockDatabase());
+
+  const worldOidcService: IWorldOidcService =
+    deps.worldOidcService ??
+    (env.NODE_ENV === 'test'
+      ? new MockWorldOidcService(
+          {
+            issuer: env.WORLD_ID_ISSUER,
+            clientId: env.WORLD_ID_CLIENT_ID,
+            clientSecret: env.WORLD_ID_CLIENT_SECRET,
+            redirectUri: env.WORLD_ID_REDIRECT_URI,
+            requiredAcr: env.WORLD_ID_REQUIRED_ACR,
+            maxAuthAgeSeconds: env.WORLD_ID_MAX_AUTH_AGE_SECONDS,
+            hmacSecret: env.OPERATOR_SUBJECT_HMAC_SECRET,
+            encryptionKeyHex: env.ENCRYPTION_KEY_HEX
+          },
+          dbStore,
+          log as any
+        )
+      : new LiveWorldOidcService(
+          {
+            issuer: env.WORLD_ID_ISSUER,
+            clientId: env.WORLD_ID_CLIENT_ID,
+            clientSecret: env.WORLD_ID_CLIENT_SECRET,
+            redirectUri: env.WORLD_ID_REDIRECT_URI,
+            requiredAcr: env.WORLD_ID_REQUIRED_ACR,
+            maxAuthAgeSeconds: env.WORLD_ID_MAX_AUTH_AGE_SECONDS,
+            hmacSecret: env.OPERATOR_SUBJECT_HMAC_SECRET,
+            encryptionKeyHex: env.ENCRYPTION_KEY_HEX
+          },
+          dbStore,
+          log as any
+        ));
+
+  const operatorEnrollmentService =
+    deps.operatorEnrollmentService ??
+    new OperatorEnrollmentService(
+      dbStore,
+      {
+        issuer: env.WORLD_ID_ISSUER,
+        hmacSecret: env.OPERATOR_SUBJECT_HMAC_SECRET,
+        chainId: env.APPLICATION_CHAIN_ID
+      },
+      log as any
+    );
+
+  const attestorService =
+    deps.attestorService ??
+    new AttestorService(
+      {
+        attestorPrivateKey: env.ATTESTOR_PRIVATE_KEY as Hex,
+        attestationTtlSeconds: env.ATTESTATION_TTL_SECONDS,
+        maxAuthAgeSeconds: env.WORLD_ID_MAX_AUTH_AGE_SECONDS,
+        chainId: env.APPLICATION_CHAIN_ID
+      },
+      dbStore,
+      log as any
+    );
+
+  const rotationControllerClient =
+    deps.rotationControllerClient ?? new MockRotationControllerClient();
 
   // Security headers & CORS
   app.register(helmet, {
@@ -86,19 +174,25 @@ export function createApp(deps: AppDependencies): FastifyInstance {
 
   app.register(merchantRoutes, {
     ensResolver: deps.ensResolver,
-    db: deps.db
+    dbStore,
+    operatorEnrollmentService
   });
 
   app.register(rotationRoutes, {
     ensResolver: deps.ensResolver,
-    db: deps.db
+    dbStore,
+    rotationControllerClient
   });
 
   app.register(auditRoutes, {
-    db: deps.db
+    dbStore
   });
 
-  app.register(worldRoutes);
+  app.register(worldRoutes, {
+    worldOidcService,
+    attestorService,
+    dbStore
+  });
 
   return app as any as FastifyInstance;
 }

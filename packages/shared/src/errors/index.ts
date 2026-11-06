@@ -58,6 +58,46 @@ export class SecurityBlockError extends QuoteSealError {
   readonly code = 'SECURITY_BLOCK';
 }
 
+export class AuthenticationError extends QuoteSealError {
+  readonly statusCode = 401;
+  readonly code = 'AUTHENTICATION_FAILED';
+}
+
+export class StaleAuthenticationError extends QuoteSealError {
+  readonly statusCode = 401;
+  readonly code = 'STALE_AUTHENTICATION';
+}
+
+export class ReplayError extends QuoteSealError {
+  readonly statusCode = 409;
+  readonly code = 'REPLAY_DETECTED';
+}
+
+export class ProposalStateError extends QuoteSealError {
+  readonly statusCode = 409;
+  readonly code = 'INVALID_PROPOSAL_STATE';
+}
+
+export class AttestationError extends QuoteSealError {
+  readonly statusCode = 422;
+  readonly code = 'ATTESTATION_FAILED';
+}
+
+export class OperatorNotEnrolledError extends QuoteSealError {
+  readonly statusCode = 403;
+  readonly code = 'OPERATOR_NOT_ENROLLED';
+}
+
+export class OperatorRevokedError extends QuoteSealError {
+  readonly statusCode = 403;
+  readonly code = 'OPERATOR_REVOKED';
+}
+
+export class ContractExecutionError extends QuoteSealError {
+  readonly statusCode = 502;
+  readonly code = 'CONTRACT_EXECUTION_FAILED';
+}
+
 export class UnverifiableError extends QuoteSealError {
   readonly statusCode = 502;
   readonly code = 'UNVERIFIABLE';
