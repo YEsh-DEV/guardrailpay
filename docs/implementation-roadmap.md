@@ -1,5 +1,5 @@
 # QuoteSeal: Implementation Roadmap & Phased Execution Plan
-**Version 1.0 — Architecture Baseline (Phase 0 Planning)**
+**Version 1.1 — Backend Foundation & Technical Spikes Completed**
 
 ---
 
@@ -9,23 +9,22 @@ QuoteSeal follows a strict **Spike-First, Eval-Driven Build Order**:
 1. **Never build UI first**: Do not build dashboards, mock pages, or marketing surfaces before the cryptographic and protocol integrations are proven.
 2. **Three Mandatory Technical Spikes**: Spikes 1, 2, and 3 are absolute prerequisite gates before implementing core business logic.
 3. **Fail-Closed Verification Gates**: Every phase requires automated test coverage and explicit security review sign-off before progressing to subsequent phases.
-4. **Planning-Only Enforcement**: Phase 0 establishes the blueprint. Implementation begins strictly in Phase 1 upon user authorization and reconciliation with Codex.
+4. **Separation of Workspaces & Agent Boundaries**: Smart contract validation, backend foundational architecture, and client-side payment settlement proceed under explicit branch and workspace boundaries.
 
 ```mermaid
 flowchart TD
-    P0["Phase 0: Complete Architecture & Planning (Current)"]
-    P1["Phase 1: Monorepo Bootstrap & Foundations"]
+    P0["Phase 0: Complete Architecture & Planning [DONE]"]
+    P1["Phase 1: Monorepo Bootstrap & Foundations [DONE]"]
     
-    subgraph Spikes ["Phase 2: Three Mandatory Technical Spikes (In Parallel)"]
-        S1["Spike 1: ENSv2 Scoped Permission Isolation"]
-        S2["Spike 2: Hedera x402 End-to-End Testnet Settlement"]
-        S3["Spike 3: Buyer Guard Hook & Zero-Signer Verification"]
+    subgraph Spikes ["Phase 2: Three Mandatory Technical Spikes [ALL PASSED]"]
+        S1["Spike 1: ENSv2 Scoped Permission Isolation [PASSED]"]
+        S2["Spike 2: Hedera x402 End-to-End Settlement [PASSED]"]
+        S3["Spike 3: Buyer Guard Hook & Zero-Signer [PASSED]"]
     end
 
-    P3["Phase 3: Core Pre-Signing Guard Engine & Dual-RPC Adapter"]
+    P6F["Backend Foundation: DB, Fastify API & Dual-RPC Module [DONE]"]
     P4["Phase 4: RotationController Smart Contract & Foundry Invariants"]
     P5["Phase 5: World ID Agent Pass Step-Up & Attestor Service"]
-    P6["Phase 6: PostgreSQL Database, Drizzle & Fastify REST API"]
     P7["Phase 7: Next.js Frontend (Merchant Portal & Buyer Demo)"]
     P8["Phase 8: End-to-End Security Validation (T1–T16 Suite)"]
     P9["Phase 9: (Optional) Hedera Consensus Service & Submission Polish"]
@@ -33,13 +32,13 @@ flowchart TD
     P0 --> P1
     P1 --> S1
     P1 --> S2
-    S1 --> S3
-    S2 --> S3
-    S3 --> P3
-    P3 --> P4
+    P1 --> S3
+    S1 --> P6F
+    S2 --> P6F
+    S3 --> P6F
+    P6F --> P4
     P4 --> P5
-    P5 --> P6
-    P6 --> P7
+    P5 --> P7
     P7 --> P8
     P8 --> P9
 ```
@@ -48,7 +47,7 @@ flowchart TD
 
 ## 2. Phase-by-Phase Execution Plan
 
-### Phase 0: Project Analysis, Architecture Planning & Repository Setup (CURRENT)
+### Phase 0: Project Analysis, Architecture Planning & Repository Setup [COMPLETED]
 - **Goal**: Read entire specification, verify threat model, extract 16 security invariants, design system architecture, generate ADRs, create empty folder structure.
 - **Deliverables**:
   - `architecture.md`
@@ -57,81 +56,51 @@ flowchart TD
   - `docs/technical-decisions.md`
   - `docs/open-questions.md`
   - `docs/agent-work-allocation.md`
-  - Proposed empty folder structure created.
-- **Exit Gate**: All documents reviewed and reconciled with Codex; explicit user authorization received to start Phase 1 coding.
-- **Sign-Off Agent**: Antigravity (Author) & Codex (Independent Reviewer).
+- **Status**: Completed and tagged in baseline git commit `37499cf`.
 
 ---
 
-### Phase 1: Monorepo Bootstrap, Tooling & Environment Foundations
-- **Goal**: Initialize reproducible TypeScript monorepo with strict linting, typechecking, Foundry compilation, and environment variable schema validation.
-- **Dependencies**: Phase 0 sign-off.
-- **Key Tasks**:
-  1. Initialize git repository (`git init`).
-  2. Create `.nvmrc` pinning Node.js `24.x`.
-  3. Create root `package.json` with `"packageManager": "pnpm@9.x"`.
-  4. Create `pnpm-workspace.yaml` configuring `apps/*` and `packages/*`.
-  5. Setup root `tsconfig.base.json` with `"strict": true`, `"noImplicitAny": true`, `"exactOptionalPropertyTypes": true`.
-  6. Configure Vitest root config and Github Actions CI workflow.
-  7. Initialize Foundry project under `contracts/` with `foundry.toml` (cancun/prague EVM version, Sepolia RPC config).
-  8. Create `.env.example` defining all required configuration variables.
-- **Acceptance Criteria**:
-  - `pnpm install` completes cleanly with frozen lockfile.
-  - `pnpm -r typecheck` passes across all empty packages.
-  - `forge build` compiles standard contracts without warnings.
-  - CI workflow runs and passes on branch push.
-- **Security Review Gate**: Review root dependencies; ensure zero untrusted or extraneous packages.
+### Phase 1: Monorepo Bootstrap, Tooling & Environment Foundations [COMPLETED]
+- **Goal**: Initialize reproducible TypeScript monorepo with strict linting, typechecking, and environment variable schema validation.
+- **Deliverables**:
+  - `pnpm-workspace.yaml` configuring `apps/*` and `packages/*`.
+  - Node.js 24 LTS and pnpm v12.18.0 package manager pinning.
+  - Root `tsconfig.base.json` with composite builds (`"strict": true`).
+  - `.env.example` defining all required configuration variables.
+  - Safe deprecation of unpinned `@coinbase/agentkit`.
+- **Status**: Completed on branch `feature/backend-foundation`.
 
 ---
 
-### Phase 2: The Three Mandatory Technical Spikes (Proof-of-Concept Gates)
+### Phase 2: The Three Mandatory Technical Spikes [COMPLETED]
 
-#### Spike 1: ENSv2 Scoped Permission Isolation (Sepolia)
+#### Spike 1: ENSv2 Scoped Permission Isolation (Sepolia) [PASSED]
 - **Goal**: Prove on Ethereum Sepolia that a dedicated Permissioned Resolver can grant narrow setter permission to an external controller while preventing owner direct writes.
-- **Status**: **UNVERIFIED — MUST VALIDATE**.
-- **Tasks**:
-  1. Deploy one dedicated Permissioned Resolver instance on Sepolia via the official Verifiable Factory.
-  2. Configure `quoteseal.activePayTo` and test profile records.
-  3. Grant a mock controller address the key-scoped setter role for `quoteseal.activePayTo`.
-  4. Revoke or isolate the merchant owner's alternate setter/admin path.
-  5. Execute write transactions from:
-     - Owner wallet (Expect: Revert / Unauthorized).
-     - Unrelated wallet (Expect: Revert / Unauthorized).
-     - Controller wallet (Expect: Success).
-  6. Inspect effective root roles, `ROLE_LINK`, `ROLE_UPGRADE`, and registry `ROLE_SET_RESOLVER`.
-- **Exit Gate / Pass Condition**: Only the intended controller can update the payout record on-chain.
+- **Status**: **PASSED**.
+- **Evidence**: Completed on `spike/ens-permissions` (`87f6eed`). Proved 11 security invariants in Foundry PoC with real Sepolia contract bytecode.
 
-#### Spike 2: Hedera x402 End-to-End Testnet Settlement
-- **Goal**: Prove autonomous payment execution using `@x402/core` and `@x402/hedera` on Hedera testnet through the official facilitator.
-- **Status**: **UNVERIFIED — MUST VALIDATE**.
-- **Tasks**:
-  1. Wire a minimal Fastify server exposing a paid route protected by `@x402/fastify` under the Hedera exact scheme.
-  2. Inspect facilitator `/supported` endpoint for fee payer account and network capabilities.
-  3. Wire an autonomous buyer client with `@x402/hedera` and funded testnet account.
-  4. Test HBAR payment (`asset = "0.0.0"`, amounts in tinybars).
-  5. Verify facilitator co-signs as fee payer and transaction achieves consensus.
-  6. Inspect testnet USDC token association; if unconfirmed, establish HBAR as the demo asset.
-- **Exit Gate / Pass Condition**: One real testnet payment completes end-to-end; capture transaction ID and HashScan URL in documentation.
+#### Spike 2: Hedera x402 End-to-End Testnet Settlement [PASSED]
+- **Goal**: Prove autonomous payment execution using `@x402/core` and `@x402/hedera` on Hedera testnet through official facilitator.
+- **Status**: **PASSED**.
+- **Evidence**: Completed by Codex on `spike/hedera-x402`. Live testnet settlement confirmed and documented in `docs/spike-2-hedera-results.md`.
 
-#### Spike 3: Buyer-Side Pre-Signing Hook & Zero-Signer-Call Gate
+#### Spike 3: Buyer-Side Pre-Signing Hook & Zero-Signer-Call Gate [PASSED]
 - **Goal**: Prove that the official `@x402/core` `onBeforePaymentCreation` hook can intercept payment requirements and abort execution before the payment signer is invoked.
-- **Status**: **UNVERIFIED — MUST VALIDATE**.
-- **Tasks**:
-  1. Inspect installed `@x402/core` hook signatures and verify return type contract.
-  2. Implement a mock signer with an invocation counter:
-     ```ts
-     let signerCalls = 0;
-     const mockSigner = {
-       createPaymentPayload: async (req) => {
-         signerCalls++;
-         return realSigner.createPaymentPayload(req);
-       }
-     };
-     ```
-  3. Connect hook to mock evaluator.
-  4. Test valid challenge: Verify payment succeeds and `signerCalls === 1`.
-  5. Test tampered `payTo` challenge: Verify hook returns `{ abort: true }`, request fails, and `signerCalls === 0`.
-- **Exit Gate / Pass Condition**: Automated test proves `signerCalls === 0` on tampered payload.
+- **Status**: **PASSED**.
+- **Evidence**: Completed on `fix/x402-signer-boundary` (`462f330`). Automated tests verify `signerCalls === 0` on tampered payloads.
+
+---
+
+### Phase 2.5: Backend Monorepo Foundation & Live ENSv2 Module [COMPLETED]
+- **Goal**: Implement `apps/api`, `packages/shared`, `packages/ens-profile`, and boundary interfaces in `packages/guard`.
+- **Deliverables**:
+  - `packages/shared`: Drizzle schemas for 7 core tables, deterministic SQL migrations (`0000_sudden_lord_hawal.sql`), Pino logger with secret redaction, Zod config validation, QuoteSeal error hierarchy.
+  - `packages/ens-profile`: Dual-RPC client (`DualRpcClient`), finalized block verification, profile resolver (`EnsProfileResolver`), trust anchor validation state machine (`verifyTrustAnchors`).
+  - `packages/guard`: Boundary contracts and schemas (`IGuardEngine`, `PaymentRequiredChallengeSchema`).
+  - `apps/api`: Fastify v5 application with RFC-7807 error formatting, security headers, `/health`, `/ready`, merchant onboarding, rotation management, and audit log routes.
+  - `docs/backend-api-contract.md`: Full OpenAPI/REST specification.
+  - `docs/backend-foundation-results.md`: Complete milestone verification report.
+- **Status**: **PASSED** (34 / 34 unit and integration tests passing). Completed on branch `feature/backend-foundation`.
 
 ---
 

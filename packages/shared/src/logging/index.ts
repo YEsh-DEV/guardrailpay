@@ -1,0 +1,54 @@
+import pino, { type Logger, type LoggerOptions } from 'pino';
+
+// Strict redaction paths: any log containing these fields will be censored with [REDACTED]
+export const SENSITIVE_PATHS = [
+  'authorization',
+  'headers.authorization',
+  'headers.cookie',
+  'req.headers.authorization',
+  'req.headers.cookie',
+  'token',
+  'id_token',
+  'idToken',
+  'accessToken',
+  'access_token',
+  'refreshToken',
+  'refresh_token',
+  'client_secret',
+  'clientSecret',
+  'privateKey',
+  'private_key',
+  'secret',
+  'signerKey',
+  'pkceVerifier',
+  'codeVerifier',
+  'code_verifier',
+  'password',
+  'sessionSecret',
+  'hmacSecret',
+  'encryptionKey'
+];
+
+export interface CreateLoggerOptions {
+  level?: string;
+  name?: string;
+}
+
+export function createLogger(options: CreateLoggerOptions = {}): Logger {
+  const pinoOptions: LoggerOptions = {
+    name: options.name ?? 'quoteseal',
+    level: options.level ?? process.env.LOG_LEVEL ?? 'info',
+    redact: {
+      paths: SENSITIVE_PATHS,
+      censor: '[REDACTED]'
+    },
+    formatters: {
+      level: (label) => ({ level: label })
+    },
+    timestamp: pino.stdTimeFunctions.isoTime
+  };
+
+  return pino(pinoOptions);
+}
+
+export const logger = createLogger();

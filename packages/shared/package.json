@@ -1,0 +1,54 @@
+{
+  "name": "@quoteseal/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./db": {
+      "types": "./dist/db/index.d.ts",
+      "import": "./dist/db/index.js"
+    },
+    "./errors": {
+      "types": "./dist/errors/index.d.ts",
+      "import": "./dist/errors/index.js"
+    },
+    "./config": {
+      "types": "./dist/config/index.d.ts",
+      "import": "./dist/config/index.js"
+    },
+    "./logging": {
+      "types": "./dist/logging/index.d.ts",
+      "import": "./dist/logging/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.39.3",
+    "pg": "^8.13.3",
+    "pino": "^9.6.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@types/pg": "^8.11.11",
+    "drizzle-kit": "^0.30.4",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  }
+}

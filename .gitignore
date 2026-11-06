@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 
+# TypeScript build outputs
+dist/
+*.tsbuildinfo
+
 # Environment secrets
 .env
 .env.local
