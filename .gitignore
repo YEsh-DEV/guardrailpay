@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Environment secrets
+.env
+.env.local
+.env.*.local
+*.env
+
+# Foundry build artifacts
+spikes/*/out/
+spikes/*/cache/
+contracts/out/
+contracts/cache/
+out/
+cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Lock files for spike (keep pnpm-lock.yaml when added)
+# package-lock.json kept intentionally for existing deps
