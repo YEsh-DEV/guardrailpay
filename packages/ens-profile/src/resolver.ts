@@ -97,6 +97,7 @@ export class EnsProfileResolver {
       'quoteseal.pendingPayTo',
       'quoteseal.rotationStatus',
       'quoteseal.version',
+      'quoteseal.profileVersion',
       'quoteseal.network',
       'quoteseal.scheme',
       'quoteseal.asset',
@@ -125,7 +126,7 @@ export class EnsProfileResolver {
       });
     }
 
-    const versionStr = records['quoteseal.version'] || '1';
+    const versionStr = records['quoteseal.profileVersion'] || records['quoteseal.version'] || '1';
     const profileVersion = parseInt(versionStr, 10);
 
     const rotationStatusRaw = (records['quoteseal.rotationStatus'] || 'STABLE').toUpperCase();

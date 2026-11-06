@@ -28,12 +28,21 @@ const ProposalIdParamSchema = z.object({
   proposalId: z.string().uuid()
 });
 
-const CreateProposalSchema = z.object({
-  newPayTo: z.string().regex(/^0\.0\.[1-9][0-9]*$/, 'Must be canonical Hedera account format 0.0.N'),
-  operatorAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/),
-  proposalExpirySeconds: z.number().int().positive().default(604800), // 7 days
-  reasonCode: z.string().optional()
-});
+const CreateProposalSchema = z
+  .object({
+    newPayTo: z.string().regex(/^0\.0\.[1-9][0-9]*$/, 'Must be canonical Hedera account format 0.0.N').optional(),
+    proposedPayTo: z.string().regex(/^0\.0\.[1-9][0-9]*$/, 'Must be canonical Hedera account format 0.0.N').optional(),
+    operatorAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/),
+    proposalExpirySeconds: z.number().int().positive().default(604800), // 7 days
+    reasonCode: z.string().optional()
+  })
+  .refine((d) => Boolean(d.newPayTo || d.proposedPayTo), {
+    message: 'Must provide newPayTo or proposedPayTo'
+  })
+  .transform((d) => ({
+    ...d,
+    newPayTo: (d.newPayTo ?? d.proposedPayTo)!
+  }));
 
 const SubmitApprovalSchema = z.object({
   signature: z.string().regex(/^0x[a-fA-F0-9]{130}$/),
@@ -216,6 +225,10 @@ export const rotationRoutes: FastifyPluginAsync<RotationRouteOptions> = async (a
     return reply.status(201).send({
       data: {
         proposal: proposalRecord,
+        proposalId: proposalRecord.id,
+        proposalHash: proposalRecord.proposalHash,
+        status: proposalRecord.state,
+        proposedPayTo: proposalRecord.newPayTo,
         txHash,
         message: 'Rotation proposed on-chain; awaiting World ID OIDC step-up authorization'
       }

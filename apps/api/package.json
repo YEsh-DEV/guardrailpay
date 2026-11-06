@@ -17,6 +17,7 @@
     "@fastify/helmet": "^13.0.1",
     "@fastify/sensible": "^6.0.3",
     "@quoteseal/ens-profile": "workspace:*",
+    "@quoteseal/guard": "workspace:*",
     "@quoteseal/shared": "workspace:*",
     "drizzle-orm": "^0.39.3",
     "fastify": "^5.2.1",

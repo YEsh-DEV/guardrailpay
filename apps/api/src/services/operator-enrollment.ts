@@ -64,7 +64,7 @@ export class OperatorEnrollmentService {
       hmacSecret: string;
       chainId: number;
     },
-    private readonly logger: FastifyBaseLogger
+    private readonly logger: FastifyBaseLogger = console as any
   ) {}
 
   /**

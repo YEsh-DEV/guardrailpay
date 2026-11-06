@@ -90,7 +90,7 @@ export class LiveWorldOidcService implements IWorldOidcService {
   constructor(
     private readonly config: WorldOidcConfig,
     private readonly dbStore: any,
-    private readonly logger: FastifyBaseLogger
+    private readonly logger: FastifyBaseLogger = console as any
   ) {}
 
   private async getOidcConfiguration(): Promise<oidc.Configuration> {
@@ -262,6 +262,15 @@ export class LiveWorldOidcService implements IWorldOidcService {
           `Insufficient World ID verification level: policy requires 'device' or higher, received acr='${acr}'`
         );
       }
+    } else if (this.config.requiredAcr) {
+      const matchesRequired = acr === this.config.requiredAcr || amr.includes(this.config.requiredAcr);
+      if (!matchesRequired) {
+        throw new AuthenticationError(
+          `Insufficient World ID verification level: policy requires '${this.config.requiredAcr}', received acr='${acr}', amr='${amr.join(',')}'`
+        );
+      }
+    } else {
+      throw new AuthenticationError('No World ID assurance policy configured (fail closed)');
     }
 
     // 4. Mark attempt as consumed (one-time use, prevents replay)
@@ -356,16 +365,21 @@ export class MockWorldOidcService extends LiveWorldOidcService {
     }
 
     // In mock mode, construct verified claims using registered mock token or test defaults
-    const claims: IdTokenClaims = this.mockTokenClaims ?? {
-      sub: 'world_user_sub_12345',
-      iss: this['config'].issuer,
-      aud: this['config'].clientId,
-      exp: Math.floor(Date.now() / 1000) + 3600,
-      auth_time: Math.floor(Date.now() / 1000),
-      acr: this['config'].requiredAcr,
-      amr: [this['config'].requiredAcr],
-      nonce: (input as any).mockNonce
-    };
+    const claims: IdTokenClaims = this.mockTokenClaims
+      ? {
+          ...this.mockTokenClaims,
+          nonce: (input as any).mockNonce ?? this.mockTokenClaims.nonce
+        }
+      : {
+          sub: 'world_user_sub_12345',
+          iss: this['config'].issuer,
+          aud: this['config'].clientId,
+          exp: Math.floor(Date.now() / 1000) + 3600,
+          auth_time: Math.floor(Date.now() / 1000),
+          acr: this['config'].requiredAcr,
+          amr: [this['config'].requiredAcr],
+          nonce: (input as any).mockNonce
+        };
 
     return this.validateAndFinalizeSession(attempt, claims);
   }

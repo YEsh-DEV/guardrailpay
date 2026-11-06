@@ -1,5 +1,6 @@
 import type { QuoteSealDatabase, MockDatabaseStore } from '@quoteseal/shared';
 import {
+  createMockDatabase,
   merchants,
   operators,
   rotationProposals,
@@ -38,7 +39,7 @@ export interface IDbStore {
 }
 
 export class MemoryDbStore implements IDbStore {
-  constructor(private readonly mockDb: MockDatabaseStore) {}
+  constructor(private readonly mockDb: MockDatabaseStore = createMockDatabase()) {}
 
   async findMerchantById(id: string): Promise<any | null> {
     return this.mockDb.merchants.get(id) ?? null;

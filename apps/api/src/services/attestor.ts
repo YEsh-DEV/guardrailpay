@@ -64,12 +64,18 @@ export const ROTATION_APPROVAL_TYPES = {
 
 export class AttestorService {
   private readonly attestorAccount: PrivateKeyAccount;
+  private readonly config: AttestorConfig;
 
   constructor(
-    private readonly config: AttestorConfig,
+    config: Partial<AttestorConfig> & { attestorPrivateKey: Hex; chainId: number },
     private readonly dbStore: any,
-    private readonly logger: FastifyBaseLogger
+    private readonly logger: FastifyBaseLogger = console as any
   ) {
+    this.config = {
+      maxAuthAgeSeconds: 300,
+      attestationTtlSeconds: 300,
+      ...config
+    };
     this.attestorAccount = privateKeyToAccount(this.config.attestorPrivateKey);
   }
 

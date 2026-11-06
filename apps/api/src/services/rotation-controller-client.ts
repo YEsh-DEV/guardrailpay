@@ -353,6 +353,16 @@ export class MockRotationControllerClient implements IRotationControllerClient {
   public operators = new Map<string, bigint>();
   public shouldFailTx: boolean = false;
   public failErrorMessage: string = 'Execution reverted: simulated failure';
+  public bypassTimelock: boolean = false;
+
+  setShouldRevert(shouldRevert: boolean, message?: string) {
+    this.shouldFailTx = shouldRevert;
+    if (message) this.failErrorMessage = message;
+  }
+
+  setBypassTimelock(bypass: boolean) {
+    this.bypassTimelock = bypass;
+  }
 
   async getProposalState(_controllerAddress: Address): Promise<ContractProposal> {
     if (!this.proposal) {
@@ -440,7 +450,7 @@ export class MockRotationControllerClient implements IRotationControllerClient {
     }
 
     const now = BigInt(Math.floor(Date.now() / 1000));
-    if (now < this.proposal.effectiveAt) {
+    if (now < this.proposal.effectiveAt && !this.bypassTimelock) {
       throw new ContractExecutionError('Delay timelock has not elapsed');
     }
 
