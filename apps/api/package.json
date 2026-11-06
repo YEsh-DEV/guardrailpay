@@ -18,7 +18,10 @@
     "@fastify/sensible": "^6.0.3",
     "@quoteseal/ens-profile": "workspace:*",
     "@quoteseal/shared": "workspace:*",
+    "drizzle-orm": "^0.39.3",
     "fastify": "^5.2.1",
+    "openid-client": "^6.8.9",
+    "viem": "^2.57.16",
     "zod": "^3.24.2"
   },
   "devDependencies": {

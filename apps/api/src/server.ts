@@ -3,6 +3,7 @@ import { DualRpcClient, EnsProfileResolver } from '@quoteseal/ens-profile';
 import { createPublicClient, http } from 'viem';
 import { sepolia } from 'viem/chains';
 import { createApp } from './app.js';
+import { LiveRotationControllerClient } from './services/rotation-controller-client.js';
 
 const logger = createLogger({ name: 'quoteseal-server' });
 
@@ -32,7 +33,7 @@ async function startServer() {
   const createRpcAdapter = (client: typeof primaryViemClient) => ({
     getBlockNumber: () => client.getBlockNumber(),
     getBlock: (params: { blockTag: 'finalized' | 'latest' }) =>
-      client.getBlock(params).then((b) => ({ number: b.number, hash: b.hash })),
+      client.getBlock(params).then((b: any) => ({ number: b.number, hash: b.hash })),
     readContract: (params: {
       address: `0x${string}`;
       abi: readonly unknown[];
@@ -60,8 +61,12 @@ async function startServer() {
     registryAddress: env.ENS_REGISTRY_ADDRESS as `0x${string}`
   });
 
+  const rotationControllerClient = new LiveRotationControllerClient(primaryViemClient as any);
+
   const app = createApp({
     ensResolver,
+    rotationControllerClient,
+    env,
     checkRpcPrimary: async () => {
       try {
         await primaryViemClient.getBlockNumber();

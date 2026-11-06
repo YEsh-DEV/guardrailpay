@@ -32,8 +32,38 @@ export const EnvSchema = z.object({
   ROTATION_TIMELOCK_SECONDS: z.coerce.number().int().positive().default(86400),
 
   OPERATOR_SUBJECT_HMAC_SECRET: z.string().min(16).default('sample_32_byte_hmac_secret_for_subject_hashing_min32'),
-  ENCRYPTION_KEY_HEX: z.string().length(64).default('000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f')
-});
+  ENCRYPTION_KEY_HEX: z.string().length(64).default('000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f'),
+
+  // World ID OIDC Configuration
+  WORLD_ID_ISSUER: z.string().url().default('https://auth.world.org'),
+  WORLD_ID_CLIENT_ID: z.string().default('app_sample_quoteseal_world_id'),
+  WORLD_ID_CLIENT_SECRET: z.string().optional(),
+  WORLD_ID_REDIRECT_URI: z.string().url().default('http://localhost:4000/v1/world/callback'),
+  WORLD_ID_REQUIRED_ACR: z.string().default('orb'),
+  WORLD_ID_MAX_AUTH_AGE_SECONDS: z.coerce.number().int().positive().default(120),
+
+  // Backend Attestor Configuration
+  ATTESTOR_PRIVATE_KEY: z
+    .string()
+    .regex(/^0x[a-fA-F0-9]{64}$/)
+    .default('0x1111111111111111111111111111111111111111111111111111111111111111'),
+  ATTESTATION_TTL_SECONDS: z.coerce.number().int().positive().default(300)
+}).refine(
+  (data) => {
+    if (data.NODE_ENV === 'production') {
+      if (data.ATTESTOR_PRIVATE_KEY === '0x1111111111111111111111111111111111111111111111111111111111111111') {
+        return false;
+      }
+      if (data.OPERATOR_SUBJECT_HMAC_SECRET === 'sample_32_byte_hmac_secret_for_subject_hashing_min32') {
+        return false;
+      }
+    }
+    return true;
+  },
+  {
+    message: 'Production deployment requires real, non-default ATTESTOR_PRIVATE_KEY and OPERATOR_SUBJECT_HMAC_SECRET'
+  }
+);
 
 export type EnvConfig = z.infer<typeof EnvSchema>;
 

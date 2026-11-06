@@ -10,9 +10,11 @@ export type Verdict = z.infer<typeof VerdictSchema>;
 export const RotationStateSchema = z.enum([
   'STABLE',
   'PROPOSED',
+  'PENDING_APPROVED',
   'APPROVED',
   'ACTIVATED',
-  'CANCELLED'
+  'CANCELLED',
+  'PAUSED'
 ]);
 export type RotationState = z.infer<typeof RotationStateSchema>;
 
@@ -35,7 +37,16 @@ export const ReasonCodeSchema = z.enum([
   'PROPOSAL_EXPIRED',
   'PROPOSAL_ALREADY_CONSUMED',
   'OPERATOR_UNAUTHORIZED',
-  'SIGNATURE_INVALID'
+  'OPERATOR_REVOKED',
+  'OPERATOR_EXPIRED',
+  'SIGNATURE_INVALID',
+  'OIDC_STATE_MISMATCH',
+  'OIDC_NONCE_MISMATCH',
+  'OIDC_STALE_AUTH_TIME',
+  'OIDC_INVALID_ACR',
+  'OIDC_REPLAY_DETECTED',
+  'PROPOSAL_HASH_MISMATCH',
+  'CONTRACT_REVERTED'
 ]);
 export type ReasonCode = z.infer<typeof ReasonCodeSchema>;
 
@@ -106,3 +117,52 @@ export const AuditEventSchema = z.object({
   createdAt: z.date()
 });
 export type AuditEvent = z.infer<typeof AuditEventSchema>;
+
+// =============================================================================
+// OPERATORS & ENROLLMENT
+// =============================================================================
+
+export const OperatorSchema = z.object({
+  id: z.string().uuid(),
+  merchantId: z.string().uuid(),
+  walletAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/),
+  role: z.string().default('ROLE_ROTATION_APPROVER'),
+  issuer: z.string(),
+  subjectHmac: z.string().length(64),
+  status: z.enum(['active', 'revoked', 'expired']),
+  enrolledAt: z.date(),
+  expiresAt: z.date(),
+  revokedAt: z.date().nullable().optional()
+});
+export type Operator = z.infer<typeof OperatorSchema>;
+
+// =============================================================================
+// EIP-712 ROTATION APPROVAL & ENROLLMENT TYPED DATA
+// =============================================================================
+
+export const EIP712_DOMAIN_NAME = 'QuoteSeal';
+export const EIP712_DOMAIN_VERSION = '1';
+
+export interface RotationApprovalData {
+  merchantId: `0x${string}`;
+  proposalId: `0x${string}`;
+  operator: `0x${string}`;
+  resolver: `0x${string}`;
+  namehash: `0x${string}`;
+  oldPayToHash: `0x${string}`;
+  newPayToHash: `0x${string}`;
+  effectiveAt: bigint;
+  proposalExpiry: bigint;
+  proposalNonce: bigint;
+  authTime: bigint;
+  attestationExpiry: bigint;
+}
+
+export interface OperatorEnrollmentData {
+  merchantId: `0x${string}`;
+  operator: `0x${string}`;
+  role: bigint;
+  expiry: bigint;
+  nonce: bigint;
+  controller: `0x${string}`;
+}
