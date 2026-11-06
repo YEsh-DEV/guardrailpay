@@ -1,0 +1,27 @@
+{
+  "name": "@quoteseal/buyer-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/cli.js",
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "demo:local": "node ./dist/cli.js --mode=local",
+    "demo:live": "node ./dist/cli.js --mode=live",
+    "demo:malicious": "node ./dist/malicious-demo.js"
+  },
+  "dependencies": {
+    "@quoteseal/buyer": "workspace:*",
+    "@quoteseal/guard": "workspace:*",
+    "@quoteseal/shared": "workspace:*",
+    "@x402/core": "2.30.0",
+    "@x402/hedera": "2.30.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  }
+}

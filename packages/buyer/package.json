@@ -1,0 +1,35 @@
+{
+  "name": "@quoteseal/buyer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "demo:local": "node ./dist/demo.js --mode=local",
+    "demo:live": "node ./dist/demo.js --mode=live"
+  },
+  "dependencies": {
+    "@quoteseal/ens-profile": "workspace:*",
+    "@quoteseal/guard": "workspace:*",
+    "@quoteseal/shared": "workspace:*",
+    "@x402/core": "2.30.0",
+    "@x402/hedera": "2.30.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  }
+}

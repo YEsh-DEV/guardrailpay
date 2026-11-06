@@ -30,6 +30,7 @@ import { merchantRoutes } from './routes/merchants.js';
 import { rotationRoutes } from './routes/rotation.js';
 import { auditRoutes } from './routes/audit.js';
 import { worldRoutes } from './routes/world.js';
+import { buyerRoutes } from './routes/buyer.js';
 import type { Hex } from 'viem';
 
 export interface AppDependencies {
@@ -220,6 +221,10 @@ export function createApp(deps: AppDependencies): FastifyInstance {
     worldOidcService,
     attestorService,
     dbStore
+  });
+
+  app.register(buyerRoutes, {
+    ensResolver: deps.ensResolver
   });
 
   return app;

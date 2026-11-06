@@ -43,6 +43,7 @@
     "drizzle-orm": "^0.39.3",
     "pg": "^8.13.3",
     "pino": "^9.6.0",
+    "viem": "^2.23.5",
     "zod": "^3.24.2"
   },
   "devDependencies": {

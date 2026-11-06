@@ -7,7 +7,9 @@
     { "path": "./packages/shared" },
     { "path": "./packages/ens-profile" },
     { "path": "./packages/guard" },
-    { "path": "./apps/api" }
+    { "path": "./packages/buyer" },
+    { "path": "./apps/api" },
+    { "path": "./apps/buyer-cli" }
   ],
   "files": []
 }

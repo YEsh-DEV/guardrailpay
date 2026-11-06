@@ -8,7 +8,8 @@
   "references": [
     { "path": "../../packages/shared" },
     { "path": "../../packages/ens-profile" },
-    { "path": "../../packages/guard" }
+    { "path": "../../packages/guard" },
+    { "path": "../../packages/buyer" }
   ],
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]
