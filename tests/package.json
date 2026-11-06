@@ -9,16 +9,17 @@
     "lint": "echo 'No lint specified for tests'"
   },
   "dependencies": {
-    "@quoteseal/ens-profile": "workspace:*",
-    "@quoteseal/hedera-x402": "workspace:*",
-    "@quoteseal/payee-guard": "workspace:*",
-    "@quoteseal/rotation-controller": "workspace:*",
-    "@quoteseal/shared": "workspace:*",
-    "@quoteseal/world-auth": "workspace:*",
-    "vitest": "^3.0.5"
+    "@quoteseal/ens-profile": "^0.1.0",
+    "@quoteseal/hedera-x402": "^0.1.0",
+    "@quoteseal/payee-guard": "^0.1.0",
+    "@quoteseal/rotation-controller": "^0.1.0",
+    "@quoteseal/shared": "^0.1.0",
+    "@quoteseal/world-auth": "^0.1.0",
+    "drizzle-orm": "0.45.4",
+    "vitest": "^5.1.0"
   },
   "devDependencies": {
-    "@quoteseal/config": "workspace:*",
+    "@quoteseal/config": "^0.1.0",
     "@types/node": "^22.13.0",
     "typescript": "^5.7.3"
   }

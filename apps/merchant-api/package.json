@@ -14,23 +14,25 @@
   },
   "dependencies": {
     "@fastify/cors": "^10.0.2",
-    "@quoteseal/ens-profile": "workspace:*",
-    "@quoteseal/hedera-x402": "workspace:*",
-    "@quoteseal/rotation-controller": "workspace:*",
-    "@quoteseal/shared": "workspace:*",
-    "@quoteseal/world-auth": "workspace:*",
-    "better-sqlite3": "^11.8.1",
-    "drizzle-orm": "^0.39.3",
+    "@quoteseal/ens-profile": "^0.1.0",
+    "@quoteseal/hedera-x402": "^0.1.0",
+    "@quoteseal/rotation-controller": "^0.1.0",
+    "@quoteseal/shared": "^0.1.0",
+    "@quoteseal/world-auth": "^0.1.0",
+    "drizzle-orm": "^0.45.4",
     "fastify": "^5.2.1",
-    "zod": "^3.24.2"
+    "zod": "^4.6.7"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^11.8.1"
   },
   "devDependencies": {
-    "@quoteseal/config": "workspace:*",
+    "@quoteseal/config": "^0.1.0",
     "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^22.13.0",
-    "drizzle-kit": "^0.30.4",
+    "drizzle-kit": "^0.31.11",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
-    "vitest": "^3.0.5"
+    "vitest": "^5.1.0"
   }
 }

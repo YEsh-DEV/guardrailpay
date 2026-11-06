@@ -3,13 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "description": "Merchant-authorized payment identity for autonomous x402 agents",
-  "packageManager": "pnpm@12.6.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "tests"
+  ],
   "scripts": {
     "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:dashboard": "npm run dev --workspace=@quoteseal/merchant-dashboard",
+    "build:dashboard": "npm run build --workspace=@quoteseal/merchant-dashboard",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "dev": "turbo run dev",
     "clean": "turbo run clean",
     "forge:build": "cd contracts && forge build",
     "forge:test": "cd contracts && forge test -vvv"
@@ -18,5 +24,12 @@
     "@types/node": "^22.13.0",
     "turbo": "^2.4.0",
     "typescript": "^5.7.3"
+  },
+  "allowScripts": {
+    "esbuild@0.18.20": true,
+    "esbuild@0.19.12": true,
+    "esbuild@0.28.2": true,
+    "protobufjs@7.6.6": true,
+    "protobufjs@8.0.0": true
   }
 }
