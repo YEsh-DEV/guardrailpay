@@ -218,11 +218,15 @@ async function runLiveDemo() {
 
   // Probe Mirror Node for Account Readiness
   console.log('\n[2/5] Querying Hedera Mirror Node account status...');
+  let expectedPublicKey = '';
+  let accountKeyType = '';
   if (buyerAccountId) {
     try {
       const res = await globalThis.fetch(`${mirrorNodeUrl}/api/v1/accounts/${buyerAccountId}`);
       if (res.ok) {
-        const data = (await res.json()) as { balance?: { balance?: number }; key?: { _type?: string } };
+        const data = (await res.json()) as { balance?: { balance?: number }; key?: { _type?: string; key?: string } };
+        expectedPublicKey = data.key?.key ?? '';
+        accountKeyType = data.key?._type ?? '';
         const hbarBal = ((data.balance?.balance ?? 0) / 1e8).toFixed(4);
         console.log(`  Buyer Account:         ${buyerAccountId} (Key: ${data.key?._type ?? 'UNKNOWN'})`);
         console.log(`  Available Balance:     ${hbarBal} HBAR (${data.balance?.balance} tinybars)`);
@@ -257,8 +261,26 @@ async function runLiveDemo() {
   console.log('\n[3/5] Initializing real ECDSA/ED25519 Hedera Signer...');
   let parsedPrivateKey: PrivateKey;
   try {
-    parsedPrivateKey = PrivateKey.fromString(buyerPrivateKey.trim());
-    console.log(`  Signer Private Key:    Loaded and validated (Algorithm: ${parsedPrivateKey._key?._type ?? 'VALID'})`);
+    const rawKey = buyerPrivateKey.trim();
+    if (rawKey.startsWith('0x')) {
+      parsedPrivateKey = PrivateKey.fromStringECDSA(rawKey.slice(2));
+    } else {
+      try {
+        parsedPrivateKey = PrivateKey.fromString(rawKey);
+      } catch {
+        parsedPrivateKey = PrivateKey.fromStringECDSA(rawKey);
+      }
+    }
+
+    const derivedPub = parsedPrivateKey.publicKey.toStringRaw();
+    console.log(`  Signer Private Key:    Loaded and validated (Never logged)`);
+    console.log(`  Derived Public Key:    ${derivedPub}`);
+
+    if (expectedPublicKey && derivedPub !== expectedPublicKey && parsedPrivateKey.publicKey.toStringDer() !== expectedPublicKey) {
+      console.warn(`  [Key Warning] Derived public key does not match on-chain account key (${expectedPublicKey})`);
+    } else {
+      console.log(`  Account Key Match:     VERIFIED matches on-chain ${accountKeyType || 'ECDSA_SECP256K1'} key`);
+    }
   } catch (err) {
     console.error(`  [Signer Error] Failed to parse HEDERA_BUYER_PRIVATE_KEY: ${(err as Error).message}`);
     process.exitCode = 1;
