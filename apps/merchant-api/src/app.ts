@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { paidRoutes } from './routes/paid.js';
+import { arkivRoutes } from './routes/arkiv.js';
 import { rotationRoutes } from './routes/rotation.js';
 import { worldRoutes } from './routes/world.js';
 import { wellknownRoutes } from './routes/wellknown.js';
@@ -17,6 +18,7 @@ export function buildApp() {
   });
 
   server.register(paidRoutes);
+  server.register(arkivRoutes);
   server.register(rotationRoutes);
   server.register(worldRoutes);
   server.register(wellknownRoutes);

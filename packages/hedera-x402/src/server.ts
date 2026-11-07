@@ -1,17 +1,10 @@
-export interface X402PaymentTerms {
-  network: string;
-  asset: string;
-  payTo: string;
-  amount: string;
-  ensName?: string;
-  serviceEndpoint: string;
-  referenceId: string;
-  expiresAt: number; // Unix timestamp in seconds
-}
+import type { X402PaymentTerms, PaymentVerificationResult } from './types.js';
+
+export type { X402PaymentTerms, PaymentVerificationResult };
 
 export interface ProtectedEndpointOptions {
   getPaymentTerms: () => Promise<X402PaymentTerms> | X402PaymentTerms;
-  verifyPaymentProof: (proof: string, terms: X402PaymentTerms) => Promise<boolean> | boolean;
+  verifyPaymentProof: (proof: string, terms: X402PaymentTerms) => Promise<PaymentVerificationResult | boolean> | PaymentVerificationResult | boolean;
 }
 
 export function createX402Challenge(terms: X402PaymentTerms) {

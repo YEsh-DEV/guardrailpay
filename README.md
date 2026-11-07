@@ -137,25 +137,45 @@ pnpm test
 - Records: `serviceEndpoint`, `hederaNetwork`, `assetId`, `activePayTo`, `maxAmount`, `profileVersion`, `rotationStatus`.
 - Role separation: Treasury role proposes rotations; `RotationController.sol` is the only entity authorized to update `activePayTo`.
 
-### 2. Hedera x402 Micropayments
-- Server endpoint: HTTP 402 with `PAYMENT-REQUIRED` header & JSON challenge.
-- Hedera client: autonomous pay-and-fetch generating transaction receipts.
-- HashScan Explorer URL format: `https://hashscan.io/testnet/transaction/{id}`.
-- Audit trail: `submitAuditEventToHcs` hashes security verdicts and rotation milestones to Hedera Consensus Service (HCS).
+### 2. Hedera x402 Micropayments & On-Chain Settlement Verification
+- **Challenge Creation**: HTTP 402 with `payment-required` header and deterministic challenge binding (`referenceId`).
+- **Hedera Testnet Signing**: Buyer signs real `TransferTransaction` via `@hashgraph/sdk` with bound memo (`qs:${referenceId}`) and cryptographic authorization signature over payment terms.
+- **Server-Side Verification**: Independent verification via Hedera Mirror Node (`reconcileHederaTransaction`) confirming transaction existence, consensus `SUCCESS`, exact tinybar credit to `payTo`, payer debit, and memo binding.
+- **Replay Protection**: Persistent SQLite replay protection (`SqliteReplayProtection`) with atomic check-and-insert ensuring payments cannot be re-used across requests or challenges.
+- **Audit Trail**: `submitAuditEventToHcs` hashes security verdicts and rotation milestones to Hedera Consensus Service (HCS).
+- **Explorer Verification**: Real transactions verifiable on [HashScan Testnet](https://hashscan.io/testnet/).
 
-### 3. World ID Agent Pass
+### 3. Arkiv Rabdi Shared Risk Intelligence
+- **Named Schemas**: `RiskSignal` and canonical mutable `WalletRiskState` on Arkiv Rabdi testnet.
+- **Server-Side Publisher**: Authorized server-side writer (`0xAFc9...`) publishes risk records with deterministic idempotency deduplication.
+- **Pre-Signing Gate**: PayeeGuard consumes trusted Arkiv risk reader; flagged wallets (`BLOCK`) halt execution before raw signing (`signerCallCount = 0`).
+- **Cross-Merchant Detection**: Merchant A reports a suspicious wallet; Merchant B independently queries the trusted record and blocks the simulated payment attempt.
+- **Dashboard Interface**: Dedicated `/arkiv` route inspecting live verified risk records, entity keys, and policy status.
+
+### 4. World ID Agent Pass
 - OIDC flow (`/world/start`, `/world/callback`) ensuring that only verified human operators can approve payout address rotations.
 - Denied, cancelled, and unauthorized attempts are rejected; old profile remains strictly active.
 
 ---
 
+## Live Testnet Evidence
+
+| Network | Protocol / Service | Identity / Address | Evidence (TxHash / Entity Key / Explorer) | Status |
+|---|---|---|---|---|
+| **Hedera Testnet** | Real Payment Settlement | Buyer: `0.0.11338944`<br>Merchant: `0.0.11339189` | Tx ID: `0.0.11338944@1794011311.555510736`<br>Consensus Timestamp: `1794011318.421680160`<br>[HashScan Explorer](https://hashscan.io/testnet/transaction/0.0.11338944%401794011311.555510736) | **VERIFIED LIVE** |
+| **Arkiv Rabdi** | RiskSignal Publication | Writer: `0xAFc9b641D89cB5C23D247B2Fbf2622BA879E7e7C` | Entity: `0x1efd40614e776d6b782d69e177494c30adc889cc8def7e275adf39e64df941f0`<br>TxHash: `0x4b461ec0e1f1aaadb50b6304535496d1e8aa481d1b7422f54240dc7392592ca3` | **VERIFIED LIVE** |
+| **Arkiv Rabdi** | WalletRiskState Upsert | Writer: `0xAFc9b641D89cB5C23D247B2Fbf2622BA879E7e7C` | Entity: `0xb14aa428576a1d4bdd97062dfc178a1b51040a2de6b7c34f49b531e2f9e9bf1f`<br>TxHash: `0xae7e65df3122b15df89134ce031e81a6a02dc85bf0a134f82c396036547753ee` | **VERIFIED LIVE** |
+
+---
+
 ## Honest Limitations
 
-- QuoteSeal reduces a defined class of **recipient-substitution and unauthorized-rotation** risk. It does not stop all payment fraud, compromised governance, malicious onboarding, stolen buyer keys, or prove service quality.
-- ENS ownership and domain control are **not** legal business verification.
-- World authentication gives fresh authentication, not proof of corporate authority; hackathon proofs are mocked.
-- EAC controls who can edit records; the **delay** is enforced by the rotation controller (or a clearly disclosed backend policy).
-- Signed-offer verification is future work.
+- **Defined Protection Scope**: GuardRail Pay reduces a defined class of **recipient-substitution, unauthorized-rotation, and cross-merchant wallet risk**. It does not stop all payment fraud, compromised governance, malicious onboarding, or stolen buyer keys.
+- **Protocol Classification**: The current implementation operates as a custom HTTP 402 protocol with native Hedera Mirror Node on-chain reconciliation and cryptographic intent binding. It is not official x402 V2 facilitator compliance (official facilitator endpoint `testnet.facilitator.x402.org` has no DNS records).
+- **Backend Decoupling**: Backend payment verification is modularized in `@quoteseal/hedera-x402`. Full merchant API production route wiring remains decoupled while the backend is under development.
+- **Deployment Boundaries**: Deployment targets are local development and public testnets (Hedera Testnet, Arkiv Rabdi Testnet, Ethereum Sepolia). No mainnet deployment is active or intended.
+- **Mirror Node Latency**: Mirror Node consensus indexing typically requires 1.5–4 seconds after consensus confirmation. Clients and merchant verification endpoints must account for a pending confirmation state.
+- **ENS & World ID**: ENS ownership and domain control are not legal business verification. World ID authentication provides human operator verification; hackathon proofs use local operator validation.
 
 ---
 
