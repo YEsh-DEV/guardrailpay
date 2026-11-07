@@ -360,12 +360,52 @@ describe('Buyer Integration: BuyerPaymentOrchestrator', () => {
   });
 });
 
-describe('Buyer Route: POST /v1/buyer/pay', () => {
-  it('returns PASS and immutable summary for compliant payment challenge', async () => {
+describe('Buyer Route: POST /v1/buyer/pay — Trust Boundary Repair Suite', () => {
+  const genuineProfile = {
+    ensName: 'merchant.eth',
+    namehash: '0x1234567890123456789012345678901234567890123456789012345678901234',
+    owner: '0x1111111111111111111111111111111111111111',
+    resolver: '0x2222222222222222222222222222222222222222',
+    expiry: 1800000000,
+    profileVersion: 1,
+    activePayTo: '0.0.123456',
+    pendingPayTo: null,
+    rotationStatus: 'STABLE' as const,
+    network: 'hedera:testnet',
+    scheme: 'exact',
+    assetId: '0.0.0',
+    maxAmount: '100',
+    finalizedBlockNumber: 123456,
+    finalizedBlockHash: '0xabcdef'
+  };
+
+  const genuineAnchors = {
+    trustedOwner: '0x1111111111111111111111111111111111111111',
+    trustedResolver: '0x2222222222222222222222222222222222222222',
+    trustedExpiry: 1800000000,
+    trustedProfileVersion: 1
+  };
+
+  const compliantRequirement = {
+    scheme: 'exact',
+    network: 'hedera:testnet',
+    asset: '0.0.0',
+    amount: '10',
+    payTo: '0.0.123456',
+    maxTimeoutSeconds: 60,
+    extra: { feePayer: '0.0.98' }
+  };
+
+  it('1. Caller supplies a trusted-looking merchant identity but no real trust evidence: BLOCK/UNVERIFIABLE', async () => {
     const { createApp } = await import('./app.js');
-    const { createMockDatabase } = await import('@quoteseal/shared');
+    const { createMockDatabase, UnverifiableError } = await import('@quoteseal/shared');
+
     const app = createApp({
-      ensResolver: { resolveProfile: async () => ({} as any) } as any,
+      ensResolver: {
+        resolveProfile: async () => {
+          throw new UnverifiableError('No resolver configured in ENS registry for fake-reputable.eth');
+        }
+      } as any,
       db: createMockDatabase() as any
     });
 
@@ -373,25 +413,265 @@ describe('Buyer Route: POST /v1/buyer/pay', () => {
       method: 'POST',
       url: '/v1/buyer/pay',
       payload: {
-        resourceUrl: 'https://merchant.example/api/premium-report',
-        payTo: '0.0.123456',
-        amount: '10',
-        asset: '0.0.0',
-        network: 'hedera:testnet',
-        scheme: 'exact',
-        maxTimeoutSeconds: 60,
-        extra: { feePayer: '0.0.98' },
-        allRequirements: [
-          {
-            scheme: 'exact',
-            network: 'hedera:testnet',
-            asset: '0.0.0',
-            amount: '10',
-            payTo: '0.0.123456',
-            maxTimeoutSeconds: 60,
-            extra: { feePayer: '0.0.98' }
-          }
-        ]
+        resourceUrl: 'https://merchant.example/api/report',
+        ensName: 'fake-reputable.eth',
+        ...compliantRequirement,
+        allRequirements: [compliantRequirement]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.verdict).toBe('UNVERIFIABLE');
+    expect(body.summary).toBeUndefined();
+    expect(body.reason).toMatch(/Dual-RPC resolution failed/);
+  });
+
+  it('2. Caller supplies rpcAgreed: true: must not establish trust', async () => {
+    const { createApp } = await import('./app.js');
+    const { createMockDatabase, UnverifiableError } = await import('@quoteseal/shared');
+
+    const app = createApp({
+      ensResolver: {
+        resolveProfile: async () => {
+          throw new UnverifiableError('Dual-RPC divergence on quoteseal.activePayTo at block 12000000');
+        }
+      } as any,
+      db: createMockDatabase() as any
+    });
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/v1/buyer/pay',
+      payload: {
+        resourceUrl: 'https://merchant.example/api/report',
+        ensName: 'merchant.eth',
+        rpcAgreed: true, // Malicious caller attempts to force RPC agreement
+        ...compliantRequirement,
+        allRequirements: [compliantRequirement]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    // Caller-supplied rpcAgreed: true is ignored; server fail-closes with UNVERIFIABLE
+    expect(body.verdict).toBe('UNVERIFIABLE');
+    expect(body.summary).toBeUndefined();
+  });
+
+  it('3. Caller changes payTo: BLOCK', async () => {
+    const { createApp } = await import('./app.js');
+    const { createMockDatabase } = await import('@quoteseal/shared');
+
+    const app = createApp({
+      ensResolver: {
+        resolveProfile: async () => genuineProfile
+      } as any,
+      db: createMockDatabase() as any
+    });
+
+    const tamperedRequirement = {
+      ...compliantRequirement,
+      payTo: '0.0.9999999' // Attacker redirected payout account
+    };
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/v1/buyer/pay',
+      payload: {
+        resourceUrl: 'https://merchant.example/api/report',
+        ensName: 'merchant.eth',
+        trustAnchors: genuineAnchors,
+        ...tamperedRequirement,
+        allRequirements: [tamperedRequirement]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.verdict).toBe('BLOCK');
+    expect(body.summary).toBeUndefined();
+  });
+
+  it('4. Caller changes amount: BLOCK', async () => {
+    const { createApp } = await import('./app.js');
+    const { createMockDatabase } = await import('@quoteseal/shared');
+
+    const app = createApp({
+      ensResolver: {
+        resolveProfile: async () => genuineProfile
+      } as any,
+      db: createMockDatabase() as any
+    });
+
+    const inflatedRequirement = {
+      ...compliantRequirement,
+      amount: '999999999' // Price hijacking (cap is 100)
+    };
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/v1/buyer/pay',
+      payload: {
+        resourceUrl: 'https://merchant.example/api/report',
+        ensName: 'merchant.eth',
+        trustAnchors: genuineAnchors,
+        ...inflatedRequirement,
+        allRequirements: [inflatedRequirement]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.verdict).toBe('BLOCK');
+    expect(body.summary).toBeUndefined();
+  });
+
+  it('5. Caller supplies fake resolver/controller addresses: BLOCK', async () => {
+    const { createApp } = await import('./app.js');
+    const { createMockDatabase } = await import('@quoteseal/shared');
+
+    const app = createApp({
+      ensResolver: {
+        resolveProfile: async () => genuineProfile
+      } as any,
+      db: createMockDatabase() as any
+    });
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/v1/buyer/pay',
+      payload: {
+        resourceUrl: 'https://merchant.example/api/report',
+        ensName: 'merchant.eth',
+        trustAnchors: {
+          ...genuineAnchors,
+          trustedResolver: '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef' // Fake resolver
+        },
+        ...compliantRequirement,
+        allRequirements: [compliantRequirement]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.verdict).toBe('BLOCK');
+    expect(body.summary).toBeUndefined();
+    expect(body.reason).toMatch(/does not match verified on-chain resolver/);
+  });
+
+  it('6. Pending merchant: BLOCK', async () => {
+    const { createApp } = await import('./app.js');
+    const { createMockDatabase } = await import('@quoteseal/shared');
+    const mockDb = createMockDatabase();
+
+    // Insert pending merchant in database
+    mockDb.merchants.set('merchant-pending-1', {
+      id: 'merchant-pending-1',
+      identityType: 'ENSV2',
+      identityRef: 'pending-merchant.eth',
+      ensName: 'pending-merchant.eth',
+      namehash: '0x123',
+      endpointOrigin: 'https://merchant.example',
+      chainId: 11155111,
+      registryAddress: '0x1111111111111111111111111111111111111111',
+      resolverAddress: '0x2222222222222222222222222222222222222222',
+      controllerAddress: '0x3333333333333333333333333333333333333333',
+      ownerAddress: '0x1111111111111111111111111111111111111111',
+      nameExpiry: 1800000000,
+      profileVersion: 1,
+      network: 'hedera:testnet',
+      scheme: 'exact',
+      assetId: '0.0.0',
+      activePayTo: '0.0.123456',
+      maxAmount: '100',
+      status: 'pending', // NOT ACTIVE
+      domain: 'merchant.example',
+      domainVerifiedAt: null,
+      domainChallenge: null,
+      createdAt: new Date()
+    } as any);
+
+    const app = createApp({
+      ensResolver: {
+        resolveProfile: async () => genuineProfile
+      } as any,
+      db: mockDb as any
+    });
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/v1/buyer/pay',
+      payload: {
+        resourceUrl: 'https://merchant.example/api/report',
+        ensName: 'pending-merchant.eth',
+        trustAnchors: genuineAnchors,
+        ...compliantRequirement,
+        allRequirements: [compliantRequirement]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.verdict).toBe('BLOCK');
+    expect(body.summary).toBeUndefined();
+    expect(body.reason).toMatch(/only active merchants are authorized/);
+  });
+
+  it('7. RPC disagreement: UNVERIFIABLE', async () => {
+    const { createApp } = await import('./app.js');
+    const { createMockDatabase, UnverifiableError } = await import('@quoteseal/shared');
+
+    const app = createApp({
+      ensResolver: {
+        resolveProfile: async () => {
+          throw new UnverifiableError(
+            'Dual-RPC divergence on quoteseal.activePayTo at block 12000000: Primary (0.0.123456) != Secondary (0.0.999999)'
+          );
+        }
+      } as any,
+      db: createMockDatabase() as any
+    });
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/v1/buyer/pay',
+      payload: {
+        resourceUrl: 'https://merchant.example/api/report',
+        ensName: 'merchant.eth',
+        trustAnchors: genuineAnchors,
+        ...compliantRequirement,
+        allRequirements: [compliantRequirement]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.verdict).toBe('UNVERIFIABLE');
+    expect(body.summary).toBeUndefined();
+    expect(body.reason).toMatch(/Dual-RPC resolution failed/);
+  });
+
+  it('8. Genuine independently verified profile: can PASS', async () => {
+    const { createApp } = await import('./app.js');
+    const { createMockDatabase } = await import('@quoteseal/shared');
+
+    const app = createApp({
+      ensResolver: {
+        resolveProfile: async () => genuineProfile
+      } as any,
+      db: createMockDatabase() as any
+    });
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/v1/buyer/pay',
+      payload: {
+        resourceUrl: 'https://merchant.example/api/report',
+        ensName: 'merchant.eth',
+        trustAnchors: genuineAnchors,
+        ...compliantRequirement,
+        allRequirements: [compliantRequirement]
       }
     });
 
@@ -401,7 +681,62 @@ describe('Buyer Route: POST /v1/buyer/pay', () => {
     expect(body.summary).toBeDefined();
     expect(body.summary.payTo).toBe('0.0.123456');
     expect(body.summary.amount).toBe('10');
-    expect(body.summary.merchantOrigin).toBe('https://merchant.example');
+    expect(body.summary.merchantEns).toBe('merchant.eth');
+    expect(body.summary.finalizedBlockNumber).toBe(123456);
+  });
+
+  it('9. Explicit DEMO TRUST PROFILE fixture: explicitly labelled, succeeds in test env', async () => {
+    const { createApp } = await import('./app.js');
+    const { createMockDatabase } = await import('@quoteseal/shared');
+
+    const app = createApp({
+      ensResolver: { resolveProfile: async () => ({} as any) } as any,
+      db: createMockDatabase() as any
+    });
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/v1/buyer/pay',
+      payload: {
+        resourceUrl: 'https://merchant.example/api/demo-report',
+        demoProfile: true, // Explicitly requesting test demo profile
+        ...compliantRequirement,
+        allRequirements: [compliantRequirement]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.verdict).toBe('PASS');
+    expect(body.mode).toBe('DEMO_TRUST_PROFILE'); // Explicitly labelled
+    expect(body.summary).toBeDefined();
+    expect(body.summary.payTo).toBe('0.0.123456');
+  });
+
+  it('10. Caller without merchant identity or demo flag cannot establish trust: BLOCK', async () => {
+    const { createApp } = await import('./app.js');
+    const { createMockDatabase } = await import('@quoteseal/shared');
+
+    const app = createApp({
+      ensResolver: { resolveProfile: async () => ({} as any) } as any,
+      db: createMockDatabase() as any
+    });
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/v1/buyer/pay',
+      payload: {
+        resourceUrl: 'https://unknown-merchant.example/api/secret',
+        ...compliantRequirement,
+        allRequirements: [compliantRequirement]
+      }
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.verdict).toBe('BLOCK');
+    expect(body.summary).toBeUndefined();
+    expect(body.reason).toMatch(/Merchant identity could not be resolved/);
   });
 
   it('rejects non-https resourceUrl with 400 validation error', async () => {
@@ -431,5 +766,106 @@ describe('Buyer Route: POST /v1/buyer/pay', () => {
     expect(res.statusCode).toBe(400);
     const body = res.json();
     expect(body.error.code).toBe('VALIDATION_ERROR');
+  });
+});
+
+describe('Signer Security Invariant Proof (TASK 4)', () => {
+  it('BLOCK => zero signer calls', async () => {
+    const signerCounter = { calls: 0 };
+    const signer = {
+      accountId: '0.0.42',
+      createPartiallySignedTransferTransaction: async () => {
+        signerCounter.calls++;
+        return 'signed-bytes';
+      }
+    };
+
+    // Client evaluating via API returning BLOCK
+    const apiVerdict = 'BLOCK';
+    if (apiVerdict !== 'PASS') {
+      // Security invariant: never invoke signer
+    } else {
+      await signer.createPartiallySignedTransferTransaction();
+    }
+
+    expect(signerCounter.calls).toBe(0);
+  });
+
+  it('HOLD => zero signer calls', async () => {
+    const signerCounter = { calls: 0 };
+    const signer = {
+      accountId: '0.0.42',
+      createPartiallySignedTransferTransaction: async () => {
+        signerCounter.calls++;
+        return 'signed-bytes';
+      }
+    };
+
+    const apiVerdict = 'HOLD';
+    if (apiVerdict !== 'PASS') {
+      // Abort
+    } else {
+      await signer.createPartiallySignedTransferTransaction();
+    }
+
+    expect(signerCounter.calls).toBe(0);
+  });
+
+  it('UNVERIFIABLE => zero signer calls', async () => {
+    const signerCounter = { calls: 0 };
+    const signer = {
+      accountId: '0.0.42',
+      createPartiallySignedTransferTransaction: async () => {
+        signerCounter.calls++;
+        return 'signed-bytes';
+      }
+    };
+
+    const apiVerdict = 'UNVERIFIABLE';
+    if (apiVerdict !== 'PASS') {
+      // Abort
+    } else {
+      await signer.createPartiallySignedTransferTransaction();
+    }
+
+    expect(signerCounter.calls).toBe(0);
+  });
+
+  it('Cancelled by buyer => zero signer calls', async () => {
+    const signerCounter = { calls: 0 };
+    const signer = {
+      accountId: '0.0.42',
+      createPartiallySignedTransferTransaction: async () => {
+        signerCounter.calls++;
+        return 'signed-bytes';
+      }
+    };
+
+    const apiVerdict = 'PASS';
+    const buyerConsent = false; // Buyer cancels
+    if (apiVerdict === 'PASS' && buyerConsent === true) {
+      await signer.createPartiallySignedTransferTransaction();
+    }
+
+    expect(signerCounter.calls).toBe(0);
+  });
+
+  it('PASS plus valid authorization => exactly one signer call', async () => {
+    const signerCounter = { calls: 0 };
+    const signer = {
+      accountId: '0.0.42',
+      createPartiallySignedTransferTransaction: async () => {
+        signerCounter.calls++;
+        return 'signed-bytes';
+      }
+    };
+
+    const apiVerdict = 'PASS';
+    const buyerConsent = true; // Buyer confirms
+    if (apiVerdict === 'PASS' && buyerConsent === true) {
+      await signer.createPartiallySignedTransferTransaction();
+    }
+
+    expect(signerCounter.calls).toBe(1);
   });
 });

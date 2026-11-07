@@ -61,25 +61,31 @@ export class EnsProfileResolver {
   async resolveProfile(ensName: string): Promise<EnsProfileRecord> {
     const node = namehash(ensName);
 
-    // 1. Read registry anchors (owner, resolver, expiry)
+    // Pin agreed finalized block across all contract reads to guarantee consistent snapshot
+    const { blockNumber, blockHash } = await this.dualRpc.getAgreedFinalizedBlock();
+
+    // 1. Read registry anchors (owner, resolver, expiry) at the exact agreed block
     const [ownerRes, resolverRes, expiryRes] = await Promise.all([
       this.dualRpc.readContract<`0x${string}`>({
         address: this.registryAddress,
         abi: ENS_REGISTRY_ABI,
         functionName: 'owner',
-        args: [node]
+        args: [node],
+        blockNumber
       }),
       this.dualRpc.readContract<`0x${string}`>({
         address: this.registryAddress,
         abi: ENS_REGISTRY_ABI,
         functionName: 'resolver',
-        args: [node]
+        args: [node],
+        blockNumber
       }),
       this.dualRpc.readContract<bigint>({
         address: this.registryAddress,
         abi: ENS_REGISTRY_ABI,
         functionName: 'expiry',
-        args: [node]
+        args: [node],
+        blockNumber
       })
     ]);
 
@@ -91,7 +97,7 @@ export class EnsProfileResolver {
       });
     }
 
-    // 2. Read QuoteSeal text records from the dedicated resolver
+    // 2. Read QuoteSeal text records from the dedicated resolver at the exact agreed block
     const keys = [
       'quoteseal.activePayTo',
       'quoteseal.pendingPayTo',
@@ -110,7 +116,8 @@ export class EnsProfileResolver {
           address: resolverAddress,
           abi: ENS_RESOLVER_ABI,
           functionName: 'text',
-          args: [node, key]
+          args: [node, key],
+          blockNumber
         })
         .then((res) => ({ key, value: res.data }))
     );

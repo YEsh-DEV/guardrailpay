@@ -233,7 +233,9 @@ export function createApp(deps: AppDependencies): FastifyInstance {
   });
 
   app.register(buyerRoutes, {
-    ensResolver: deps.ensResolver
+    ensResolver: deps.ensResolver,
+    dbStore,
+    env
   });
 
   const arkivStorageClient = deps.arkivStorageClient ?? new MemoryArkivStorageClient();

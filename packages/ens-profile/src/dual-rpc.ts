@@ -52,6 +52,18 @@ export class DualRpcClient {
       );
     }
 
+    // Verify block hash agreement if block numbers match
+    if (blockA.number === blockB.number && blockA.hash.toLowerCase() !== blockB.hash.toLowerCase()) {
+      throw new UnverifiableError(
+        `Dual-RPC finalized block hash divergence at block ${blockA.number}: Primary (${blockA.hash}) != Secondary (${blockB.hash})`,
+        {
+          blockNumber: Number(blockA.number),
+          primaryHash: blockA.hash,
+          secondaryHash: blockB.hash
+        }
+      );
+    }
+
     // Use the lower (more conservative / definitely finalized on both) block number
     const agreedBlockNumber = blockA.number <= blockB.number ? blockA.number : blockB.number;
     const agreedBlockHash = blockA.number <= blockB.number ? blockA.hash : blockB.hash;
@@ -71,8 +83,19 @@ export class DualRpcClient {
     abi: readonly unknown[];
     functionName: string;
     args: readonly unknown[];
+    blockNumber?: bigint;
   }): Promise<DualRpcReadResult<T>> {
-    const { blockNumber, blockHash } = await this.getAgreedFinalizedBlock();
+    let blockNumber: bigint;
+    let blockHash: string;
+
+    if (params.blockNumber !== undefined) {
+      blockNumber = params.blockNumber;
+      blockHash = '';
+    } else {
+      const agreed = await this.getAgreedFinalizedBlock();
+      blockNumber = agreed.blockNumber;
+      blockHash = agreed.blockHash;
+    }
 
     let resultA: unknown;
     let resultB: unknown;

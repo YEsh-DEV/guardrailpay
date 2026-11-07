@@ -41,6 +41,7 @@ export interface IDbStore {
   findMerchantById(id: string): Promise<MerchantRecord | null>;
   findMerchantByName(ensName: string): Promise<MerchantRecord | null>;
   findMerchantByIdentity(identityType: string, identityRef: string): Promise<MerchantRecord | null>;
+  findMerchantByOrigin(origin: string): Promise<MerchantRecord | null>;
   saveMerchant(merchant: InsertMerchantRecord | MerchantRecord): Promise<void>;
   updateMerchant(id: string, updates: Partial<MerchantRecord>): Promise<void>;
 
@@ -113,6 +114,15 @@ export class MemoryDbStore implements IDbStore {
       ) {
         return m;
       }
+    }
+    return null;
+  }
+
+  async findMerchantByOrigin(origin: string): Promise<MerchantRecord | null> {
+    const targetOrigin = origin.toLowerCase().replace(/\/+$/, '');
+    for (const m of this.mockDb.merchants.values()) {
+      const mOrigin = (m.endpointOrigin || '').toLowerCase().replace(/\/+$/, '');
+      if (mOrigin === targetOrigin) return m;
     }
     return null;
   }
@@ -378,6 +388,12 @@ export class PostgresDbStore implements IDbStore {
       .where(eq(merchants.domain, identityRef.toLowerCase()))
       .limit(1);
     return byDomain[0] ?? null;
+  }
+
+  async findMerchantByOrigin(origin: string): Promise<MerchantRecord | null> {
+    const targetOrigin = origin.toLowerCase().replace(/\/+$/, '');
+    const rows = await this.db.select().from(merchants).where(eq(merchants.endpointOrigin, targetOrigin)).limit(1);
+    return rows[0] ?? null;
   }
 
   async saveMerchant(merchant: InsertMerchantRecord | MerchantRecord): Promise<void> {

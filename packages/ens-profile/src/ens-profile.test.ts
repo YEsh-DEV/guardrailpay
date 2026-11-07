@@ -82,6 +82,26 @@ describe('DualRpcClient (MOCKED TEST VECTORS)', () => {
     ).rejects.toThrow(/Dual-RPC divergence/);
   });
 
+  it('[MOCKED] throws UnverifiableError when finalized block hashes diverge at same block number', async () => {
+    const primary = createMockRpcProvider({
+      getBlock: vi.fn().mockResolvedValue({ number: 12000000n, hash: '0x1111111111111111111111111111111111111111111111111111111111111111' })
+    });
+    const secondary = createMockRpcProvider({
+      getBlock: vi.fn().mockResolvedValue({ number: 12000000n, hash: '0x2222222222222222222222222222222222222222222222222222222222222222' })
+    });
+
+    const client = new DualRpcClient({ primary, secondary });
+
+    await expect(
+      client.readContract({
+        address: '0x1234567890123456789012345678901234567890',
+        abi: ENS_RESOLVER_ABI,
+        functionName: 'text',
+        args: ['0x00', 'quoteseal.activePayTo']
+      })
+    ).rejects.toThrow(/Dual-RPC finalized block hash divergence/);
+  });
+
   it('[MOCKED] throws UnverifiableError when an RPC call fails (fail-closed)', async () => {
     const primary = createMockRpcProvider({
       readContract: vi.fn().mockRejectedValue(new Error('Connection timeout'))
