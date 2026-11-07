@@ -9,7 +9,7 @@ import { FacilitatorSettlementError, InvalidSettlementEvidenceError } from './ty
  */
 export function isValidHederaTransactionId(txId: string): boolean {
   if (!txId || typeof txId !== 'string') return false;
-  return /^\d+\.\d+\.\d+@\d+\.\d+$/.test(txId.trim());
+  return /^\d+\.\d+\.\d+[@-]\d+[.-]\d+$/.test(txId.trim());
 }
 
 /**
