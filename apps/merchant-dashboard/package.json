@@ -8,10 +8,11 @@
     "lint": "echo 'No lint specified for merchant-dashboard'",
     "dev": "npx next dev -p 3000",
     "start": "npx next start -p 3000",
-    "test": "echo 'Dashboard tests pass'",
+    "test": "vitest run",
     "clean": "rm -rf .next"
   },
   "dependencies": {
+    "@quoteseal/arkiv": "^0.1.0",
     "@quoteseal/ens-profile": "^0.1.0",
     "@quoteseal/rotation-controller": "^0.1.0",
     "@quoteseal/shared": "^0.1.0",

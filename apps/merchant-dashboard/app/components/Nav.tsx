@@ -23,17 +23,29 @@ export default function Nav() {
         {/* Violet Right CTA */}
         <div className="flex items-center gap-3">
           <Link
-            href="/merchant"
-            className="hidden sm:inline-block px-4 py-2 rounded-btn text-xs font-semibold text-silver-400 hover:text-white transition-colors"
+            href="/demo"
+            className="px-3.5 py-1.5 rounded-btn text-xs font-mono font-semibold bg-[#DD60F7]/15 text-[#DD60F7] border border-[#DD60F7]/30 hover:bg-[#DD60F7]/25 transition-all shadow-[0_0_12px_rgba(221,96,247,0.2)]"
           >
-            Dashboard
+            Demo Center
           </Link>
-          <a
-            href="#demo"
+          <Link
+            href="/arkiv"
+            className="hidden md:inline-block px-3 py-1.5 rounded-btn text-xs font-mono text-silver-400 hover:text-white transition-colors"
+          >
+            Arkiv Monitor
+          </Link>
+          <Link
+            href="/merchant"
+            className="hidden sm:inline-block px-3 py-1.5 rounded-btn text-xs font-semibold text-silver-400 hover:text-white transition-colors"
+          >
+            Merchant
+          </Link>
+          <Link
+            href="/demo"
             className="px-5 py-2.5 rounded-btn bg-[#D152F5] hover:bg-[#DD60F7] text-[#050505] font-semibold text-xs tracking-wide shadow-violet-btn hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            Explore Now
-          </a>
+            Launch Demo
+          </Link>
         </div>
       </div>
     </header>
