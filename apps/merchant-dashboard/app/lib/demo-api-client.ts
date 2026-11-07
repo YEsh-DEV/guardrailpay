@@ -192,6 +192,11 @@ async function runBackendLiveOrchestration(
       body: JSON.stringify({ scenarioId }),
     });
   } catch (netErr: unknown) {
+    if (requestedMode === 'fixture') {
+      const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+      return runDeterministicSimulation(scenarioId, 'fixture', runId, startTime, onUpdate, 'fixture');
+    }
+
     const details = netErr instanceof Error ? netErr.message : 'Network request failed';
     const errorState: DemoRunState = {
       ...initialLiveState,
@@ -212,6 +217,11 @@ async function runBackendLiveOrchestration(
   const responsePayload: unknown = await runResponse.json().catch(() => ({}));
 
   if (!runResponse.ok) {
+    if (requestedMode === 'fixture') {
+      const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+      return runDeterministicSimulation(scenarioId, 'fixture', runId, startTime, onUpdate, 'fixture');
+    }
+
     const errorMessage = readBackendError(responsePayload) || `Backend returned HTTP ${runResponse.status}`;
     const code =
       runResponse.status === 403

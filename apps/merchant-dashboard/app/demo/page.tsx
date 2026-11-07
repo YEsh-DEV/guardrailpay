@@ -46,7 +46,7 @@ export default function DemoControlCenterPage() {
   useEffect(() => {
     async function load() {
       const [list, capabilities] = await Promise.all([
-        getScenarios(),
+        getScenarios().catch(() => Object.values(SCENARIO_DEFINITIONS)),
         fetch('/api/demo/capabilities', { cache: 'no-store' }).then((response) => response.ok ? response.json() : { liveEnabled: false }).catch(() => ({ liveEnabled: false })),
       ]);
       setScenarios(list);
