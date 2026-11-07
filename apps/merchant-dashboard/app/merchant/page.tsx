@@ -108,6 +108,12 @@ export default function MerchantDashboard() {
 
           <div className="flex items-center gap-4">
             <Link
+              href="/arkiv"
+              className="text-xs font-mono text-[#E2E8F0] hover:text-[#DD60F7] px-3.5 py-1.5 rounded-lg border border-[#262626] hover:border-[#D152F5]/50 transition-all bg-[#141414]"
+            >
+              Arkiv Risk State
+            </Link>
+            <Link
               href="/buyer"
               className="text-xs font-mono text-[#E2E8F0] hover:text-[#DD60F7] px-3.5 py-1.5 rounded-lg border border-[#262626] hover:border-[#D152F5]/50 transition-all bg-[#141414]"
             >

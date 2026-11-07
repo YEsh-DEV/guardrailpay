@@ -10,6 +10,7 @@ import {
   MerchantProfile,
   PaymentRequest,
   BuyerPolicy,
+  SharedRiskReader,
 } from '../src/index.js';
 
 describe('normalize utilities', () => {
@@ -278,5 +279,160 @@ describe('guardedSigner middleware', () => {
     expect(res.verdict).toBe('UNVERIFIABLE');
     expect(res.signerCallCount).toBe(0);
     expect(mockSignerCalled).toBe(0);
+  });
+
+  it('blocks a payer flagged by a trusted Arkiv reader before the signer runs', async () => {
+    let signerCalls = 0;
+    const riskReader: SharedRiskReader = {
+      async getTrustedWalletRiskState() {
+        return {
+          kind: 'trusted',
+          state: {
+            status: 'BLOCK',
+            entityKey: 'fixture-risk-state',
+            owner: 'fixture-writer',
+            expiresAt: 999999n,
+          },
+        };
+      },
+    };
+
+    const guarded = createGuardedSigner(
+      async () => {
+        signerCalls += 1;
+        return { tx: 'should-not-run' };
+      },
+      {
+        resolveProfile: async () => baseProfile,
+        policy,
+        riskReader,
+        getNow: () => 1000,
+      }
+    );
+
+    const result = await guarded.execute({ ...validPayment, payerWallet: '0.0.90001' });
+    expect(result.verdict).toBe('BLOCK');
+    expect(result.reason).toContain('ARKIV_RISK_BLOCK');
+    expect(result.signerCallCount).toBe(0);
+    expect(signerCalls).toBe(0);
+  });
+
+  it('fails safe when the Arkiv reader is unavailable', async () => {
+    let signerCalls = 0;
+    const guarded = createGuardedSigner(
+      async () => {
+        signerCalls += 1;
+        return { tx: 'should-not-run' };
+      },
+      {
+        resolveProfile: async () => baseProfile,
+        policy,
+        riskReader: {
+          async getTrustedWalletRiskState() {
+            return { kind: 'unavailable', reason: 'query timeout' };
+          },
+        },
+        getNow: () => 1000,
+      }
+    );
+
+    const result = await guarded.execute({ ...validPayment, payerWallet: '0.0.90001' });
+    expect(result.verdict).toBe('UNVERIFIABLE');
+    expect(result.reason).toContain('ARKIV_RISK_UNAVAILABLE');
+    expect(signerCalls).toBe(0);
+  });
+
+  it('allows payment signing when Arkiv returns ALLOW and all local checks pass', async () => {
+    let signerCalls = 0;
+    const guarded = createGuardedSigner(
+      async (req) => {
+        signerCalls += 1;
+        return { tx: `signed_for_${req.payTo}` };
+      },
+      {
+        resolveProfile: async () => baseProfile,
+        policy,
+        riskReader: {
+          async getTrustedWalletRiskState() {
+            return {
+              kind: 'trusted',
+              state: {
+                status: 'ALLOW',
+                entityKey: 'trusted-allow-entity',
+                owner: 'trusted-writer',
+                expiresAt: 999999n,
+              },
+            };
+          },
+        },
+        getNow: () => 1000,
+      }
+    );
+
+    const result = await guarded.execute({ ...validPayment, payerWallet: '0.0.12345' });
+    expect(result.verdict).toBe('PASS');
+    expect(result.signerCallCount).toBe(1);
+    expect(signerCalls).toBe(1);
+    expect(result.result).toEqual({ tx: 'signed_for_0.0.12345' });
+  });
+
+  it('holds payment and prevents signing when Arkiv returns REVIEW or UNKNOWN', async () => {
+    let signerCalls = 0;
+    const guarded = createGuardedSigner(
+      async () => {
+        signerCalls += 1;
+        return { tx: 'should-not-run' };
+      },
+      {
+        resolveProfile: async () => baseProfile,
+        policy,
+        riskReader: {
+          async getTrustedWalletRiskState() {
+            return {
+              kind: 'trusted',
+              state: {
+                status: 'REVIEW',
+                entityKey: 'review-entity',
+                owner: 'trusted-writer',
+                expiresAt: 999999n,
+              },
+            };
+          },
+        },
+        getNow: () => 1000,
+      }
+    );
+
+    const result = await guarded.execute({ ...validPayment, payerWallet: '0.0.55555' });
+    expect(result.verdict).toBe('HOLD');
+    expect(result.reason).toContain('ARKIV_RISK_REVIEW');
+    expect(result.signerCallCount).toBe(0);
+    expect(signerCalls).toBe(0);
+  });
+
+  it('returns UNVERIFIABLE without calling signer if payer wallet is omitted when riskReader is active', async () => {
+    let signerCalls = 0;
+    const guarded = createGuardedSigner(
+      async () => {
+        signerCalls += 1;
+        return { tx: 'should-not-run' };
+      },
+      {
+        resolveProfile: async () => baseProfile,
+        policy,
+        riskReader: {
+          async getTrustedWalletRiskState() {
+            return { kind: 'not_found' };
+          },
+        },
+        getNow: () => 1000,
+      }
+    );
+
+    // Omit payerWallet
+    const result = await guarded.execute({ ...validPayment, payerWallet: undefined });
+    expect(result.verdict).toBe('UNVERIFIABLE');
+    expect(result.reason).toContain('ARKIV_PAYER_MISSING');
+    expect(signerCalls).toBe(0);
   });
 });

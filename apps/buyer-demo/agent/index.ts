@@ -1,4 +1,13 @@
-import { createGuardedSigner, PaymentRequest, BuyerPolicy, MerchantProfile } from '@quoteseal/payee-guard';
+import { createGuardedSigner, PaymentRequest, BuyerPolicy, MerchantProfile, SharedRiskReader } from '@quoteseal/payee-guard';
+import {
+  createMvpFixtureRiskReader,
+  MVP_FLAGGED_WALLET,
+  createArkivReadClient,
+  createArkivWalletRiskStateQuery,
+  createTrustedWalletRiskReader,
+  loadArkivReadConfig,
+  loadArkivTrustedOwner,
+} from '@quoteseal/arkiv';
 import { resolveProfile, EnsMerchantProfile } from '@quoteseal/ens-profile';
 import { executeHederaPayment } from '@quoteseal/hedera-x402';
 import { createLogger, getHashScanUrl } from '@quoteseal/shared';
@@ -23,6 +32,8 @@ export async function runAgentPurchase(
   options: {
     mockProfile?: EnsMerchantProfile;
     policy?: BuyerPolicy;
+    payerWallet?: string;
+    riskReader?: SharedRiskReader;
   } = {}
 ): Promise<AgentRunResult> {
   logger.info(`Starting autonomous agent purchase loop for: ${targetUrl}`);
@@ -70,6 +81,7 @@ export async function runAgentPurchase(
 
   const paymentRequest: PaymentRequest = {
     origin: targetUrl,
+    payerWallet: options.payerWallet,
     payTo: payment.payTo,
     amount: payment.amount,
     asset: payment.asset || 'HBAR',
@@ -126,6 +138,7 @@ export async function runAgentPurchase(
         };
       },
       policy,
+      riskReader: options.riskReader,
     }
   );
 
@@ -173,6 +186,31 @@ export async function runAgentPurchase(
     signerCalled: true,
     contentReceived: content,
   };
+}
+
+export function createConfiguredRiskReader(): SharedRiskReader {
+  const trustedOwner = loadArkivTrustedOwner();
+  if (!trustedOwner) {
+    return createMvpFixtureRiskReader();
+  }
+  try {
+    const client = createArkivReadClient(loadArkivReadConfig());
+    const query = createArkivWalletRiskStateQuery(client, trustedOwner);
+    return createTrustedWalletRiskReader(query, trustedOwner, { timeoutMs: 2000, retries: 1 });
+  } catch {
+    return createMvpFixtureRiskReader();
+  }
+}
+
+/**
+ * Demonstrates Merchant B rejecting the wallet Merchant A flagged. Uses the live Arkiv Rabdi
+ * reader when configured; otherwise falls back to the labeled local fixture. Payment execution remains simulated.
+ */
+export function runMvpArkivBlockedDemo(targetUrl?: string): Promise<AgentRunResult> {
+  return runAgentPurchase(targetUrl, {
+    payerWallet: MVP_FLAGGED_WALLET,
+    riskReader: createConfiguredRiskReader(),
+  });
 }
 
 if (process.env.NODE_ENV !== 'test' && process.argv[1]?.includes('agent/index.ts')) {

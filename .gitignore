@@ -38,3 +38,4 @@ contracts/broadcast/
 *.swp
 coverage/
 .nyc_output/
+./arkiv/.env 

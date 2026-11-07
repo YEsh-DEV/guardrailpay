@@ -1,5 +1,4 @@
 import { FastifyInstance } from 'fastify';
-import { currentPayTo, updateMerchantPayTo } from './paid.js';
 
 export interface RotationState {
   id: string;
@@ -12,8 +11,14 @@ export interface RotationState {
   worldSubject?: string;
 }
 
+export let currentPayTo = process.env.HEDERA_MERCHANT_ACCOUNT_ID || '0.0.12345';
+
+export function updateMerchantPayTo(newPayTo: string) {
+  currentPayTo = newPayTo;
+}
+
 let activeRotation: RotationState = {
-  id: '0',
+  id: String(Date.now()),
   currentPayTo,
   pendingPayTo: '',
   status: 'NONE',
@@ -77,7 +82,7 @@ export async function rotationRoutes(server: FastifyInstance) {
         : 0;
 
     return {
-      activePayTo: currentPayTo,
+      activePayTo: process.env.HEDERA_MERCHANT_ACCOUNT_ID || '0.0.12345',
       rotation: activeRotation,
       currentTime: now,
       secondsRemaining,

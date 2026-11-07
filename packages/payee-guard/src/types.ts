@@ -4,6 +4,7 @@ export type RotationStatus = 'none' | 'pending' | 'active' | 'revoked';
 
 export interface PaymentRequest {
   origin: string;
+  payerWallet?: string;
   payTo: string;
   amount: bigint | string | number;
   asset: string;
@@ -11,6 +12,15 @@ export interface PaymentRequest {
   expiresAt?: number; // Unix timestamp in seconds
   referenceId?: string;
   ensName?: string;
+}
+
+export type SharedRiskLookup =
+  | { kind: 'trusted'; state: { status: 'ALLOW' | 'REVIEW' | 'BLOCK' | 'UNKNOWN'; entityKey: string; owner: string; expiresAt: bigint } }
+  | { kind: 'not_found' }
+  | { kind: 'unavailable'; reason: string };
+
+export interface SharedRiskReader {
+  getTrustedWalletRiskState(input: { walletKey: string; network: string }): Promise<SharedRiskLookup>;
 }
 
 export interface MerchantProfile {
@@ -49,4 +59,5 @@ export interface GuardDependencies {
   resolveProfile: (ensNameOrOrigin: string) => Promise<MerchantProfile | null>;
   policy: BuyerPolicy;
   getNow?: () => number;
+  riskReader?: SharedRiskReader;
 }

@@ -13,6 +13,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@quoteseal/arkiv": "^0.1.0",
     "@quoteseal/ens-profile": "^0.1.0",
     "@quoteseal/hedera-x402": "^0.1.0",
     "@quoteseal/payee-guard": "^0.1.0",
